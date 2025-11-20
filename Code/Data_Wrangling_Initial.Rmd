@@ -1,0 +1,67 @@
+---
+title: "Initial_Data_Wrangling"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(lubridate)
+library(here)
+
+getwd()
+```
+
+```{r load data}
+#read in all group outage data (2015-2023, 2014 has no monthly data)
+outage_group_2015 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2015_group.csv'), stringsAsFactors = TRUE)
+outage_group_2016 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2016_group.csv'), stringsAsFactors = TRUE)
+outage_group_2017 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2017_group.csv'), stringsAsFactors = TRUE)
+outage_group_2018 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2018_group.csv'), stringsAsFactors = TRUE)
+outage_group_2019 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2019_group.csv'), stringsAsFactors = TRUE)
+outage_group_2020 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2020_group.csv'), stringsAsFactors = TRUE)
+outage_group_2021 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2021_group.csv'), stringsAsFactors = TRUE)
+outage_group_2022 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2022_group.csv'), stringsAsFactors = TRUE)
+outage_group_2023 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2023_group.csv'), stringsAsFactors = TRUE)
+
+#merge into one dataset
+outage_group_all_years <- rbind(outage_group_2015, outage_group_2016,outage_group_2017, outage_group_2018, outage_group_2019, outage_group_2020, outage_group_2021, outage_group_2022, outage_group_2023)
+
+#change columns to state abbrevations (for plotting)
+outage_group_all_years$state <- state.abb[match(outage_group_all_years$state, state.name)]
+
+#export to combined years dataset
+write.csv(outage_group_all_years, row.names = FALSE, 
+          file = "./Data/Processed/outage_group_all_years.csv")
+
+```
+
+```{r process into 4 state files}
+#filter out for california and export to processed data file 
+outage_group_CA <- outage_group_all_years %>% 
+  filter(state == 'CA') 
+
+write.csv(outage_group_CA, row.names = FALSE, 
+          file = "./Data/Processed/outage_group_CA.csv")
+
+#filter out for TX and export to processed data file 
+outage_group_TX <- outage_group_all_years %>% 
+  filter(state == 'TX') 
+
+write.csv(outage_group_TX, row.names = FALSE, 
+          file = "./Data/Processed/outage_group_TX.csv")
+
+#filter out for FL and export to processed data file 
+outage_group_FL <- outage_group_all_years %>% 
+  filter(state == 'FL') 
+
+write.csv(outage_group_FL, row.names = FALSE, 
+          file = "./Data/Processed/outage_group_FL.csv")
+
+#filter out for PA and export to processed data file 
+outage_group_PA <- outage_group_all_years %>% 
+  filter(state == 'PA') 
+
+write.csv(outage_group_PA, row.names = FALSE, 
+          file = "./Data/Processed/outage_group_PA.csv")
+```
+

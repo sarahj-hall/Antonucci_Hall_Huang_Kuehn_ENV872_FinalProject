@@ -1,0 +1,27 @@
+---
+title: "Initial_Data_Wrangling"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(lubridate)
+library(here)
+```
+
+```{r load data}
+outage_group_CA <- read.csv(here('Data/Processed/outage_group_CA.csv'), 
+                            stringsAsFactors = TRUE)
+#read in CA data from procssed folder 
+#change datas?
+#remove unwanted data columns  
+
+```
+
+```{r process into 4 state files}
+#filter out for california and export to processed data file 
+#processing: plots, time plot, county spatial plot? 
+
+
+```
+
