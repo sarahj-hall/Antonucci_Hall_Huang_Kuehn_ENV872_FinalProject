@@ -23,6 +23,9 @@ Write 1-2 paragraph(s) detailing the rationale for your study. This should inclu
 
 At the end of your rationale, introduce a numbered list of your questions (or an overarching question and sub-questions).
 
+- damage of outages (health, financial)
+- increasing climate related weather events, vulnerable power system infrastructure 
+- 
 
 \newpage
 
