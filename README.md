@@ -21,7 +21,6 @@ Addisen Antonucci, Sarah Hall, Carina Huang, and Isabelle Kuehn
 
 power outages, trend, time series analysis, power-system, black-out, reliability
 
-<add relevant keywords here>
 
 ## Database Information
 
@@ -48,6 +47,26 @@ state seperated?
 <describe your file naming conventions>
 
 ## Metadata
+
+In the Raw data folder, there are four different types of files for the years 2014 to 2023:
+
+1. eagle_outages_year_group.csv
+
+Column Name    | Description                                                   | Class         | Units
+-------------: | :----------------------------------------------------------- | ------------- | -------------
+state         |State where outage occured                                   | Content Cell  | NA
+year          | Year when outage occured                                    | Content Cell  | NA
+month  | Month when outage occured (0 is yearly summary)| Content Cell | NA
+outage_count  | Total number of outages | Content Cell | NA
+max_outage_duration  | Maximum duration of any single outage in the period | Content Cell | hours
+
+
+2. eagle_outages_year_merged.csv
+3. eaglei_outages_with_events_2014_8_hours_lag.csv
+4. eaglei_outages_with_events_2014_24_hours_lag.csv
+
+In the Processed data folder: 
+
 
 <For each data file in the repository, describe the data contained in each column. Include the column name, a description of the information, the class of data, and any units associated with the data. Create a list or table for each data file.> 
 
