@@ -50,7 +50,8 @@ state seperated?
 
 <For each data file in the repository, describe the data contained in each column. Include the column name, a description of the information, the class of data, and any units associated with the data. Create a list or table for each data file.> 
 
-In the Raw data folder, there are four different types of files for the years 2014 to 2023:
+note to self: might not need to include all this if we don't use it?, also check class types 
+In the Raw data folder, there are four different types of files for the years 2014 to 2023 (replace year in title with proper year):
 
 1. eagle_outages_year_group.csv
 
@@ -114,6 +115,17 @@ mean_customers | Mean number of affected customers during the outage | number | 
 
 
 In the Processed data folder: 
+1. outage_group_all_years.csv
+
+Column Name    | Description                                                   | Class         | Units
+-------------: | :----------------------------------------------------------- | ------------- | -------------
+state         |State where outage occurred                                   | character  | NA
+year          | Year when outage occurred                                    | integer  | NA
+month  | Month when outage occurred (0 is yearly summary)| integer | NA
+outage_count  | Total number of outages | integer | NA
+max_outage_duration  | Maximum duration of any single outage in the period | number | hours
+customer_weighted_hours  | Total customer-weighted hours, calculated by multiplying the number of affected customers by the outage duration | number | NA
+
 
 ## Scripts and code
 All found in the Code folder:
