@@ -426,13 +426,13 @@ the years 2014 to 2023:</p>
 <table>
 <colgroup>
 <col width="14%" />
-<col width="59%" />
-<col width="12%" />
-<col width="12%" />
+<col width="60%" />
+<col width="13%" />
+<col width="13%" />
 </colgroup>
 <thead>
 <tr class="header">
-<th align="center">Column Name</th>
+<th align="right">Column Name</th>
 <th align="left">Description</th>
 <th>Class</th>
 <th>Units</th>
@@ -440,43 +440,326 @@ the years 2014 to 2023:</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="center">state</td>
-<td align="left">State where outage occured</td>
-<td>Content Cell</td>
+<td align="right">state</td>
+<td align="left">State where outage occurred</td>
+<td>factor</td>
 <td>NA</td>
 </tr>
 <tr class="even">
-<td align="center">year</td>
-<td align="left">Year when outage occured</td>
-<td>Content Cell</td>
+<td align="right">year</td>
+<td align="left">Year when outage occurred</td>
+<td>integer</td>
 <td>NA</td>
 </tr>
 <tr class="odd">
-<td align="center">month</td>
-<td align="left">Month when outage occured (0 is yearly summary)</td>
-<td>Content Cell</td>
+<td align="right">month</td>
+<td align="left">Month when outage occurred (0 is yearly summary)</td>
+<td>integer</td>
 <td>NA</td>
 </tr>
 <tr class="even">
-<td align="center">outage_count</td>
+<td align="right">outage_count</td>
 <td align="left">Total number of outages</td>
-<td>Content Cell</td>
+<td>integer</td>
 <td>NA</td>
 </tr>
 <tr class="odd">
-<td align="center">max_outage_duration</td>
+<td align="right">max_outage_duration</td>
 <td align="left">Maximum duration of any single outage in the
 period</td>
-<td>Content Cell</td>
+<td>number</td>
 <td>hours</td>
+</tr>
+<tr class="even">
+<td align="right">customer_weighted_hours</td>
+<td align="left">Total customer-weighted hours, calculated by
+multiplying the number of affected customers by the outage duration</td>
+<td>number</td>
+<td>NA</td>
 </tr>
 </tbody>
 </table>
 <ol start="2" style="list-style-type: decimal">
 <li>eagle_outages_year_merged.csv</li>
+</ol>
+<table>
+<colgroup>
+<col width="14%" />
+<col width="60%" />
+<col width="13%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">Column Name</th>
+<th align="left">Description</th>
+<th>Class</th>
+<th>Units</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">fips</td>
+<td align="left">FIPS code identifying the county where outage
+occured</td>
+<td>number</td>
+<td>NA</td>
+</tr>
+<tr class="even">
+<td align="right">state</td>
+<td align="left">State where outage occurred</td>
+<td>factor</td>
+<td>NA</td>
+</tr>
+<tr class="odd">
+<td align="right">county</td>
+<td align="left">County where outage occur</td>
+<td>factor</td>
+<td>NA</td>
+</tr>
+<tr class="even">
+<td align="right">start_time</td>
+<td align="left">Time when outage occurred</td>
+<td>??</td>
+<td>NA</td>
+</tr>
+<tr class="odd">
+<td align="right">duration</td>
+<td align="left">Duration of the outage</td>
+<td>number</td>
+<td>hours</td>
+</tr>
+<tr class="even">
+<td align="right">min_customers</td>
+<td align="left">Minimum number of affected customers during the
+outage</td>
+<td>number</td>
+<td>NA</td>
+</tr>
+<tr class="odd">
+<td align="right">max_customers</td>
+<td align="left">Maximum number of affected customers during the
+outage</td>
+<td>number</td>
+<td>NA</td>
+</tr>
+<tr class="even">
+<td align="right">mean_customers</td>
+<td align="left">Mean number of affected customers during the
+outage</td>
+<td>number</td>
+<td>NA</td>
+</tr>
+</tbody>
+</table>
+<ol start="3" style="list-style-type: decimal">
 <li>eaglei_outages_with_events_2014_8_hours_lag.csv</li>
+</ol>
+<table>
+<colgroup>
+<col width="14%" />
+<col width="60%" />
+<col width="13%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">Column Name</th>
+<th align="left">Description</th>
+<th>Class</th>
+<th>Units</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">event_id</td>
+<td align="left">Unique identified for associated event</td>
+<td>factor</td>
+<td>NA</td>
+</tr>
+<tr class="even">
+<td align="right">state_event</td>
+<td align="left">State of outage event</td>
+<td>factor</td>
+<td>NA</td>
+</tr>
+<tr class="odd">
+<td align="right">Datetime Event Began</td>
+<td align="left">Date and time of the start of the outage event</td>
+<td>???</td>
+<td>NA</td>
+</tr>
+<tr class="even">
+<td align="right">Datetime Restoration</td>
+<td align="left">Date and time of the end of the outage event</td>
+<td>???</td>
+<td>NA</td>
+</tr>
+<tr class="odd">
+<td align="right">Event Type</td>
+<td align="left">The type of disturbance (e.g. hurricane) causing the
+outage</td>
+<td>factor</td>
+<td>NA</td>
+</tr>
+<tr class="even">
+<td align="right">fips</td>
+<td align="left">FIPS code identifying the county where outage
+occured</td>
+<td>number</td>
+<td>NA</td>
+</tr>
+<tr class="odd">
+<td align="right">state</td>
+<td align="left">State where outage occurred</td>
+<td>factor</td>
+<td>NA</td>
+</tr>
+<tr class="even">
+<td align="right">county</td>
+<td align="left">County where outage occur</td>
+<td>factor</td>
+<td>NA</td>
+</tr>
+<tr class="odd">
+<td align="right">start_time</td>
+<td align="left">Time when outage occurred</td>
+<td>??</td>
+<td>NA</td>
+</tr>
+<tr class="even">
+<td align="right">duration</td>
+<td align="left">Duration of the outage</td>
+<td>number</td>
+<td>hours</td>
+</tr>
+<tr class="odd">
+<td align="right">min_customers</td>
+<td align="left">Minimum number of affected customers during the
+outage</td>
+<td>number</td>
+<td>NA</td>
+</tr>
+<tr class="even">
+<td align="right">max_customers</td>
+<td align="left">Maximum number of affected customers during the
+outage</td>
+<td>number</td>
+<td>NA</td>
+</tr>
+<tr class="odd">
+<td align="right">mean_customers</td>
+<td align="left">Mean number of affected customers during the
+outage</td>
+<td>number</td>
+<td>NA</td>
+</tr>
+</tbody>
+</table>
+<ol start="4" style="list-style-type: decimal">
 <li>eaglei_outages_with_events_2014_24_hours_lag.csv</li>
 </ol>
+<table>
+<colgroup>
+<col width="14%" />
+<col width="60%" />
+<col width="13%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">Column Name</th>
+<th align="left">Description</th>
+<th>Class</th>
+<th>Units</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">event_id</td>
+<td align="left">Unique identified for associated event</td>
+<td>factor</td>
+<td>NA</td>
+</tr>
+<tr class="even">
+<td align="right">state_event</td>
+<td align="left">State of outage event</td>
+<td>factor</td>
+<td>NA</td>
+</tr>
+<tr class="odd">
+<td align="right">Datetime Event Began</td>
+<td align="left">Date and time of the start of the outage event</td>
+<td>???</td>
+<td>NA</td>
+</tr>
+<tr class="even">
+<td align="right">Datetime Restoration</td>
+<td align="left">Date and time of the end of the outage event</td>
+<td>???</td>
+<td>NA</td>
+</tr>
+<tr class="odd">
+<td align="right">Event Type</td>
+<td align="left">The type of disturbance (e.g. hurricane) causing the
+outage</td>
+<td>factor</td>
+<td>NA</td>
+</tr>
+<tr class="even">
+<td align="right">fips</td>
+<td align="left">FIPS code identifying the county where outage
+occured</td>
+<td>number</td>
+<td>NA</td>
+</tr>
+<tr class="odd">
+<td align="right">state</td>
+<td align="left">State where outage occurred</td>
+<td>factor</td>
+<td>NA</td>
+</tr>
+<tr class="even">
+<td align="right">county</td>
+<td align="left">County where outage occur</td>
+<td>factor</td>
+<td>NA</td>
+</tr>
+<tr class="odd">
+<td align="right">start_time</td>
+<td align="left">Time when outage occurred</td>
+<td>??</td>
+<td>NA</td>
+</tr>
+<tr class="even">
+<td align="right">duration</td>
+<td align="left">Duration of the outage</td>
+<td>number</td>
+<td>hours</td>
+</tr>
+<tr class="odd">
+<td align="right">min_customers</td>
+<td align="left">Minimum number of affected customers during the
+outage</td>
+<td>number</td>
+<td>NA</td>
+</tr>
+<tr class="even">
+<td align="right">max_customers</td>
+<td align="left">Maximum number of affected customers during the
+outage</td>
+<td>number</td>
+<td>NA</td>
+</tr>
+<tr class="odd">
+<td align="right">mean_customers</td>
+<td align="left">Mean number of affected customers during the
+outage</td>
+<td>number</td>
+<td>NA</td>
+</tr>
+</tbody>
+</table>
 <p>In the Processed data folder:</p>
 <p>&lt;For each data file in the repository, describe the data contained
 in each column. Include the column name, a description of the

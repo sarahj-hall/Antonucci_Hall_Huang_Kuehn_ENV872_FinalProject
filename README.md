@@ -10,7 +10,8 @@ ENV 872 Course Project for A. Antonucci, S. Hall, C. Huang, and I. Kuehn
 
 ## Summary
 
-This repository contains code and data for the investigators' Duke Nicholas School of the Environment ENVIRON872 Environmental Data Exploration Final Course Project in the Fall of 2025. The data used for analysis was event-correlated power outage data from the Pacific Northwest National Laboratory (PNNL). Temporal trends in number and length of power outages were analyzed for four states (x,y,z,w).
+This repository contains code and data for the investigators' Duke Nicholas School of the Environment ENVIRON872 Environmental Data Exploration Final Course Project in the Fall of 2025. The data used for analysis was event-correlated power outage data from the Pacific Northwest National Laboratory (PNNL). Temporal trends in the number and length of power outages were analyzed for CA, TX, FL, PA from 2015 to 2023.
+
 <describe the purpose of this repository, the information it contains, and any relevant analysis goals. What, why, where, when, how?>
 
 ## Investigators
@@ -20,7 +21,6 @@ Addisen Antonucci, Sarah Hall, Carina Huang, and Isabelle Kuehn
 ## Keywords
 
 power outages, trend, time series analysis, power-system, black-out, reliability
-
 
 ## Database Information
 
@@ -48,27 +48,72 @@ state seperated?
 
 ## Metadata
 
+<For each data file in the repository, describe the data contained in each column. Include the column name, a description of the information, the class of data, and any units associated with the data. Create a list or table for each data file.> 
+
 In the Raw data folder, there are four different types of files for the years 2014 to 2023:
 
 1. eagle_outages_year_group.csv
 
 Column Name    | Description                                                   | Class         | Units
 -------------: | :----------------------------------------------------------- | ------------- | -------------
-state         |State where outage occured                                   | Content Cell  | NA
-year          | Year when outage occured                                    | Content Cell  | NA
-month  | Month when outage occured (0 is yearly summary)| Content Cell | NA
-outage_count  | Total number of outages | Content Cell | NA
-max_outage_duration  | Maximum duration of any single outage in the period | Content Cell | hours
-
+state         |State where outage occurred                                   | factor  | NA
+year          | Year when outage occurred                                    | integer  | NA
+month  | Month when outage occurred (0 is yearly summary)| integer | NA
+outage_count  | Total number of outages | integer | NA
+max_outage_duration  | Maximum duration of any single outage in the period | number | hours
+customer_weighted_hours  | Total customer-weighted hours, calculated by multiplying the number of affected customers by the outage duration | number | NA
 
 2. eagle_outages_year_merged.csv
+
+Column Name    | Description                                                   | Class         | Units
+-------------: | :----------------------------------------------------------- | ------------- | -------------
+fips          |FIPS code identifying the county where outage occured          | number  | NA
+state         |State where outage occurred                                   | factor  | NA
+county          | County where outage occur                                  | factor  | NA
+start_time  | Time when outage occurred | ?? | NA
+duration  | Duration of the outage | number | hours
+min_customers  | Minimum number of affected customers during the outage | number | NA
+max_customers  | Maximum number of affected customers during the outage | number | NA
+mean_customers | Mean number of affected customers during the outage | number | NA
+
 3. eaglei_outages_with_events_2014_8_hours_lag.csv
+
+Column Name    | Description                                                   | Class         | Units
+-------------: | :----------------------------------------------------------- | ------------- | -------------
+event_id       | Unique identified for associated event          | factor | NA
+state_event         |State of outage event                                   | factor  | NA
+Datetime Event Began | Date and time of the start of the outage event | ???  | NA
+Datetime Restoration | Date and time of the end of the outage event | ???  | NA
+Event Type  | The type of disturbance (e.g. hurricane) causing the outage | factor | NA
+fips          |FIPS code identifying the county where outage occured          | number  | NA
+state         |State where outage occurred                                   | factor  | NA
+county          | County where outage occur                                  | factor  | NA
+start_time  | Time when outage occurred | ?? | NA
+duration  | Duration of the outage | number | hours
+min_customers  | Minimum number of affected customers during the outage | number | NA
+max_customers  | Maximum number of affected customers during the outage | number | NA
+mean_customers | Mean number of affected customers during the outage | number | NA
+
 4. eaglei_outages_with_events_2014_24_hours_lag.csv
 
+Column Name    | Description                                                   | Class         | Units
+-------------: | :----------------------------------------------------------- | ------------- | -------------
+event_id       | Unique identified for associated event          | factor | NA
+state_event         |State of outage event                                   | factor  | NA
+Datetime Event Began | Date and time of the start of the outage event | ???  | NA
+Datetime Restoration | Date and time of the end of the outage event | ???  | NA
+Event Type  | The type of disturbance (e.g. hurricane) causing the outage | factor | NA
+fips          |FIPS code identifying the county where outage occured          | number  | NA
+state         |State where outage occurred                                   | factor  | NA
+county          | County where outage occur                                  | factor  | NA
+start_time  | Time when outage occurred | ?? | NA
+duration  | Duration of the outage | number | hours
+min_customers  | Minimum number of affected customers during the outage | number | NA
+max_customers  | Maximum number of affected customers during the outage | number | NA
+mean_customers | Mean number of affected customers during the outage | number | NA
+
+
 In the Processed data folder: 
-
-
-<For each data file in the repository, describe the data contained in each column. Include the column name, a description of the information, the class of data, and any units associated with the data. Create a list or table for each data file.> 
 
 ## Scripts and code
 All found in the Code folder:
