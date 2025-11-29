@@ -36,30 +36,34 @@ write.csv(outage_group_all_years, row.names = FALSE,
 ```
 
 ```{r process into 4 state files}
-#filter out for california and export to processed data file 
+#filter out for CA and export to processed data file 
 outage_group_CA <- outage_group_all_years %>% 
-  filter(state == 'CA') 
+  filter(state == 'CA') %>% 
+  filter(month > 0) #filter out yearly summary 
 
 write.csv(outage_group_CA, row.names = FALSE, 
           file = "./Data/Processed/outage_group_CA.csv")
 
 #filter out for TX and export to processed data file 
 outage_group_TX <- outage_group_all_years %>% 
-  filter(state == 'TX') 
+  filter(state == 'TX') %>% 
+  filter(month > 0) #filter out yearly summary 
 
 write.csv(outage_group_TX, row.names = FALSE, 
           file = "./Data/Processed/outage_group_TX.csv")
 
 #filter out for FL and export to processed data file 
 outage_group_FL <- outage_group_all_years %>% 
-  filter(state == 'FL') 
+  filter(state == 'FL') %>% 
+  filter(month > 0) #filter out yearly summary 
 
 write.csv(outage_group_FL, row.names = FALSE, 
           file = "./Data/Processed/outage_group_FL.csv")
 
 #filter out for PA and export to processed data file 
 outage_group_PA <- outage_group_all_years %>% 
-  filter(state == 'PA') 
+  filter(state == 'PA') %>% 
+  filter(month > 0) #filter out yearly summary 
 
 write.csv(outage_group_PA, row.names = FALSE, 
           file = "./Data/Processed/outage_group_PA.csv")

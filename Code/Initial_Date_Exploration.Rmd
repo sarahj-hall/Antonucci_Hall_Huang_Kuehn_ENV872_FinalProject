@@ -9,6 +9,9 @@ editor_options:
 ```{r setup, include=FALSE}
 library(here)
 library(tidyverse)
+library(viridis)
+library(RColorBrewer)
+library(colormap)
 
 #read in files for 2021
 outage_group_2021 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2021_group.csv'),
@@ -103,33 +106,102 @@ outage_group_TX %>%
   geom_line()
 
 #line plots for each state, monthly 
-outage_group_CA %>% 
+CA_monthly_plot <- outage_group_CA %>% 
   filter(month != 0) %>% 
-  ggplot(aes(x = month,
-      y = outage_count))+
-  geom_point()+
-  geom_line()
+  ggplot(
+    mapping = aes(
+      x=factor(
+      month,
+      levels=1:12,
+      labels=month.abb),
+      y = outage_count,
+      color = year)
+    ) +
+ geom_point(size = 2, alpha = 0.7)+
+ scale_color_viridis(
+   option = "mako", 
+   direction = -1)+
+  labs(
+    title = "Number of Power Outages in California by Month from 2015 to 2023",
+    y = "Number of Outages",
+    x = "Month",
+    color = "Year",
+  )
 
-#plots for each state, monthly 
+CA_monthly_plot
+
+#example of how to export 
+ggsave(here('Output/CA_monthly_plot.jpg'), CA_monthly_plot, height = 4, width = 6, units = "in", dpi = 300)
+
+#plots for Texas, monthly 
 outage_group_TX %>% 
   filter(month != 0) %>% 
-  ggplot(aes(x = month,
-      y = outage_count))+
-  geom_point()
+  ggplot(
+    mapping = aes(
+      x=factor(
+      month,
+      levels=1:12,
+      labels=month.abb),
+      y = outage_count,
+      color = year)
+    ) +
+ geom_point(size = 2, alpha = 0.7)+
+ scale_color_viridis(
+   option = "mako", 
+   direction = -1)+
+  labs(
+    title = "Number of Power Outages in Texas by Month from 2015 to 2023",
+    y = "Number of Outages",
+    x = "Month",
+    color = "Year",
+  )
 
-#plots for each state, monthly 
+#plots for Florida, monthly 
 outage_group_FL %>% 
   filter(month != 0) %>% 
-  ggplot(aes(x = month,
-      y = outage_count))+
-  geom_point()
+  ggplot(
+    mapping = aes(
+      x=factor(
+      month,
+      levels=1:12,
+      labels=month.abb),
+      y = outage_count,
+      color = year)
+    ) +
+ geom_point(size = 2, alpha = 0.7)+
+ scale_color_viridis(
+   option = "mako", 
+   direction = -1)+
+  labs(
+    title = "Number of Power Outages in Florida by Month from 2015 to 2023",
+    y = "Number of Outages",
+    x = "Month",
+    color = "Year",
+  )
 
+#plots for PA, monthly 
 outage_group_PA %>% 
   filter(month != 0) %>% 
-  ggplot(aes(x = month,
+  ggplot(
+    mapping = aes(
+      x=factor(
+      month,
+      levels=1:12,
+      labels=month.abb),
       y = outage_count,
-      color = year))+
-  geom_point(alpha = 0.5)
+      color = year)
+    ) +
+ geom_point(size = 2, alpha = 0.7)+
+ scale_color_viridis(
+   option = "mako", 
+   direction = -1)+
+  labs(
+    title = "Number of Power Outages in Pennslyvania by Month from 2015 to 2023",
+    y = "Number of Outages",
+    x = "Month",
+    color = "Year",
+  )
+
 
 
 ```

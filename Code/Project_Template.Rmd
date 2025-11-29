@@ -10,8 +10,17 @@
 # Set your working directory
 
 # Load your packages
+library(tidyverse)
+library(here)
+library(lubridate)
+library(viridis)
+library(zoo)
 
 # Set your ggplot theme
+mytheme <- theme_classic(base_size = 12) +
+  theme(axis.text = element_text(color = "black"), 
+        legend.position = "top")
+theme_set(mytheme)
 
 # Load your datasets
 
