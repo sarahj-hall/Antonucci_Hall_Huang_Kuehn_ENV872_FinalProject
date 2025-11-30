@@ -13,12 +13,17 @@ library(viridis)
 ```
 
 ```{r load data}
+#read in CA data from processed folder 
 outage_group_CA <- read.csv(here('Data/Processed/outage_group_CA.csv'), 
                             stringsAsFactors = TRUE)
 
-#read in CA data from processed folder 
+outage_group_CA <- outage_group_CA %>% 
+  mutate(
+    date = my(paste0(month, "-", year)))
+
+
 #create date column, combine month + year
-#remove unwanted data columns ? 
+#set date column as date class
 
 ```
 
@@ -98,13 +103,48 @@ CA_weighted_customers_plot
 ```
 
 ```{r Time Series Analysis }
+#define first day and first year values 
+f_month <- month(first(outage_group_CA$date))
+f_year <- year(first(outage_group_CA$date))
 
+#create time series object 
+CA_outage_ts <- 
+  ts(outage_group_CA$outage_count, 
+     start = c(f_year, f_month), 
+     frequency = 12)
 
+#decompose and plot
+CA_outage_decompose <- stl(CA_outage_ts, 
+                           s.window = "periodic")
+plot(CA_outage_decompose)
+
+#run monotonic trend analysis 
+CA_outage_trend <- trend::smk.test(CA_outage_ts)
+CA_outage_trend
+
+```
+
+```{r remove seasonality trend??}
+#remove seasonality trend?? and re=run MK test 
+#could we remove the other parts to just look at the seasonal trend??
+#extract the components of each series into a df
+CA_outage_compon <- 
+  as.data.frame(CA_outage_decompose$time.series[,1:3])
+
+#remove seasonal 
+CA_outage_non_seas <- 
+  CA_outage_ts - CA_outage_compon[,1]
+
+#rerun MK
+CA_outage_trend_noseasons <- trend::mk.test(CA_outage_non_seas)
+CA_outage_trend_noseasons
 
 ```
 
 
 ```{r Results Visualization}
+#plot of monthly outages 
+
 
 ```
 
