@@ -10,6 +10,8 @@ library(tidyverse)
 library(lubridate)
 library(here)
 library(viridis)
+library(trend)
+library(zoo)
 ```
 
 ```{r load data}
@@ -17,18 +19,33 @@ library(viridis)
 outage_group_CA <- read.csv(here('Data/Processed/outage_group_CA.csv'), 
                             stringsAsFactors = TRUE)
 
+#create new column with month and year combined, first of the month is use to allow for time series analysis  
 outage_group_CA <- outage_group_CA %>% 
   mutate(
     date = my(paste0(month, "-", year)))
-
-
-#create date column, combine month + year
-#set date column as date class
 
 ```
 
 ```{r CA data visualization}
 #processing: plots, time plot, county spatial plot? 
+
+#yearly plot?
+CA_yearly <- outage_group_CA %>% 
+  ggplot(
+    mapping = aes(
+      x= date,
+      y = outage_count
+      )) +
+  geom_point(size = 2, alpha = 0.7)+
+  geom_line()+
+  geom_smooth(method ="lm")+
+  labs(
+    title = "Number of Power Outages in California from 2015 to 2023",
+    y = "Number of Outages",
+    x = "Year"
+  )
+
+CA_yearly
 
 #monthly plot (for data visualization)
 CA_monthly_plot <- outage_group_CA %>% 
@@ -122,6 +139,9 @@ plot(CA_outage_decompose)
 CA_outage_trend <- trend::smk.test(CA_outage_ts)
 CA_outage_trend
 
+summary(CA_outage_trend)
+
+
 ```
 
 ```{r remove seasonality trend??}
@@ -138,6 +158,13 @@ CA_outage_non_seas <-
 #rerun MK
 CA_outage_trend_noseasons <- trend::mk.test(CA_outage_non_seas)
 CA_outage_trend_noseasons
+
+#remove trend 
+CA_outage_seasonal <- 
+  CA_outage_ts - CA_outage_compon[,2]
+
+CA_outage_trend_seasonal <- trend::mk.test(CA_outage_seasonal)
+CA_outage_trend_seasonal
 
 ```
 

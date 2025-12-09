@@ -1,0 +1,16 @@
+---
+title: "Data_Analysis_CA"
+output: html_document
+---
+
+```{r setup and load data}
+library(tidyverse)
+library(here)
+library(trend)
+library(zoo)
+
+
+
+
+```
+
