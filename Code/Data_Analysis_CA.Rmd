@@ -1,16 +1,135 @@
 ---
 title: "Data_Analysis_CA"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup and load data}
+#load packages in
 library(tidyverse)
 library(here)
 library(trend)
 library(zoo)
 
+#read in CA data from processed folder 
+outage_group_CA <- read.csv(here('Data/Processed/outage_group_CA.csv'), 
+                            stringsAsFactors = TRUE)
+
+#update date object to date format 
+outage_group_CA$date <- ymd(outage_group_CA$date)
+
+```
+
+```{r time series analysis}
+
+#define first day and first year values 
+f_month <- month(first(outage_group_CA$date))
+f_year <- year(first(outage_group_CA$date))
+
+#create time series object 
+CA_outage_ts <- 
+  ts(outage_group_CA$outage_count, 
+     start = c(f_year, f_month), 
+     frequency = 12)
+
+#decompose and plot
+CA_outage_decompose <- stl(CA_outage_ts, 
+                           s.window = "periodic")
+plot(CA_outage_decompose)
+
+#run monotonic trend analysis 
+CA_outage_trend <- trend::smk.test(CA_outage_ts)
+CA_outage_trend
+
+summary(CA_outage_trend)
+
+```
+
+```{r remove seasonality trend??}
+#remove seasonality trend?? and re=run MK test 
+#could we remove the other parts to just look at the seasonal trend??
+#extract the components of each series into a df
+CA_outage_compon <- 
+  as.data.frame(CA_outage_decompose$time.series[,1:3])
+
+#remove seasonal 
+CA_outage_non_seas <- 
+  CA_outage_ts - CA_outage_compon[,1]
+
+#rerun MK
+CA_outage_trend_noseasons <- trend::mk.test(CA_outage_non_seas)
+CA_outage_trend_noseasons
+
+```
+
+```{r Results Visualization}
+#plot of monthly outages 
 
 
+```
 
+```{r customer weighted average tsa }
+#create time series object 
+CA_CWA_ts <- 
+  ts(outage_group_CA$customer_weighted_hours, 
+     start = c(f_year, f_month), 
+     frequency = 12)
+
+#decompose and plot
+CA_CWA_decompose <- stl(CA_CWA_ts, 
+                           s.window = "periodic")
+plot(CA_CWA_decompose)
+
+#run monotonic trend analysis 
+CA_CWA_trend <- trend::smk.test(CA_CWA_ts)
+CA_CWA_trend
+
+summary(CA_CWA_trend)
+
+#remove seasonality for customer weighted average
+#extract the components of each series into a df
+CA_CWA_compon <- 
+  as.data.frame(CA_CWA_decompose$time.series[,1:3])
+
+#remove seasonal 
+CA_CWA_non_seas <- 
+  CA_CWA_ts - CA_CWA_compon[,1]
+
+#rerun MK
+CA_CWA_trend_noseasons <- trend::mk.test(CA_CWA_non_seas)
+CA_CWA_trend_noseasons
+```
+
+```{r tsa for outage duration}
+#create time series object 
+CA_duration_ts <- 
+  ts(outage_group_CA$max_outage_duration, 
+     start = c(f_year, f_month), 
+     frequency = 12)
+
+#decompose and plot
+CA_duration_decompose <- stl(CA_duration_ts, 
+                           s.window = "periodic")
+plot(CA_duration_decompose)
+
+#run monotonic trend analysis 
+CA_duration_trend <- trend::smk.test(CA_duration_ts)
+CA_duration_trend
+
+summary(CA_duration_trend)
+
+#remove seasonality for customer weighted average
+#extract the components of each series into a df
+CA_duration_compon <- 
+  as.data.frame(CA_duration_decompose$time.series[,1:3])
+
+#remove seasonal 
+CA_duration_non_seas <- 
+  CA_duration_ts - CA_duration_compon[,1]
+
+#rerun MK
+CA_duration_trend_noseasons <- trend::mk.test(CA_duration_non_seas)
+CA_duration_trend_noseasons
 ```
 
