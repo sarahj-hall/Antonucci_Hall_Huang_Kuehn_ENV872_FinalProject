@@ -39,7 +39,10 @@ write.csv(outage_group_all_years, row.names = FALSE,
 #filter out for CA and export to processed data file 
 outage_group_CA <- outage_group_all_years %>% 
   filter(state == 'CA') %>% 
-  filter(month > 0) #filter out yearly summary 
+  filter(month > 0)  %>%  #filter out yearly summary 
+  #create new column with month and year combined, first of the month is      use to allow for time series analysis
+  mutate(
+    date = my(paste0(month, "-", year)))   
 
 write.csv(outage_group_CA, row.names = FALSE, 
           file = "./Data/Processed/outage_group_CA.csv")
@@ -47,7 +50,10 @@ write.csv(outage_group_CA, row.names = FALSE,
 #filter out for TX and export to processed data file 
 outage_group_TX <- outage_group_all_years %>% 
   filter(state == 'TX') %>% 
-  filter(month > 0) #filter out yearly summary 
+  filter(month > 0) %>%  #filter out yearly summary 
+ #create new column with month and year combined, first of the month is      use to allow for time series analysis
+  mutate(
+    date = my(paste0(month, "-", year)))   
 
 write.csv(outage_group_TX, row.names = FALSE, 
           file = "./Data/Processed/outage_group_TX.csv")
@@ -55,7 +61,10 @@ write.csv(outage_group_TX, row.names = FALSE,
 #filter out for FL and export to processed data file 
 outage_group_FL <- outage_group_all_years %>% 
   filter(state == 'FL') %>% 
-  filter(month > 0) #filter out yearly summary 
+  filter(month > 0) %>% #filter out yearly summary 
+ #create new column with month and year combined, first of the month is      use to allow for time series analysis
+  mutate(
+    date = my(paste0(month, "-", year)))   
 
 write.csv(outage_group_FL, row.names = FALSE, 
           file = "./Data/Processed/outage_group_FL.csv")
@@ -63,7 +72,10 @@ write.csv(outage_group_FL, row.names = FALSE,
 #filter out for PA and export to processed data file 
 outage_group_PA <- outage_group_all_years %>% 
   filter(state == 'PA') %>% 
-  filter(month > 0) #filter out yearly summary 
+  filter(month > 0) %>% #filter out yearly summary 
+ #create new column with month and year combined, first of the month is      use to allow for time series analysis
+  mutate(
+    date = my(paste0(month, "-", year)))   
 
 write.csv(outage_group_PA, row.names = FALSE, 
           file = "./Data/Processed/outage_group_PA.csv")
