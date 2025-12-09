@@ -1,0 +1,20 @@
+---
+title: "Data_Wrang_TX"
+output: html_document
+---
+
+```{r set up and import libraries}
+library(tidyverse)
+library(lubridate)
+library(here)
+library(viridis)
+library(ggplot2)
+
+here()
+```
+
+```{r read csv}
+TX <- read.csv(here('./Data/Processed/outage_group_TX.csv'))
+
+```
+
