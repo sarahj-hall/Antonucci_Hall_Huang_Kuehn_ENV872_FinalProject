@@ -1,5 +1,5 @@
 ---
-title: "Data Analysis for FL"
+title: "Time Series Analysis for FL"
 author: "Isabelle Kuehn"
 date: "2025-12-10"
 output: html_document
@@ -103,27 +103,74 @@ monthly_outages_FL <- outage_group_FL %>%
   filter(month != 0)
 ```
 
+```{r}
+# Monthly Outages Across FL from 2015-2023 with Linear Regression
+monthly_outages_FL <- monthly_outages_FL %>% 
+  mutate(Date = my(paste(month,"-",year)))
+
+ggplot(monthly_outages_FL, aes(x=Date, y=outage_count)) + 
+  geom_line() + 
+  geom_point() +
+  geom_smooth(method="lm", se = FALSE) +
+  labs(title = "2015-2023 Monthly Outages for Florida",
+       y="Outage Count",
+       x="Date")
+```
 
 ## Time Series Analysis
 
-Main question: How have outage occurrences changed in Florida from 2015 to 2023? Have the duration of those outages changed? Are outages occurrences or longer durations consistent with any extreme weather events in FL?
+Main question: How have outage occurrences changed in Florida from 2015 to 2023? Have the duration of those outages changed? Are outages occurrences or longer durations consistent with any extreme weather events in FL? Do any of the results reflect seasonality?
 
 ```{r}
-# Goal is to run Time Series Analysis for monthly outages and cumulative yearly outages
+# Goal is to run time series analysis for monthly outages and cumulative yearly outages
 first_month <- first(monthly_outages_FL$month)
 first_year <- first(yearly_outages_FL$year)
 
-FL_outages.monthly.ts <- ts(monthly_outages_FL$outage_count, 
+monthly_outages_FL.ts <- ts(monthly_outages_FL$outage_count, 
                              frequency = 12, start = c(first_year, first_month))
-FL_outages.yearly.ts <- ts(yearly_outages_FL$outage_count, frequency = 1, 
-                               start = first_year)
 
 # Plot each time series
-FL_monthly_decomposed <- stl(FL_outages.monthly.ts, s.window = "periodic")
-#FL_yearly_decomposed <- stl(FL_outages.yearly.ts, s.window = "periodic")
-plot(FL_monthly_decomposed)
-#plot(FL_yearly_decomposed)
+FL_monthly_decomposed <- stl(monthly_outages_FL.ts, s.window = "periodic")
+plot(FL_monthly_decomposed, main = "Time Series Analysis for Monthly FL Outages")
+
+FL_monthly_outage_trend <- trend::smk.test(monthly_outages_FL.ts)
+FL_monthly_outage_trend
 ```
+
+```{r}
+# Monthly Outage TS Decomposition
+
+monthly_outages_FL.components <- as.data.frame(FL_monthly_decomposed$time.series[,1:3])
+
+monthly_outages_FL.components <- mutate(monthly_outages_FL.components,
+        Observed = monthly_outages_FL$outage_count,     
+        Date = monthly_outages_FL$Date)
+
+# Trend Plot
+ggplot(monthly_outages_FL.components) +
+  geom_line(aes(y = Observed, x = Date),  size = 0.5) +
+  geom_line(aes(y = trend, x = Date), color = "slateblue") +
+  ylab("Outage Count")
+  
+# Seasonality Plot
+ggplot(monthly_outages_FL.components) +
+  geom_line(aes(y = Observed, x = Date),  size = 0.5) +
+  geom_line(aes(y = seasonal, x = Date), color = "slateblue") +
+  ylab("Outage Count")
 ```
+
+
+What does this show?
+Seasonal Mann Kendall tests are run to show statistical evidence for seasonality across datasets. The results of the Mann Kendall test show a p-value well below 0.05, providing significant statistical support in proving seasonal trends across Florida from 2015-2023.
+
+```{r}
+
+# customer weighted hours = customer hours x duration
+
+# use instead of max_outage_duration
+# run time series analysis
+#
+```
+
 
 
