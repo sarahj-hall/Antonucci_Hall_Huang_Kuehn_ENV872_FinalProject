@@ -96,9 +96,7 @@ CA_CWA_compon <-
 CA_CWA_non_seas <- 
   CA_CWA_ts - CA_CWA_compon[,1]
 
-#rerun MK
-CA_CWA_trend_noseasons <- trend::mk.test(CA_CWA_non_seas)
-CA_CWA_trend_noseasons
+ 
 ```
 
 ```{r tsa for outage duration}
