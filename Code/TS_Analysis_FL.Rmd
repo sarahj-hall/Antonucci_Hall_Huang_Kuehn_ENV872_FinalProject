@@ -1,0 +1,129 @@
+---
+title: "Data Analysis for FL"
+author: "Isabelle Kuehn"
+date: "2025-12-10"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+# From Intitial Data Exploration
+library(here)
+library(tidyverse)
+library(viridis)
+library(RColorBrewer)
+library(colormap)
+
+outage_group_2021 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2021_group.csv'),
+                              stringsAsFactors = TRUE)
+outage_merged_2021 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2021_merged.csv'),
+                              stringsAsFactors = TRUE)
+outage_events_2021_24hr <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_with_events_2021_24_hours_lag.csv'), stringsAsFactors = TRUE)
+
+outage_group_2015 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2015_group.csv'), stringsAsFactors = TRUE)
+outage_group_2016 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2016_group.csv'), stringsAsFactors = TRUE)
+outage_group_2017 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2017_group.csv'), stringsAsFactors = TRUE)
+outage_group_2018 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2018_group.csv'), stringsAsFactors = TRUE)
+outage_group_2019 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2019_group.csv'), stringsAsFactors = TRUE)
+outage_group_2020 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2020_group.csv'), stringsAsFactors = TRUE)
+outage_group_2021 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2021_group.csv'), stringsAsFactors = TRUE)
+outage_group_2022 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2022_group.csv'), stringsAsFactors = TRUE)
+outage_group_2023 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2023_group.csv'), stringsAsFactors = TRUE)
+
+#merge into one dataset
+outage_group_all_years <- rbind(outage_group_2015, outage_group_2016,outage_group_2017, outage_group_2018, outage_group_2019, outage_group_2020, outage_group_2021, outage_group_2022, outage_group_2023)
+
+#change columns to state abbrevations
+outage_group_all_years$state <- state.abb[match(outage_group_all_years$state, state.name)]
+
+#export to combined years dataset
+write.csv(outage_group_all_years, row.names = FALSE, 
+          file = "./Data/Processed/outage_group_all_years.csv")
+
+#filter out for PA 
+outage_group_PA <- outage_group_all_years %>% 
+  filter(state == 'PA') 
+```
+
+```{r}
+my_theme <- theme_classic + theme(axis.text.x = element_text(angle = 45))
+
+summary(outage_events_2021_24hr)
+summary(outage_group_2021)
+summary(outage_merged_2021)
+
+#boxplot for total yearly outages from 2015-2023
+outage_group_all_years %>% 
+  filter(month == 0) %>% 
+  ggplot(aes(x = state,
+      y = outage_count))+
+  geom_boxplot()
+
+outage_group_FL %>% 
+  filter(month == 0) %>% 
+  ggplot(aes(x = year,
+      y = outage_count))+
+  geom_point()+
+  geom_line()
+
+#plots for Florida, monthly 
+outage_group_FL %>% 
+  filter(month != 0) %>% 
+  ggplot(
+    mapping = aes(
+      x=factor(
+      month,
+      levels=1:12,
+      labels=month.abb),
+      y = outage_count,
+      color = year)
+    ) +
+ geom_point(size = 2, alpha = 0.7)+
+ scale_color_viridis(
+   option = "mako", 
+   direction = -1)+
+  labs(
+    title = "Number of Power Outages in Florida by Month from 2015 to 2023",
+    y = "Number of Outages",
+    x = "Month",
+    color = "Year",
+  )
+```
+
+```{r}
+# Data Wrangling
+
+# Create data sets like the plots above that distinguish between yearly outages in FL and monthly averages in FL
+
+yearly_outages_FL <- outage_group_FL %>%
+  filter(month == 0)
+
+monthly_outages_FL <- outage_group_FL %>%
+  filter(month != 0)
+```
+
+
+## Time Series Analysis
+
+Main question: How have outage occurrences changed in Florida from 2015 to 2023? Have the duration of those outages changed? Are outages occurrences or longer durations consistent with any extreme weather events in FL?
+
+```{r}
+# Goal is to run Time Series Analysis for monthly outages and cumulative yearly outages
+first_month <- first(monthly_outages_FL$month)
+first_year <- first(yearly_outages_FL$year)
+
+FL_outages.monthly.ts <- ts(monthly_outages_FL$outage_count, 
+                             frequency = 12, start = c(first_year, first_month))
+FL_outages.yearly.ts <- ts(yearly_outages_FL$outage_count, frequency = 1, 
+                               start = first_year)
+
+# Plot each time series
+FL_monthly_decomposed <- stl(FL_outages.monthly.ts, s.window = "periodic")
+#FL_yearly_decomposed <- stl(FL_outages.yearly.ts, s.window = "periodic")
+plot(FL_monthly_decomposed)
+#plot(FL_yearly_decomposed)
+```
+```
+
+
