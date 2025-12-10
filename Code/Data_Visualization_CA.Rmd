@@ -10,8 +10,6 @@ library(tidyverse)
 library(lubridate)
 library(here)
 library(viridis)
-library(trend)
-library(zoo)
 ```
 
 ```{r load data}
@@ -27,13 +25,12 @@ outage_group_CA$date <- ymd(outage_group_CA$date)
 ```{r CA data visualization}
 
 mytheme <- theme_classic(base_size = 12) +
-  theme(axis.text = element_text(color = "black"), 
-        legend.position = "top")
+  theme(axis.text = element_text(color = "black"))
 theme_set(mytheme)
 
 #processing: plots, time plot, county spatial plot? 
 
-#yearly plot? need to fix x-axis 
+#yearly plot 
 CA_yearly <- outage_group_CA %>% 
   ggplot(
     mapping = aes(
