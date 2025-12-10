@@ -1,3 +1,13 @@
+---
+title: 'Power Outage Trends in California, Florida, Pennsylvania, and Texas from 2015 to 2023'
+subtitle: 'https://github.com/sarahj-hall/Antonucci_Hall_Huang_Kuehn_ENV872_FinalProject.git'
+authors: 'Addisen Antonucci, Sarah Hall, Carina Huang, and Isabelle Kuehn'
+date: 'December 12th, 2025'
+output: 
+  pdf_document: default
+editor_options:
+  chunk_output_type: console
+---
 \newpage
 \tableofcontents 
 \newpage
@@ -7,8 +17,6 @@
 \newpage
 
 ```{r setup, include=FALSE}
-# Set your working directory
-
 # Load your packages
 library(tidyverse)
 library(here)
@@ -16,11 +24,17 @@ library(lubridate)
 library(viridis)
 library(zoo)
 
-# Set your ggplot theme
+# Set your working directory
+here()
+
+# Set ggplot theme
 mytheme <- theme_classic(base_size = 12) +
   theme(axis.text = element_text(color = "black"), 
         legend.position = "top")
 theme_set(mytheme)
+
+#set global chunk options
+knitr::opts_chunk$set()
 
 # Load your datasets
 
@@ -34,7 +48,9 @@ At the end of your rationale, introduce a numbered list of your questions (or an
 
 - damage of outages (health, financial)
 - increasing climate related weather events, vulnerable power system infrastructure 
-- 
+- selected four states, tried to spread out geographically but also selected states with the highest power outages/most impacted by recent extreme climate events. Texas, California, Florida, and Pennsylvania 
+
+
 
 \newpage
 
