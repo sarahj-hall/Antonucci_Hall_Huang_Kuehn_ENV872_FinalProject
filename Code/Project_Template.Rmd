@@ -347,7 +347,7 @@ Outage_components_PA <- mutate(Outage_components_PA,
 #Mann-Kendall Seasonality Test
 Outages_PA_SMK <- Kendall::SeasonalMannKendall(Outages_ts_PA)
 Outages_PA_SMK
-summary(Ouatges_PA_SMK)
+summary(Outages_PA_SMK)
 #p-value is 0.009
 
 #Remove Seasonal
