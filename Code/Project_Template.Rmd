@@ -5,7 +5,6 @@ authors: 'Addisen Antonucci, Sarah Hall, Carina Huang, and Isabelle Kuehn'
 date: 'December 12th, 2025'
 output: 
   bookdown::pdf_document2:
-    toc: true
 editor_options:
   chunk_output_type: console
 
