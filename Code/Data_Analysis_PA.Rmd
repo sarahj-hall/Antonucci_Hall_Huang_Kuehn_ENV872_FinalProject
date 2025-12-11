@@ -3,6 +3,8 @@ title: "Data_Analysis_PA"
 author: "Addisen Antonucci"
 date: "2025-12-10"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -12,17 +14,64 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 #load packages
 library(tidyverse)
-library(zoo)
-library(here)
-library(trend)
 library(lubridate)
+library(trend)
+library(zoo)
+library(Kendall)
+library(tseries)
+library(here)
 
 #read in processed PA data
 outage_group_PA <- read.csv(here('Data/Processed/outage_group_PA.csv'), 
                     stringsAsFactors = TRUE)
+#Set Theme
+mytheme <- theme_classic(base_size = 14) +
+  theme(axis.text = element_text(color = "black"), 
+        legend.position = "top")
+theme_set(mytheme)
 
 #Format Date  
 outage_group_PA$date <- ymd(outage_group_PA$date)
+
+```
+
+##  Initial Plots
+```{r}
+#Outages by Month
+monthly_outages <- outage_group_PA %>%
+  mutate(
+    year = year(date),
+    month = month(date),
+    year_month = as.Date(paste(year, month, "01", sep = "-"))
+  ) %>%
+  group_by(year_month) %>%
+  summarise(outage_count = sum(outage_count))
+
+#Time series of Outages
+ggplot(monthly_outages, aes(x = year_month, y = outage_count)) +
+  geom_line() +
+  labs(x = "Year", y = "Outage Count") +
+  geom_smooth(method = "lm", color = "blue")
+
+```
+
+## Time Series
+```{r}
+#Creating time Series Objects
+Outages_ts <- ts(monthly_outages$outage_count, start = c(2015,1), end =c(2023,12), frequency = 12)
+
 ```
 
 
+```{r}
+#Visualize Decomposed Series
+Outage_Decomposed <- stl(Outages_ts, s.window = "periodic")
+
+plot(Outage_Decomposed)
+```
+
+##  How have outage frequencies changed over time?
+
+##  Is there seasonality?
+
+##How have the lengths of outages changed over time?
