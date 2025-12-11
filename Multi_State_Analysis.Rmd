@@ -55,8 +55,11 @@ CA_outage_combined <- CA_outage_components %>%
 PA_Outage_combined <- Outage_components_PA %>%
   mutate(State = "PA")
 
+TX_Outage_combined <- TXOutage_count_Components %>%
+  mutate(State = "TX")
+
 # Combine the datasets
-combined_data <- bind_rows(CA_outage_combined, PA_Outage_combined)
+combined_data <- bind_rows(CA_outage_combined, PA_Outage_combined, TX_Outage_combined)
 
 # Plot together
 ggplot(combined_data) +
