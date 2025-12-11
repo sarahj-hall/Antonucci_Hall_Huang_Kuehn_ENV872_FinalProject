@@ -77,16 +77,41 @@ outage_group_CA$month <- factor(month(outage_group_CA$date),
                                 levels = 1:12,
                                 labels = month.abb)
 
-anova_outage <- aov(outage_count ~ month, data = outage_group_CA)
-summary(anova_outage)
+CA_anova_outage <- aov(data = outage_group_CA, outage_count ~ month)
+summary(CA_anova_outage)
+
+#show months
+TukeyHSD(CA_anova_outage)
 
 #messing around with PA stats for seasonality (results so stats sig)
 outage_group_PA$month <- factor(month(outage_group_PA$date),
                                 levels = 1:12,
                                 labels = month.abb)
 
-PAanova_outage <- aov(outage_count ~ month, data = outage_group_PA)
-summary(PAanova_outage)
+PA_anova_outage <- aov(data = outage_group_PA, outage_count ~ month)
+summary(PA_anova_outage)
+
+#show months
+TukeyHSD(PA_anova_outage)
+
+#messing around with FL stats for seasonality (results so stats sig)
+outage_group_FL$month <- factor(month(outage_group_FL$date),
+                                levels = 1:12,
+                                labels = month.abb)
+
+FL_anova_outage <- aov(data = outage_group_FL, outage_count ~ month)
+summary(FL_anova_outage)
+
+#messing around with TX stats for seasonality (results so stats sig)
+outage_group_TX$month <- factor(month(outage_group_TX$date),
+                                levels = 1:12,
+                                labels = month.abb)
+
+TX_anova_outage <- aov(data = outage_group_TX, outage_count ~ month)
+summary(TX_anova_outage)
+
+#show months
+TukeyHSD(TX_anova_outage)
 ```
 
 
@@ -100,7 +125,7 @@ CA_outage_components <- mutate(CA_outage_compon,
 # Visualize how the trend maps onto the data
 outage_trend_vis_CA <- ggplot(CA_outage_components) +
   geom_line(aes(y = Observed, x = Date),  size = 0.25) + #observed component
-  geom_line(aes(y = trend, x = Date), color = "#c13d75ff") + #trend component (pink)
+  geom_line(aes(y = trend, x = Date), color = "red") + #trend component (pink)
   geom_hline(yintercept = 0, lty = 2) + #seasonal components can end up wonky w/ less than zero y?
   ylab(expression("# of outages"))
 
@@ -108,7 +133,7 @@ outage_trend_vis_CA
 
 # Visualize seasonal cycle, want to show months to infer seasons 
 outage_seas_vis_CA <- ggplot(CA_outage_components) +
-  geom_line(aes(y = seasonal, x = Date), color = "#c13d75ff") +
+  geom_line(aes(y = seasonal, x = Date), color = "red") +
   geom_hline(yintercept = 0, lty = 2) +
   ylab(expression("# of outages"))
 
