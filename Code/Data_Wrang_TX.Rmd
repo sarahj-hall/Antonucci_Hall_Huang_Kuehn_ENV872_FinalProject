@@ -25,17 +25,17 @@ TX <- TX %>%
 TX_outage_count <- ggplot(TX, 
                          aes(x = date,
                              y = outage_count,
-                             color = as.character(year))+
-  geom_point()+
+                             color = as.character(year)))+
+  geom_point(size = 2, alpha = 0.6)+
   scale_colour_discrete(palette = 'Set1')
-  
-TX_outage_count  
+
+  TX_outage_count
 
 TX_outage_duration <- ggplot(TX, 
                          aes(x = date,
                              y = max_outage_duration,
                              color = as.character(year)))+
-  geom_point()+
+  geom_point(size = 2, alpha = 0.6)+
   scale_colour_discrete(palette = 'Set1')
   # scale_color_viridis(option = "mako", direction = -1)
   
@@ -44,9 +44,9 @@ TX_outage_duration
 TX_outage_weighted <- ggplot(TX, 
                          aes(x = date,
                              y = customer_weighted_hours,
-                             color = year))+
-  geom_point()+
-  scale_color_viridis(option = "mako", direction = -1)+
+                             color = as.character(year)))+
+  geom_point(size = 2, alpha = 0.6)+
+  scale_colour_discrete(palette = 'Set1')+
   ylim(0,50000000)
   
 TX_outage_weighted
@@ -55,7 +55,7 @@ TX_outage_weighted
 
 
 ```{r time series analysis}
-
+first_month <- first()
 
 ```
 
