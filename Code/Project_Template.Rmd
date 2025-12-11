@@ -577,7 +577,7 @@ ggplot(CWH_components_PA) +
 # Summary and Conclusions
 Summarize your major findings from your analyses in a few paragraphs. What conclusions do you draw from your findings? Relate your findings back to the original research questions and rationale.
 
-For customer-weighted hours in Pennsylvania, the seasonal test was not statistically significant (tau = 0.13, p = 0.09), indicating no consistent monthly pattern in outage impacts on customers. However, after de-seasonalizing, the Mann-Kendall trend test suggested a marginally increasing trend in customer-weighted hours over time (z = 1.89, n = 108, p = 0.06). Overall, these results suggest that while outage counts are increasing and show clear seasonality, the impact on customers is also trending upward, though less strongly.
+After accounting for seasonal patterns, the analysis shows that the frequency of power outages in Pennsylvania has increased from 2015 to 2023. Outage counts display a clear seasonal trend, with the highest numbers occurring in the summer months of June, July, and August. In contrast, customer-weighted hours do not show a strong seasonal pattern, but there is a slight upward trend over time, indicating that the impact of outages on customers is also gradually increasing. Overall, while outages are becoming more frequent and seasonally concentrated, the effect on customers is rising more moderately.
 
 
 
