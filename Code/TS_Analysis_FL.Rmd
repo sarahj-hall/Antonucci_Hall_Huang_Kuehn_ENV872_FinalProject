@@ -174,12 +174,10 @@ monthly_wHrs_FL.ts <- ts(monthly_outages_FL$customer_weighted_hours,
 FL_wHrs_decomposed <- stl(monthly_wHrs_FL.ts, s.window = "periodic")
 plot(FL_wHrs_decomposed, main = "Time Series Analysis for Monthly FL Customer Weighted Hours")
 
-FL_monthly_wHrs_trend <- trend::smk.test(monthly_wHrs_FL.ts)
-FL_monthly_wHrs_trend
 ```
 
 ```{r}
-# Monthly Outage TS Decomposition
+# Monthly Customer Weighted Hours TS Decomposition
 
 monthly_wHrs_FL.components <- as.data.frame(FL_wHrs_decomposed$time.series[,1:3])
 
@@ -190,14 +188,14 @@ monthly_wHrs_FL.components <- mutate(monthly_wHrs_FL.components,
 # Trend Plot
 ggplot(monthly_wHrs_FL.components) +
   geom_line(aes(y = Observed, x = Date),  size = 0.5) +
-  geom_line(aes(y = trend, x = Date), color = "slateblue") +
+  geom_line(aes(y = trend, x = Date), color = "darkseagreen4") +
   ylab("Customer Weighted Duration")
   
 # Seasonality Plot
 ggplot(monthly_wHrs_FL.components) +
   geom_line(aes(y = Observed, x = Date),  size = 0.5) +
-  geom_line(aes(y = seasonal, x = Date), color = "slateblue") +
+  geom_line(aes(y = seasonal, x = Date), color = "darkseagreen4") +
   ylab("Customer Weighted Duration")
 ```
 
-
+For the customer weighted hours, Mann Kendall test also shows statistical evidence for seasonality. Graphs of the TS decomposition show large spikes just before 2018 (likely from increase in data collection).
