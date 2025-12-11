@@ -108,6 +108,7 @@ Each figure should be accompanied by a caption, and each figure should be refere
 
 Scope: think about what information someone might want to know about the dataset before analyzing it statistically. How might you visualize this information?
 
+### California
 Initial data exploration of California power outage data suggest a slight increasing trend (Figure \@ref(fig:cayearly)). Furthermore, Figure \@ref(fig:camonthly) shows. 
 
 ```{r cayearly, fig.cap="Power outages in California from 2015 to 2023."}
@@ -157,7 +158,7 @@ CA_monthly_plot
 ```
 
 \newpage
-
+### Texas
 ```{r txmonthly, fig.cap="Number of Power Outages in Texas from 2015-2023."}
 TX_outage_count <- ggplot(outage_group_TX,
                           aes(x = date,
@@ -190,9 +191,10 @@ TX_outage_count_month <- outage_group_TX %>%
 
 TX_outage_count_month
 ```
+\newpage
 
-## Pennsylvania
-From the initial data exploration of Pennsylvania, it is clear that power outages have gradually increased over the past decade. On a monthly basis, there is a noticeable rise in outages during the summer months, suggesting a seasonal pattern likely related to weather or energy demand.
+### Pennsylvania
+From the initial data exploration of Pennsylvania, it is clear that power outages have gradually increased over the past decade. On a monthly basis, there is a noticeable rise in outages during the summer months, suggesting a seasonal pattern likely related to weather or energy demand. Overall, the data points to both long-term growth in outage frequency and predictable seasonal fluctuations.
 
 ```{r, fig.cap="Yearly plot of power outages in PA from 2015-2023."}
 #Pennsylvania Yearly Power Outage
@@ -241,7 +243,9 @@ PA_monthly_plot
 ```
 
 \newpage
+### Florida
 
+\newpage
 # Analysis
 Insert visualizations and text describing your main analyses. Format your R chunks so that graphs are displayed but code and other output is not displayed. Instead, describe the results of any statistical tests in the main text (e.g., “Variable x was significantly different among y groups (ANOVA; df = 300, F = 5.55, p < 0.0001)”). Each paragraph, accompanied by one or more visualizations, should describe the major findings and how they relate to the question and hypotheses. Divide this section into subsections, one for each research question.
 
@@ -310,11 +314,14 @@ outage_trend_vis_CA <- ggplot(CA_outage_components) +
 outage_trend_vis_CA
 ```
 \newpage
+
 ### 1.2 Florida 
 
 \newpage
+
 ### 1.3 Pennsylvania 
- After removing the seasonal component, the Mann-Kendall trend test series showed a  upward trend over time (z = 3.02, n = 108, p = 0.002), indicating that the frequency of outages has increased from 2015 to 2023.
+
+After removing the seasonal component from the Pennsylvania outage time series, the Mann–Kendall trend test revealed a significant positive trend (z = 3.02, n = 108, p = 0.002), indicating that outage frequency has increased from 2015 to 2023. This result supports the hypothesis that outages have become more common during this time, independent of seasonal patterns. The decomposed time-series visualization shows this trend clearly, revealing that even after accounting for monthly fluctuations, the long-term component continues to rise.
 ```{r, fig.cap="Decomposed components of the Pennsylvania power outage count time series."}
 # Aggregate monthly
 monthly_outages_PA <- outage_group_PA %>%
@@ -381,6 +388,7 @@ ggplot(Outage_components_PA)+
 
 \newpage
 ### 1.4 Texas 
+
 ```{r}
 #time series object
 Outage_count_ts <- ts(outage_group_TX$outage_count, 
@@ -443,7 +451,7 @@ outage_seas_month_vis_CA
 
 \newpage
 ### 2.3 Pennsylvania 
-The Mann-Kendall Seasonal test for Pennsylvania outage counts indicated a significant seasonal trend in the data (tau = 0.20, p = 0.009), suggesting that certain months consistently experience higher numbers of outages. From the figures below it is clear that power outages occur the most in the summer months of June, July, and August. 
+The Mann–Kendall seasonal trend test for Pennsylvania outage counts indicated a significant seasonal signal in the data (τ = 0.20, p = 0.009), demonstrating that outage frequencies vary across months. This finding supports the hypothesis that outages are not evenly distributed throughout the year but instead follow a seasonal pattern. The visualizations further highlight this pattern, showing clear peaks in June, July, and August, when outage counts are highest. Together, these results suggest that summer months consistently experience elevated outage activity, potentially driven by seasonal weather conditions or increased energy demand.
 
 ```{r, fig.cap="Isolated seasonal component of PA power outages."}
 #Visualize seasonal Component 
