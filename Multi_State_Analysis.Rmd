@@ -9,3 +9,68 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r}
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+```
+
+```{r}
+###Seasonal Cycle Combined
+#California Seasonal Cycle
+outage_seas_month_vis_CA <- ggplot(CA_outage_components) +
+  geom_line(aes(y = seasonal, 
+                x=factor(
+                  Month,
+                  levels=1:12,
+                  labels=month.abb), 
+                group = year(Date)), 
+                color = "red") +
+  geom_hline(yintercept = 0, lty = 2) +
+  labs(x = "Month", 
+       y = "# of outages",
+       title = "Seasonal Cycle of Power Outages in California")
+
+outage_seas_month_vis_CA
+
+#Pennsylvania seasonal cycle
+ggplot(Outage_components_PA) +
+  geom_line(aes(
+    x = factor(Month, levels = 1:12, labels = month.abb),
+    y = seasonal,
+    group = year(Date)
+  ), color = "purple") +
+  geom_hline(yintercept = 0) +
+  labs(x = "Month", y = "# of outages",
+  title = "Seasonal Cycle of Outages in Pennsylvania")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r}
+#Seasonal Cycle combined
+# Add a column for states () Need to add FL and TX)
+CA_outage_combined <- CA_outage_components %>%
+  mutate(State = "CA")
+
+PA_Outage_combined <- Outage_components_PA %>%
+  mutate(State = "PA")
+
+# Combine the datasets
+combined_data <- bind_rows(CA_outage_combined, PA_Outage_combined)
+
+# Plot together
+ggplot(combined_data) +
+  geom_line(aes(
+    x = factor(Month, levels = 1:12, labels = month.abb),
+    y = seasonal,
+    group = interaction(year(Date), State),
+    color = State)) +
+  geom_hline(yintercept = 0) +
+  labs(
+    x = "Month",
+    y = "# of outages",
+    title = "Seasonal Cycle of Power Outages") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
