@@ -137,8 +137,6 @@ CA_CWA_compon <-
 #remove seasonal 
 CA_CWA_non_seas <- 
   CA_CWA_ts - CA_CWA_compon[,1]
-
- 
 ```
 
 ```{r tsa for outage duration, likely remove this}
