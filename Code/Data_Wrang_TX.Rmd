@@ -34,9 +34,10 @@ TX_outage_count
 TX_outage_duration <- ggplot(TX, 
                          aes(x = date,
                              y = max_outage_duration,
-                             color = year))+
+                             color = as.character(year)))+
   geom_point()+
-  scale_color_viridis(option = "mako", direction = -1)
+  scale_colour_discrete(palette = 'Set1')
+  # scale_color_viridis(option = "mako", direction = -1)
   
 TX_outage_duration
 
