@@ -58,7 +58,7 @@ outage_group_CA <- read.csv(here('Data/Processed/outage_group_CA.csv'),
 outage_group_CA$date <- ymd(outage_group_CA$date)
 
 
-#load FL data
+#load FL data (I loaded this in so i could do the ANOVA, feel free to change the names to what fits your analysis)
 outage_group_FL <- read.csv(here('Data/Processed/outage_group_FL.csv'), 
                             stringsAsFactors = TRUE)
 #format date column
@@ -342,7 +342,7 @@ plot(CA_outage_decompose)
 ```
 
 ```{r CA trend analysis chunk, include=FALSE}
-#run monotonic trend analysis 
+#run monotonic trend analysis, i think this should be removed and just focus on non seas analysis
 CA_outage_trend <- trend::smk.test(CA_outage_ts)
 CA_outage_trend
 
@@ -360,6 +360,13 @@ CA_outage_non_seas <-
 #rerun MK
 CA_outage_trend_noseasons <- trend::mk.test(CA_outage_non_seas)
 CA_outage_trend_noseasons
+
+#results:
+#data:  CA_outage_non_seas
+#z = 8.3362, n = 108, p-value < 2.2e-16
+#    S         varS          tau 
+#3.141000e+03 1.418810e+05 5.436608e-01 
+
 ```
 
 ```{r CAtrend, echo=FALSE, fig.cap="Trend versus observation of power outages in California (2015-2023)."}
@@ -448,7 +455,6 @@ ggplot(Outage_components_PA)+
       title = "Trend Component of Pennsylvania Power Outages
       Compared to the Observed Data")+
   theme(plot.title = element_text(hjust = 0.5))
-  
 
 ```
 
@@ -457,28 +463,28 @@ ggplot(Outage_components_PA)+
 
 ```{r txtimeseries, fig.cap="Decomposed components of the Texas power outage count time series."}
 #time series object
-Outage_count_ts <- ts(outage_group_TX$outage_count, 
+TXOutage_count_ts <- ts(outage_group_TX$outage_count, 
                       start = c(2015,1), 
                       end = c(2023, 12),
                       frequency = 12)
 
 # Generate the decomposition
-Outage_count_Decomposed <- stl(Outage_count_ts, s.window = "periodic")
+TXOutage_count_Decomposed <- stl(TXOutage_count_ts, s.window = "periodic")
 # Visualize the decomposed series. 
-plot(Outage_count_Decomposed)
+plot(TXOutage_count_Decomposed)
 ```
 
 ```{r TXtrend, fig.cap="Trend versus observation of power outages in Texas (2015-2023)."}
 # Extract the components and turn them into data frames
-Outage_count_Components <- as.data.frame(Outage_count_Decomposed$time.series[,1:3])
+TXOutage_count_Components <- as.data.frame(TXOutage_count_Decomposed$time.series[,1:3])
 
-Outage_count_Components <- mutate(Outage_count_Components,
+TXOutage_count_Components <- mutate(TXOutage_count_Components,
         Observed = outage_group_TX$outage_count, 
         Month = outage_group_TX$month,
         Date = outage_group_TX$date)
 
 # Visualize how the trend maps onto the data
-ggplot(Outage_count_Components) +
+ggplot(TXOutage_count_Components) +
   geom_line(aes(y = Observed, x = Date),  size = 0.25) +
   geom_line(aes(y = trend, x = Date), color = "blue") +
   geom_hline(yintercept = 0, lty = 2)+
@@ -494,6 +500,8 @@ ggplot(Outage_count_Components) +
 \newpage
 ## Question 2: Is there a seasonal trend? Are certain months more prone to outages? 
 ### California 
+
+The visualization highlights a potential pattern of power outage frequencies peaking rising in the summer months, peaking in October (Figure \@ref(fig:CAseasonal)). However, the frequency of outages in California was not significantly different among the months (ANOVA; df = 11, F = 0.704, p < 0.732). 
 
 ```{r CAseasonal, fig.cap="Seasonality component of the California power outage count time series analysis where yearly data is grouped by month.", fig.align='center'}
 #visualize grouped by month
@@ -514,8 +522,45 @@ outage_seas_month_vis_CA
 
 ```
 
+```{r CA seasonal anova, include=FALSE}
+#testing: “Are outage counts significantly different across months?”
+outage_group_CA$month <- factor(month(outage_group_CA$date),
+                                levels = 1:12,
+                                labels = month.abb)
+
+CA_anova_outage <- aov(data = outage_group_CA, outage_count ~ month)
+summary(CA_anova_outage)
+
+#show months
+TukeyHSD(CA_anova_outage)
+
+#results:
+#Df   Sum Sq Mean Sq F value Pr(>F)
+#month       11  1284083  116735   0.704  0.732
+#Residuals   96 15923546  165870  
+#The frequency of outages in California was not significantly different among the months (ANOVA; df = 11, F = 0.704, p < 0.732.  
+
+```
+
 \newpage
 ### Florida 
+
+```{r FL seasonal ANOVA, include=FALSE}
+##Are outage counts significantly different across months?
+##Null Hypothesis: Mean outage counts are the same for all 12 months 
+##Alt Hypothesis: At least on month differs (Seasonality)
+
+#format outage group month as factor 
+outage_group_FL$month <- factor(month(outage_group_FL$date),
+                                levels = 1:12,
+                                labels = month.abb)
+#run anova
+FL_anova_outage <- aov(data = outage_group_FL, outage_count ~ month)
+summary(FL_anova_outage)
+
+##The frequency of outages in Florida was significantly different among the months (ANOVA; df = 11, F = 43.28, p < 2e-16. This supports our alternative hypothesis that outages are not evenly distributed throughout the year but instead follow a seasonal pattern. 
+```
+
 
 \newpage
 ### Pennsylvania 
@@ -550,11 +595,32 @@ ggplot(Outage_components_PA) +
 
 ```
 
+```{r PA seasonal ANOVA, include=FALSE}
+##Are outage counts significantly different across months?
+##Null Hypothesis: Mean outage counts are the same for all 12 months 
+##Alt Hypothesis: At least on month differs (Seasonality)
+
+#format outage group month as factor 
+outage_group_PA$month <- factor(month(outage_group_PA$date),
+                                levels = 1:12,
+                                labels = month.abb)
+#run anova
+PA_anova_outage <- aov(data = outage_group_PA, outage_count ~ month)
+summary(PA_anova_outage)
+
+#show months
+TukeyHSD(PA_anova_outage)
+
+##The frequency of outages in Pennsylvania was significantly different among the months (ANOVA; df = 11, F =12.1, p < 7.54e-15. This supports our alternative hypothesis that outages are not evenly distributed throughout the year but instead follow a seasonal pattern.  
+
+```
+
+
 \newpage
 ### Texas 
 ```{r TXseasonal, fig.cap="Seasonality component of the California power outage count time series analysis where yearly data is grouped by month."}
 # Visualize how the seasonal cycle maps onto the data
-ggplot(Outage_count_Components) +
+ggplot(TXOutage_count_Components) +
   geom_line(aes(y = seasonal, 
                 x=factor(Month, levels=1:12, labels=month.abb), 
                 group = year(Date)), 
@@ -564,6 +630,28 @@ ggplot(Outage_count_Components) +
        y = "# of outages",
        title = "Seasonality of Power Outages in Texas")
 ```
+
+```{r TX seasonal ANOVA, include=FALSE}
+##Are outage counts significantly different across months?
+##Null Hypothesis: Mean outage counts are the same for all 12 months 
+##Alt Hypothesis: At least on month differs (Seasonality)
+#format month as factor
+outage_group_TX$month <- factor(month(outage_group_TX$date),
+                                levels = 1:12,
+                                labels = month.abb)
+
+#run anova
+TX_anova_outage <- aov(data = outage_group_TX, outage_count ~ month)
+summary(TX_anova_outage)
+
+#show months
+TukeyHSD(TX_anova_outage)
+
+#despite visual apperances of a trend, with power outages peaking in May...
+#The frequency of outages in Texas was not significantly different among the months (ANOVA; df = 11, F = 1.215, p < 0.288).  
+
+```
+
 
 \newpage
 ### Comparision between States
