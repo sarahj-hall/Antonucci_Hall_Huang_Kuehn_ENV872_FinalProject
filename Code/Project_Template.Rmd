@@ -595,7 +595,7 @@ ggplot(CWH_components_PA) +
 ### 3.4 Texas 
 
 \newpage
-### 3.5 Comparision between States
+### 3.5 Comparison between States
 
 \newpage
 
