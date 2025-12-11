@@ -158,7 +158,7 @@ CA_monthly_plot
 
 \newpage
 
-```{r txmonthly, fig.cap="Number of Power Outages in Texas from 2015-2023"}
+```{r txmonthly, fig.cap="Number of Power Outages in Texas from 2015-2023."}
 TX_outage_count <- ggplot(outage_group_TX,
                           aes(x = date,
                               y = outage_count))+
@@ -193,7 +193,8 @@ TX_outage_count_month
 
 ## Pennsylvania
 From the initial data exploration of Pennsylvania, it is clear that power outages have gradually increased over the past decade. On a monthly basis, there is a noticeable rise in outages during the summer months, suggesting a seasonal pattern likely related to weather or energy demand.
-```{r fig.cap= "Yearly plot of power outages in PA from 2015-2023"}
+
+```{r, fig.cap="Yearly plot of power outages in PA from 2015-2023."}
 #Pennsylvania Yearly Power Outage
 monthly_outages_PA <- outage_group_PA %>%
   mutate(
@@ -216,7 +217,7 @@ ggplot(monthly_outages_PA, aes(x = year_month, y = outage_count)) +
 
 ```
 
-```{r, fig.cap= "Monthly plot of power outages in PA from 2015-2023"}
+```{r, fig.cap= "Monthly plot of power outages in PA from 2015-2023."}
 #PA Monthly Power Outages
 PA_monthly_plot <- outage_group_PA %>% 
   ggplot(aes(
@@ -308,11 +309,13 @@ outage_trend_vis_CA <- ggplot(CA_outage_components) +
 
 outage_trend_vis_CA
 ```
-
+\newpage
 ### 1.2 Florida 
+
+\newpage
 ### 1.3 Pennsylvania 
  After removing the seasonal component, the Mann-Kendall trend test series showed a  upward trend over time (z = 3.02, n = 108, p = 0.002), indicating that the frequency of outages has increased from 2015 to 2023.
-```{r, fig.cap="Decomposed components of the Pennsylvia power outage count time series."}
+```{r, fig.cap="Decomposed components of the Pennsylvania power outage count time series."}
 # Aggregate monthly
 monthly_outages_PA <- outage_group_PA %>%
   mutate(
@@ -329,11 +332,12 @@ Outages_ts_PA <- ts(monthly_outages_PA$outage_count,
 
 #Visualize Decomposed Series
 Outage_Decomposed_PA <- stl(Outages_ts_PA, s.window = "periodic")
+
 plot(Outage_Decomposed_PA)
 
 ```
 
-```{r}
+```{r warning=TRUE, include=FALSE}
 #Mann-Kendall Seasonality Test
 Outages_PA_SMK <- Kendall::SeasonalMannKendall(Outages_ts_PA)
 Outages_PA_SMK
@@ -375,7 +379,7 @@ ggplot(Outage_components_PA)+
 
 ```
 
-
+\newpage
 ### 1.4 Texas 
 ```{r}
 #time series object
@@ -434,12 +438,14 @@ outage_seas_month_vis_CA <- ggplot(CA_outage_components) +
 outage_seas_month_vis_CA
 
 ```
-
+\newpage
 ### 2.2 Florida 
+
+\newpage
 ### 2.3 Pennsylvania 
 The Mann-Kendall Seasonal test for Pennsylvania outage counts indicated a significant seasonal trend in the data (tau = 0.20, p = 0.009), suggesting that certain months consistently experience higher numbers of outages. From the figures below it is clear that power outages occur the most in the summer months of June, July, and August. 
 
-```{r,  fig.cap="Isolated seasonal component of PA power outages."}
+```{r, fig.cap="Isolated seasonal component of PA power outages."}
 #Visualize seasonal Component 
 ggplot(Outage_components_PA) +
   geom_line(aes(x = Date, y = seasonal), color = "purple") +
@@ -453,7 +459,7 @@ Outage_components_PA$Month <- month(Outage_components_PA$Date)
 
 ```
 
-```{r, fig.cap="Single year breakdown of seasonal component of outages in PA."}
+```{r, fig.cap = "Single year breakdown of seasonal component of outages in PA."}
 #seasonal by month
 ggplot(Outage_components_PA) +
   geom_line(aes(
@@ -465,7 +471,9 @@ ggplot(Outage_components_PA) +
   labs(x = "Month", y = "# of outages",
   title = "Seasonal Cycle of Outages in Pennsylvania")+
   theme(plot.title = element_text(hjust = 0.5))
+
 ```
+\newpage
 ### 2.4 Texas 
 ```{r seasonal, figcap= "" }
 # Visualize how the seasonal cycle maps onto the data
@@ -475,8 +483,10 @@ ggplot(Outage_count_Components) +
   geom_hline(yintercept = 0, lty = 2)+
     ylim(-100,7500)
 ```
+\newpage
 ### 2.5 Comparision between States
 
+\newpage
 ## Question 3: How has the length of power outages changed over time?  
 ### 3.1 California 
 ```{r CACWA, fig.cap="Decomposed components of the California customer weighted outage time series."}
@@ -509,11 +519,13 @@ CA_CWA_compon <-
 CA_CWA_non_seas <- 
   CA_CWA_ts - CA_CWA_compon[,1]
 ```
-
+\newpage
 ### 3.2 Florida 
+
+\newpage
 ### 3.3 Pennsylvania 
 For customer-weighted hours, the seasonal test was not statistically significant (tau = 0.13, p = 0.09), indicating no consistent monthly pattern in outage impacts on customers. However, after de-seasonalizing, the Mann-Kendall trend test suggested a marginally increasing trend in customer-weighted hours over time (z = 1.89, n = 108, p = 0.06). Overall, these results suggest that while outage counts are increasing and show clear seasonality, the impact on customers is also trending upward, though less strongly.
-```{r, fig.cap= "Decomposed analyis of customer weighted outage time in Pennsylvania."}
+```{r, fig.cap = "Decomposed analyis of customer weighted outage time in Pennsylvania."}
 # Aggregate monthly
 monthly_cwh_PA <- outage_group_PA %>%
   mutate(
@@ -539,7 +551,7 @@ CWH_components_PA <- as.data.frame(CWH_decompose_PA$time.series[,1:3]) %>%
     Month = month(Date))
 ```
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 #Mann-Kendall Seasonality Test
 CWH_PA_SMK <- Kendall::SeasonalMannKendall(CWH_ts_PA)
 CWH_PA_SMK
@@ -553,7 +565,7 @@ CWH_MK_noseason_PA
 #p-value=0.06
 ```
 
-```{r, , fig.cap= "Trend versus observation of customer-weighted hours in PA (2015-2023)."}
+```{r, fig.cap = "Trend versus observation of customer-weighted hours in PA (2015-2023)."}
 #Visualize the trends
 ggplot(CWH_components_PA) +
   geom_line(aes(x = Date, y = Observed)) +
@@ -565,7 +577,7 @@ ggplot(CWH_components_PA) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-```{r, , fig.cap= "Single year breakdown of seasonal component of customer-weighted hours in PA."}
+```{r, fig.cap = "Single year breakdown of seasonal component of customer-weighted hours in PA."}
 # Seasonal Cycle by Month
 ggplot(CWH_components_PA) +
   geom_line(aes(
@@ -579,8 +591,10 @@ ggplot(CWH_components_PA) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-
+\newpage
 ### 3.4 Texas 
+
+\newpage
 ### 3.5 Comparision between States
 
 \newpage
