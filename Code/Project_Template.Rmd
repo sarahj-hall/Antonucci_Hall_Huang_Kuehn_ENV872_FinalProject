@@ -52,6 +52,8 @@ outage_group_CA$date <- ymd(outage_group_CA$date)
 #load FL data
 #load PA data
 #load TX data
+outage_group_TX <- read.csv(here('Data/Processed/outage_group_TX.csv'))
+outage_group_TX$date <- ymd(outage_group_TX$date)
 
 ```
 
@@ -149,6 +151,40 @@ CA_monthly_plot
 ```
 
 \newpage
+
+```{r txmonthly, fig.cap="Number of Power Outages in Texas from 2015-2023"}
+TX_outage_count <- ggplot(outage_group_TX,
+                          aes(x = date,
+                              y = outage_count))+
+  geom_point(size = 2, alpha = 0.6)+
+  geom_line()+
+  geom_smooth(method = "lm", se = FALSE, color = "blue")+
+  ylim(0,3000)+
+  labs(title = "Number of Power Outages in Texas from 2015-2023",
+       x = "Year",
+       y="Number of Outages")
+
+TX_outage_count
+```
+
+```{r}
+  
+TX_outage_count_month <- outage_group_TX %>% 
+  filter(month != 0) %>% 
+  ggplot(aes(x = factor(month,
+                        levels=1:12,
+                        labels=month.abb),
+                             y = outage_count,
+                             color = year))+
+  geom_point(size = 2, alpha = 0.6)+
+  scale_colour_viridis(option = "mako", direction = -1)+
+  labs(title = "Number of Power Outages in Texas by Month from 2015-2023",
+       x = "Month",
+       y="Number of Outages")
+
+TX_outage_count_month
+```
+
 
 # Analysis
 Insert visualizations and text describing your main analyses. Format your R chunks so that graphs are displayed but code and other output is not displayed. Instead, describe the results of any statistical tests in the main text (e.g., “Variable x was significantly different among y groups (ANOVA; df = 300, F = 5.55, p < 0.0001)”). Each paragraph, accompanied by one or more visualizations, should describe the major findings and how they relate to the question and hypotheses. Divide this section into subsections, one for each research question.
