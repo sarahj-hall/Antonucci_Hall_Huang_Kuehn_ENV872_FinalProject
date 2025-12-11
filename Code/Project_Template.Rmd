@@ -28,6 +28,8 @@ library(zoo)
 library(trend)
 library(Kendall)
 library(cowplot)
+library(knitr)
+library(kableExtra)
 
 # Set your working directory
 here()
@@ -43,8 +45,8 @@ theme_set(mytheme)
 knitr::opts_chunk$set(
   echo = FALSE,      # hide all code
   warning = FALSE,   # hide warnings
-  message = FALSE   # hide messages
-)
+  message = FALSE,   # hide messages
+  fig.align = "center") #center figures 
 
 # Load your datasets
 
@@ -101,7 +103,33 @@ The data was wrangled by combining the yearly data from 2015 to 2023 was combine
 
 Add a table that summarizes your data structure (variables, units, ranges and/or central tendencies, data source if multiple are used, etc.). This table can be made in markdown text or inserted as a kable function in an R chunk. If the latter, do not include the code used to generate your table.
 
-This data structure applies to all four state files:
+This data structure in Table \@ref(tab:datastructuretable) applies to all four state files:
+
+```{r datastructuretable, tab.cap="Summary of Outage Dataset Structure"}
+structure_tbl <- tibble::tribble(
+  ~Variable, ~Description, ~Units,
+  
+  "state", "Two-letter state abbreviation", "N/A",
+  
+  "year", "Year of outage", "N/A",
+  
+  "month", "Month of outage", "N/A",
+  
+  "outage_count", "Number of outages per month", "N/A",
+  
+  "max_outage_duration", "Longest outage duration in a month", "Hours",
+  
+  "customer_weighted_hours", "Customer-weighted outage hours", "N/A",
+  
+  "date", "Date of outage", "N/A")
+
+kable(structure_tbl, booktabs = TRUE)%>%
+  kable_styling(
+    position = "center",
+    full_width = FALSE,
+    latex_options = "hold_position")   # forces placement of table here
+```
+
 
 \newpage
 
@@ -430,7 +458,7 @@ ggplot(Outage_count_Components) +
 ## Question 2: Is there a seasonal trend? Are certain months more prone to outages? 
 ### California 
 
-```{r CAseasonal, fig.cap="Seasonality component of the California power outage count time series analysis where yearly data is grouped by month." }
+```{r CAseasonal, fig.cap="Seasonality component of the California power outage count time series analysis where yearly data is grouped by month.", fig.align='center'}
 #visualize grouped by month
 outage_seas_month_vis_CA <- ggplot(CA_outage_components) +
   geom_line(aes(y = seasonal, 
