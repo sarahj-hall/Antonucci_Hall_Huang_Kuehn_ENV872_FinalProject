@@ -70,6 +70,26 @@ CA_outage_trend_noseasons
 
 ```
 
+
+```{r seasonality test graphs}
+#testing: “Are outage counts significantly different across months?”
+outage_group_CA$month <- factor(month(outage_group_CA$date),
+                                levels = 1:12,
+                                labels = month.abb)
+
+anova_outage <- aov(outage_count ~ month, data = outage_group_CA)
+summary(anova_outage)
+
+#messing around with PA stats for seasonality (results so stats sig)
+outage_group_PA$month <- factor(month(outage_group_PA$date),
+                                levels = 1:12,
+                                labels = month.abb)
+
+PAanova_outage <- aov(outage_count ~ month, data = outage_group_PA)
+summary(PAanova_outage)
+```
+
+
 ```{r Results Visualization}
 #adding three new columns, observed outages, month date
 CA_outage_components <- mutate(CA_outage_compon,
@@ -170,9 +190,5 @@ CA_duration_non_seas <-
 #rerun MK
 CA_duration_trend_noseasons <- trend::mk.test(CA_duration_non_seas)
 CA_duration_trend_noseasons
-```
-
-```{r seasonality test graphs}
-
 ```
 
