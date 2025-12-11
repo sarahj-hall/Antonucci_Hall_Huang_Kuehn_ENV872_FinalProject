@@ -116,7 +116,10 @@ ggplot(Outage_count_Components) +
   geom_line(aes(y = Observed, x = Date),  size = 0.25) +
   geom_line(aes(y = trend, x = Date), color = "#c13d75ff") +
   geom_hline(yintercept = 0, lty = 2)+
-  ylim (-100,7500)
+  ylim (-100,6000)+
+  labs(title = "Trend Component of the Texas Power Outage ",
+       x = "Year",
+       y=" Number of Outages ")
 
 # Visualize how the seasonal cycle maps onto the data
 ggplot(Outage_count_Components) +
