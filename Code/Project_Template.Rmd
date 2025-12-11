@@ -4,9 +4,11 @@ subtitle: 'https://github.com/sarahj-hall/Antonucci_Hall_Huang_Kuehn_ENV872_Fina
 authors: 'Addisen Antonucci, Sarah Hall, Carina Huang, and Isabelle Kuehn'
 date: 'December 12th, 2025'
 output: 
-  bookdown::pdf_document2: default
+  bookdown::pdf_document2:
+    toc: true
 editor_options:
   chunk_output_type: console
+
 ---
 \newpage
 \tableofcontents 
@@ -49,8 +51,14 @@ outage_group_CA <- read.csv(here('Data/Processed/outage_group_CA.csv'),
 #format date column
 outage_group_CA$date <- ymd(outage_group_CA$date)
 
+
 #load FL data
+
 #load PA data
+outage_group_PA <- read.csv(here('Data/Processed/outage_group_PA.csv'), 
+                    stringsAsFactors = TRUE)
+outage_group_PA$date <- ymd(outage_group_PA$date)
+
 #load TX data
 outage_group_TX <- read.csv(here('Data/Processed/outage_group_TX.csv'))
 outage_group_TX$date <- ymd(outage_group_TX$date)
@@ -185,6 +193,38 @@ TX_outage_count_month <- outage_group_TX %>%
 TX_outage_count_month
 ```
 \newpage
+```{r}
+#Pennsylvania Yearly Power Outage
+ggplot(monthly_outages_PA, aes(x = year_month, y = outage_count)) +
+  geom_line() +
+  labs(
+    title = "Number of Power Outages in Pennsylvania from 2015 to 2023",
+    x = "Year", 
+    y = "Number of Outages") +
+  geom_smooth(method = "lm", se = FALSE, color = "#c13d75ff")
+  
+
+#PA Monthly Power Outages
+PA_monthly_plot <- outage_group_PA %>% 
+  ggplot(aes(
+    x = factor(month, levels = 1:12, labels = month.abb),
+    y = outage_count,
+    color = factor(year))) +
+  geom_point(size = 2, alpha = 0.7) +
+  scale_color_viridis(
+    option = "mako", 
+    direction = -1,
+    discrete = TRUE) +
+  labs(
+    title = "Number of Power Outages in Pennsylvania by Month from 2015-2023",
+    y = "Number of Outages",
+    x = "Month",
+    color = "Year" ) +
+  theme_classic(base_size = 14)
+
+PA_monthly_plot
+
+```
 
 # Analysis
 Insert visualizations and text describing your main analyses. Format your R chunks so that graphs are displayed but code and other output is not displayed. Instead, describe the results of any statistical tests in the main text (e.g., “Variable x was significantly different among y groups (ANOVA; df = 300, F = 5.55, p < 0.0001)”). Each paragraph, accompanied by one or more visualizations, should describe the major findings and how they relate to the question and hypotheses. Divide this section into subsections, one for each research question.
