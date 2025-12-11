@@ -3,12 +3,14 @@ title: 'Power Outage Trends in California, Florida, Pennsylvania, and Texas from
 subtitle: 'https://github.com/sarahj-hall/Antonucci_Hall_Huang_Kuehn_ENV872_FinalProject.git'
 authors: 'Addisen Antonucci, Sarah Hall, Carina Huang, and Isabelle Kuehn'
 date: 'December 12th, 2025'
+
 output: 
   bookdown::pdf_document2:
-    toc: true      
+    toc: true 
+    toc_depth: 3
+    
 editor_options:
   chunk_output_type: console
-
 ---
 \newpage
 \listoftables 
@@ -19,18 +21,23 @@ editor_options:
 ```{r setup, include=FALSE}
 # Load your packages
 library(tidyverse)
-library(dplyr)
 library(here)
 library(lubridate)
 library(viridis)
 library(zoo)
+library(trend)
+library(Kendall)
+library(cowplot)
 
 # Set your working directory
 here()
 
 # Set ggplot theme
-mytheme <- theme_classic(base_size = 12) +
-  theme(axis.text = element_text(color = "black"))
+mytheme <- theme_classic(base_size = 10) +
+  theme(plot.title = element_text(size = 11, hjust = 0.5, face = "bold"),
+        axis.title.x = element_text(size = 10.5),
+        axis.title.y = element_text(size = 10.5),
+        legend.position = "top")
 theme_set(mytheme)
 
 #set global chunk options
@@ -78,9 +85,9 @@ Electric power outages are costly, for both grid operators and customers. (expan
 
 Four U.S. states were selected for analysis: California, Florida, Pennsylvania, and Texas. These states were selected to cover different geographical areas of the U.S., and due to their large populations. (and vulnerability to climate change?). For all states the following questions were explored: 
 
-## Question 1: How has the frequency of power outages changed over time?
-## Question 2: Is there a seasonal trend? Are certain months more prone to outages? 
-## Question 3: How has the length of power outages changed over time?  
+Question 1: How has the frequency of power outages changed over time?
+Question 2: Is there a seasonal trend? Are certain months more prone to outages? 
+Question 3: How has the length of power outages changed over time?  
 
 \newpage
 
@@ -89,7 +96,7 @@ Provide information on how the dataset for this analysis were collected, the dat
 
 Describe how you wrangled your dataset in a format similar to a methods section of a journal article.
 
-The Event-correlated Outage Dataset in America was downloaded from the Open Energy Data Initiative (OEDI) (https://data.openei.org/submissions/6458). The dataset includes an aggregated and event-correlated analysis of power outages in the United States. The specific dataset selected for this analysis is the Aggregated Outage Data which integrates data from the Environment for the Analysis of Geo-Located Energy Information (EAGLE-I), and Annual Estimates of the Resident Population for Counties 2024 (CO-EST2024-POP). The EAGLE-I dataset, provides county-level electricity outage estimates at 15-minute intervals from 2014 to 2023. It encompasses over 146 million customers, but this coverage has increased over time from 137 million in 2018. EAGLE-I only start providing . The Aggregated Outage Dataset provides monthly outage data at the state level, including total number of outages, the duration of outages, and the customer weighted average of outages.   
+The Event-correlated Outage Dataset in America was downloaded from the Open Energy Data Initiative (OEDI) (<https://data.openei.org/submissions/6458>). The dataset includes an aggregated and event-correlated analysis of power outages in the United States. The specific dataset selected for this analysis is the Aggregated Outage Data which integrates data from the Environment for the Analysis of Geo-Located Energy Information (EAGLE-I), and Annual Estimates of the Resident Population for Counties 2024 (CO-EST2024-POP). The EAGLE-I dataset, provides county-level electricity outage estimates at 15-minute intervals from 2014 to 2023. It encompasses over 146 million customers, but this coverage has increased over time from 137 million in 2018. EAGLE-I only start providing . The Aggregated Outage Dataset provides monthly outage data at the state level, including total number of outages, the duration of outages, and the customer weighted average of outages.   
 
 The data was wrangled by combining the yearly data from 2015 to 2023 was combined into one data frame. The year 2014 was removed from the analysis because it did not have monthly data, only the yearly summary. From this file, four datasets were created by filtering for each state (CA, FL, PA, and TX). For each state, the monthly value equal to 0 was filtered out, which represented the yearly summary. Additionally, a date column was added that combined the monthly and yearly columns into a date object.
 
@@ -254,7 +261,7 @@ Each figure should be accompanied by a caption, and each figure should be refere
 **trying to figure out the best organization for this.. where is the best place for the seasonality component? 
 
 ## Question 1: How has the frequency of power outages changed over time?
-### 1.1 California 
+### California 
 
 ```{r CAtimeseries, fig.cap="Decomposed components of the California power outage count time series."}
 #define first day and first year values 
@@ -315,13 +322,14 @@ outage_trend_vis_CA
 ```
 \newpage
 
-### 1.2 Florida 
+### Florida 
 
 \newpage
 
-### 1.3 Pennsylvania 
+### Pennsylvania 
 
 After removing the seasonal component from the Pennsylvania outage time series, the Mann–Kendall trend test revealed a significant positive trend (z = 3.02, n = 108, p = 0.002), indicating that outage frequency has increased from 2015 to 2023. This result supports the hypothesis that outages have become more common during this time, independent of seasonal patterns. The decomposed time-series visualization shows this trend clearly, revealing that even after accounting for monthly fluctuations, the long-term component continues to rise.
+
 ```{r, fig.cap="Decomposed components of the Pennsylvania power outage count time series."}
 # Aggregate monthly
 monthly_outages_PA <- outage_group_PA %>%
@@ -387,7 +395,7 @@ ggplot(Outage_components_PA)+
 ```
 
 \newpage
-### 1.4 Texas 
+### Texas 
 
 ```{r}
 #time series object
@@ -421,12 +429,12 @@ ggplot(Outage_count_Components) +
        y=" Number of Outages ")
 ```
 
+\newpage
+### Comparision between States
 
-
-### 1.5 Comparision between States
-
+\newpage
 ## Question 2: Is there a seasonal trend? Are certain months more prone to outages? 
-### 2.1 California 
+### California 
 
 ```{r CAseasonal, fig.cap="Seasonality component of the California power outage count time series yearly data group by month." }
 #visualize grouped by month
@@ -446,12 +454,13 @@ outage_seas_month_vis_CA <- ggplot(CA_outage_components) +
 outage_seas_month_vis_CA
 
 ```
-\newpage
-### 2.2 Florida 
 
 \newpage
-### 2.3 Pennsylvania 
-The Mann–Kendall seasonal trend test for Pennsylvania outage counts indicated a significant seasonal signal in the data (τ = 0.20, p = 0.009), demonstrating that outage frequencies vary across months. This finding supports the hypothesis that outages are not evenly distributed throughout the year but instead follow a seasonal pattern. The visualizations further highlight this pattern, showing clear peaks in June, July, and August, when outage counts are highest. Together, these results suggest that summer months consistently experience elevated outage activity, potentially driven by seasonal weather conditions or increased energy demand.
+### Florida 
+
+\newpage
+### Pennsylvania 
+The Mann–Kendall seasonal trend test for Pennsylvania outage counts indicated a significant seasonal signal in the data ($\tau = 0.20$, p = 0.009), demonstrating that outage frequencies vary across months. This finding supports the hypothesis that outages are not evenly distributed throughout the year but instead follow a seasonal pattern. The visualizations further highlight this pattern, showing clear peaks in June, July, and August, when outage counts are highest. Together, these results suggest that summer months consistently experience elevated outage activity, potentially driven by seasonal weather conditions or increased energy demand.
 
 ```{r, fig.cap="Isolated seasonal component of PA power outages."}
 #Visualize seasonal Component 
@@ -481,8 +490,9 @@ ggplot(Outage_components_PA) +
   theme(plot.title = element_text(hjust = 0.5))
 
 ```
+
 \newpage
-### 2.4 Texas 
+### Texas 
 ```{r seasonal, figcap= "" }
 # Visualize how the seasonal cycle maps onto the data
 ggplot(Outage_count_Components) +
@@ -491,12 +501,13 @@ ggplot(Outage_count_Components) +
   geom_hline(yintercept = 0, lty = 2)+
     ylim(-100,7500)
 ```
+
 \newpage
-### 2.5 Comparision between States
+### Comparision between States
 
 \newpage
 ## Question 3: How has the length of power outages changed over time?  
-### 3.1 California 
+### California 
 ```{r CACWA, fig.cap="Decomposed components of the California customer weighted outage time series."}
 #create time series object 
 CA_CWA_ts <- 
@@ -528,10 +539,10 @@ CA_CWA_non_seas <-
   CA_CWA_ts - CA_CWA_compon[,1]
 ```
 \newpage
-### 3.2 Florida 
+### Florida 
 
 \newpage
-### 3.3 Pennsylvania 
+### Pennsylvania 
 For customer-weighted hours, the seasonal test was not statistically significant (tau = 0.13, p = 0.09), indicating no consistent monthly pattern in outage impacts on customers. However, after de-seasonalizing, the Mann-Kendall trend test suggested a marginally increasing trend in customer-weighted hours over time (z = 1.89, n = 108, p = 0.06). Overall, these results suggest that while outage counts are increasing and show clear seasonality, the impact on customers is also trending upward, though less strongly.
 ```{r, fig.cap = "Decomposed analyis of customer weighted outage time in Pennsylvania."}
 # Aggregate monthly
@@ -600,10 +611,10 @@ ggplot(CWH_components_PA) +
 ```
 
 \newpage
-### 3.4 Texas 
+### Texas 
 
 \newpage
-### 3.5 Comparison between States
+### Comparison between States
 
 \newpage
 
