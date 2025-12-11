@@ -2,8 +2,10 @@
 title: "Data_Analysis_PA"
 author: "Addisen Antonucci"
 date: "2025-12-10"
-output: html_document
-editor_options: 
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
   chunk_output_type: console
 ---
 
