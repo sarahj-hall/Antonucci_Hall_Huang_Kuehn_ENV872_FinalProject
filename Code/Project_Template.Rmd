@@ -59,6 +59,10 @@ outage_group_CA$date <- ymd(outage_group_CA$date)
 
 
 #load FL data
+outage_group_FL <- read.csv(here('Data/Processed/outage_group_FL.csv'), 
+                            stringsAsFactors = TRUE)
+#format date column
+outage_group_FL$date <- ymd(outage_group_FL$date)
 
 #load PA data
 outage_group_PA <- read.csv(here('Data/Processed/outage_group_PA.csv'), 
@@ -128,6 +132,45 @@ kable(structure_tbl, booktabs = TRUE)%>%
     position = "center",
     full_width = FALSE,
     latex_options = "hold_position")   # forces placement of table here
+```
+
+```{r datasummary, tab.cap= "Summary Statisitcs of CA, FL, PA, and TX Datasets"}
+
+#combine datasets
+all_states <- bind_rows(
+  outage_group_CA  %>% mutate(State = "CA"),
+  outage_group_TX  %>% mutate(State = "TX"),
+  outage_group_FL  %>% mutate(State = "FL"),
+  outage_group_PA  %>% mutate(State = "PA")
+)
+
+#summary stats 
+state_summary <- all_states %>%
+  group_by(State) %>%
+  summarise(
+    outage_count_range = paste0(min(outage_count), "–", max(outage_count)),
+    outage_count_mean  = round(mean(outage_count, na.rm = TRUE), 2),
+    
+    outage_duration_range = paste0(min(max_outage_duration), "–", max(max_outage_duration)),
+    outage_duration_mean  = round(mean(max_outage_duration, na.rm = TRUE), 2),
+    
+    customer_weighted_hours_range = paste0(min(customer_weighted_hours), "–", max(customer_weighted_hours)),
+    customer_weighted_hours_mean  = round(mean(customer_weighted_hours, na.rm = TRUE), 2)
+  ) %>%
+  arrange(State)   # alphabetical order
+
+#table, align values in the center, fix column names, add commas 
+kable(state_summary, booktabs = TRUE, align = "c", 
+      col.names = c("State", 
+                      linebreak("Outage Count\nRange", align = "c"),
+                      linebreak("Outage Count\nMean", align = "c"),
+                      linebreak("Max Duration\nRange", align = "c"),
+                      linebreak("Max Duration\nMean", align = "c"),
+                      linebreak("Customer Weighted\nHours Range", align = "c"),
+                      linebreak("Customer Weighted\nHours Mean", align = "c")),
+      escape = FALSE, #for header break formatting
+      format.args = list(big.mark = ","))%>%
+  kable_styling(latex_options = c("hold_position", "scale_down")) #shrinks table to fit page 
 ```
 
 
