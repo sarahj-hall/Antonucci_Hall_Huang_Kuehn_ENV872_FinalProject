@@ -36,8 +36,7 @@ here()
 mytheme <- theme_classic(base_size = 10) +
   theme(plot.title = element_text(size = 11, hjust = 0.5, face = "bold"),
         axis.title.x = element_text(size = 10.5),
-        axis.title.y = element_text(size = 10.5),
-        legend.position = "top")
+        axis.title.y = element_text(size = 10.5))
 theme_set(mytheme)
 
 #set global chunk options
@@ -104,8 +103,6 @@ Add a table that summarizes your data structure (variables, units, ranges and/or
 
 This data structure applies to all four state files:
 
-
-
 \newpage
 
 # Exploratory Analysis 
@@ -118,7 +115,7 @@ Scope: think about what information someone might want to know about the dataset
 ### California
 Initial data exploration of California power outage data suggest a slight increasing trend (Figure \@ref(fig:cayearly)). Furthermore, Figure \@ref(fig:camonthly) shows. 
 
-```{r cayearly, fig.cap="Power outages in California from 2015 to 2023."}
+```{r cayearly, fig.cap="Yearly plot of power outages in California from 2015 to 2023."}
 # CA yearly plot 
 CA_yearly <- outage_group_CA %>% 
   ggplot(
@@ -128,7 +125,7 @@ CA_yearly <- outage_group_CA %>%
       )) +
   geom_point(size = 2, alpha = 0.7)+
   geom_line()+
-  geom_smooth(method ="lm", se = FALSE) +
+  geom_smooth(method ="lm", se = FALSE, color = "red") +
   labs(
     title = "Number of Power Outages in California from 2015 to 2023",
     y = "Number of Outages",
@@ -138,7 +135,7 @@ CA_yearly <- outage_group_CA %>%
 CA_yearly
 ```
 
-```{r camonthly, fig.cap="Power outages in California from 2015 to 2023 by month."}
+```{r camonthly, fig.cap="Monthly plot of power outages in California from 2015 to 2023."}
 #CA monthly plot (for data visualization)
 CA_monthly_plot <- outage_group_CA %>% 
   ggplot(
@@ -148,12 +145,13 @@ CA_monthly_plot <- outage_group_CA %>%
       levels=1:12,
       labels=month.abb),
       y = outage_count,
-      color = year)
+      color = factor(year))
     ) +
  geom_point(size = 2, alpha = 0.7)+
  scale_color_viridis(
    option = "mako", 
-   direction = -1)+
+   direction = -1, 
+   discrete = TRUE)+
   labs(
     title = "Number of Power Outages in California by Month from 2015 to 2023",
     y = "Number of Outages",
@@ -165,45 +163,10 @@ CA_monthly_plot
 ```
 
 \newpage
-### Texas
-```{r txmonthly, fig.cap="Number of Power Outages in Texas from 2015-2023."}
-TX_outage_count <- ggplot(outage_group_TX,
-                          aes(x = date,
-                              y = outage_count))+
-  geom_point(size = 2, alpha = 0.6)+
-  geom_line()+
-  geom_smooth(method = "lm", se = FALSE, color = "blue")+
-  ylim(0,3000)+
-  labs(title = "Number of Power Outages in Texas from 2015-2023",
-       x = "Year",
-       y="Number of Outages")
-
-TX_outage_count
-```
-
-```{r}
-  
-TX_outage_count_month <- outage_group_TX %>% 
-  filter(month != 0) %>% 
-  ggplot(aes(x = factor(month,
-                        levels=1:12,
-                        labels=month.abb),
-                             y = outage_count,
-                             color = year))+
-  geom_point(size = 2, alpha = 0.6)+
-  scale_colour_viridis(option = "mako", direction = -1)+
-  labs(title = "Number of Power Outages in Texas by Month from 2015-2023",
-       x = "Month",
-       y="Number of Outages")
-
-TX_outage_count_month
-```
-\newpage
-
 ### Pennsylvania
 From the initial data exploration of Pennsylvania, it is clear that power outages have gradually increased over the past decade. On a monthly basis, there is a noticeable rise in outages during the summer months, suggesting a seasonal pattern likely related to weather or energy demand. Overall, the data points to both long-term growth in outage frequency and predictable seasonal fluctuations.
 
-```{r, fig.cap="Yearly plot of power outages in PA from 2015-2023."}
+```{r payearly, fig.cap="Yearly plot of power outages in Pennsylvania from 2015 to 2023."}
 #Pennsylvania Yearly Power Outage
 monthly_outages_PA <- outage_group_PA %>%
   mutate(
@@ -226,7 +189,7 @@ ggplot(monthly_outages_PA, aes(x = year_month, y = outage_count)) +
 
 ```
 
-```{r, fig.cap= "Monthly plot of power outages in PA from 2015-2023."}
+```{r pamonthly, fig.cap= "Monthly plot of power outages in Pennsylvania from 2015-2023."}
 #PA Monthly Power Outages
 PA_monthly_plot <- outage_group_PA %>% 
   ggplot(aes(
@@ -242,11 +205,43 @@ PA_monthly_plot <- outage_group_PA %>%
     title = "Number of Power Outages in Pennsylvania\nby Month from 2015-2023",
     y = "Number of Outages",
     x = "Month",
-    color = "Year" ) +
-  theme_classic(base_size = 14)+
-  theme(plot.title = element_text(hjust = 0.5))
+    color = "Year" )
 
 PA_monthly_plot
+```
+
+\newpage
+### Texas
+```{r txyearly, fig.cap="Yearly plot of power outages in Texas from 2015-2023."}
+TX_outage_count <- ggplot(outage_group_TX,
+                          aes(x = date,
+                              y = outage_count))+
+  geom_point(size = 2, alpha = 0.6)+
+  geom_line()+
+  geom_smooth(method = "lm", se = FALSE, color = "blue")+
+  ylim(0,3000)+
+  labs(title = "Number of Power Outages in Texas from 2015-2023",
+       x = "Year",
+       y="Number of Outages")
+
+TX_outage_count
+```
+
+```{r txmonthly, fig.cap="Monthly plot of power outages in Texas from 2015 to 2023."}
+TX_outage_count_month <- outage_group_TX %>% 
+  ggplot(aes(x = factor(month,
+                        levels=1:12,
+                        labels=month.abb),
+                             y = outage_count,
+                             color = factor(year)))+
+  geom_point(size = 2, alpha = 0.7)+
+  scale_colour_viridis(option = "mako", direction = -1, discrete = TRUE)+
+  labs(title = "Number of Power Outages in Texas by Month from 2015-2023",
+       x = "Month",
+       y="Number of Outages", 
+       color = "Year")
+
+print(TX_outage_count_month)
 ```
 
 \newpage
@@ -281,7 +276,7 @@ plot(CA_outage_decompose)
 
 ```
 
-```{r trend analysis chunk (no output, use for writing), include=FALSE}
+```{r CA trend analysis chunk, include=FALSE}
 #run monotonic trend analysis 
 CA_outage_trend <- trend::smk.test(CA_outage_ts)
 CA_outage_trend
@@ -302,8 +297,7 @@ CA_outage_trend_noseasons <- trend::mk.test(CA_outage_non_seas)
 CA_outage_trend_noseasons
 ```
 
-
-```{r CAtrend, fig.cap="Trend component of the California power outage count time series compared to the raw data."}
+```{r CAtrend, echo=FALSE, fig.cap="Trend versus observation of power outages in California (2015-2023)."}
 #adding three new columns, observed outages, month date
 CA_outage_components <- mutate(CA_outage_compon,
         Observed = outage_group_CA$outage_count, 
@@ -313,24 +307,23 @@ CA_outage_components <- mutate(CA_outage_compon,
 # Visualize how the trend maps onto the data
 outage_trend_vis_CA <- ggplot(CA_outage_components) +
   geom_line(aes(y = Observed, x = Date),  size = 0.25) + #observed component
-  geom_line(aes(y = trend, x = Date), color = "#c13d75ff") + #trend component (pink)
+  geom_line(aes(y = trend, x = Date), color = "red") + #trend component (red)
   geom_hline(yintercept = 0, lty = 2) + #seasonal components can end up wonky w/ less than zero y?
   labs(y = "# of outages",
-      title = "Trend Component of California Power Outages Compared to the Raw Data")
+      title = "Trend Component of California Power Outages Compared to the Observed Data")
 
 outage_trend_vis_CA
 ```
-\newpage
 
+\newpage
 ### Florida 
 
 \newpage
-
 ### Pennsylvania 
 
 After removing the seasonal component from the Pennsylvania outage time series, the Mann–Kendall trend test revealed a significant positive trend (z = 3.02, n = 108, p = 0.002), indicating that outage frequency has increased from 2015 to 2023. This result supports the hypothesis that outages have become more common during this time, independent of seasonal patterns. The decomposed time-series visualization shows this trend clearly, revealing that even after accounting for monthly fluctuations, the long-term component continues to rise.
 
-```{r, fig.cap="Decomposed components of the Pennsylvania power outage count time series."}
+```{r PAtimeseries, fig.cap="Decomposed components of the Pennsylvania power outage count time series."}
 # Aggregate monthly
 monthly_outages_PA <- outage_group_PA %>%
   mutate(
@@ -380,7 +373,7 @@ PA_outage_MK_noseason
 #p-value is 0.002
 ```
 
-```{r, fig.cap="Trend versus observation of power outages in PA (2015-2023)."}
+```{r PAtrend, fig.cap="Trend versus observation of power outages in Pennsylvania (2015-2023)."}
 #Visualize the trends
 ggplot(Outage_components_PA)+
   geom_line(aes(y = Observed, x = Date),  size = 0.25) +
@@ -388,7 +381,7 @@ ggplot(Outage_components_PA)+
   geom_hline(yintercept = 0, lty = 2) +
  labs(y = "# of outages",
       title = "Trend Component of Pennsylvania Power Outages
-      Compared to the Raw Data")+
+      Compared to the Observed Data")+
   theme(plot.title = element_text(hjust = 0.5))
   
 
@@ -397,7 +390,7 @@ ggplot(Outage_components_PA)+
 \newpage
 ### Texas 
 
-```{r}
+```{r txtimeseries, fig.cap="Decomposed components of the Texas power outage count time series."}
 #time series object
 Outage_count_ts <- ts(outage_group_TX$outage_count, 
                       start = c(2015,1), 
@@ -410,20 +403,21 @@ Outage_count_Decomposed <- stl(Outage_count_ts, s.window = "periodic")
 plot(Outage_count_Decomposed)
 ```
 
-```{r}
+```{r TXtrend, fig.cap="Trend versus observation of power outages in Texas (2015-2023)."}
 # Extract the components and turn them into data frames
 Outage_count_Components <- as.data.frame(Outage_count_Decomposed$time.series[,1:3])
 
 Outage_count_Components <- mutate(Outage_count_Components,
-        Observed = outage_group_TX$outage_count,     
+        Observed = outage_group_TX$outage_count, 
+        Month = outage_group_TX$month,
         Date = outage_group_TX$date)
 
 # Visualize how the trend maps onto the data
 ggplot(Outage_count_Components) +
   geom_line(aes(y = Observed, x = Date),  size = 0.25) +
-  geom_line(aes(y = trend, x = Date), color = "#c13d75ff") +
+  geom_line(aes(y = trend, x = Date), color = "blue") +
   geom_hline(yintercept = 0, lty = 2)+
-  ylim(-100,6000)+
+  ylim(-100,3000)+
   labs(title = "Trend Component of the Texas Power Outage ",
        x = "Year",
        y=" Number of Outages ")
@@ -436,7 +430,7 @@ ggplot(Outage_count_Components) +
 ## Question 2: Is there a seasonal trend? Are certain months more prone to outages? 
 ### California 
 
-```{r CAseasonal, fig.cap="Seasonality component of the California power outage count time series yearly data group by month." }
+```{r CAseasonal, fig.cap="Seasonality component of the California power outage count time series analysis where yearly data is grouped by month." }
 #visualize grouped by month
 outage_seas_month_vis_CA <- ggplot(CA_outage_components) +
   geom_line(aes(y = seasonal, 
@@ -445,11 +439,11 @@ outage_seas_month_vis_CA <- ggplot(CA_outage_components) +
                   levels=1:12,
                   labels=month.abb), 
                 group = year(Date)), 
-                color = "#c13d75ff") +
+                color = "red") +
   geom_hline(yintercept = 0, lty = 2) +
   labs(x = "Month", 
        y = "# of outages",
-       title = "Seasonality of Power Outages in California")
+       title = "Seasonal Cycle of Power Outages in California")
 
 outage_seas_month_vis_CA
 
@@ -476,7 +470,7 @@ Outage_components_PA$Month <- month(Outage_components_PA$Date)
 
 ```
 
-```{r, fig.cap = "Single year breakdown of seasonal component of outages in PA."}
+```{r PAseasonal, fig.cap="Single year breakdown of seasonal component of outages in PA."}
 #seasonal by month
 ggplot(Outage_components_PA) +
   geom_line(aes(
@@ -493,13 +487,17 @@ ggplot(Outage_components_PA) +
 
 \newpage
 ### Texas 
-```{r seasonal, figcap= "" }
+```{r TXseasonal, fig.cap="Seasonality component of the California power outage count time series analysis where yearly data is grouped by month."}
 # Visualize how the seasonal cycle maps onto the data
 ggplot(Outage_count_Components) +
-  geom_line(aes(y = Observed, x = Date),  size = 0.25) +
-  geom_line(aes(y = seasonal, x = Date), color = "#c13d75ff") +
-  geom_hline(yintercept = 0, lty = 2)+
-    ylim(-100,7500)
+  geom_line(aes(y = seasonal, 
+                x=factor(Month, levels=1:12, labels=month.abb), 
+                group = year(Date)), 
+                color = "blue") +
+  geom_hline(yintercept = 0, lty = 2) +
+  labs(x = "Month", 
+       y = "# of outages",
+       title = "Seasonality of Power Outages in Texas")
 ```
 
 \newpage
@@ -508,7 +506,7 @@ ggplot(Outage_count_Components) +
 \newpage
 ## Question 3: How has the length of power outages changed over time?  
 ### California 
-```{r CACWA, fig.cap="Decomposed components of the California customer weighted outage time series."}
+```{r CAcwh, fig.cap="Decomposed analyis of customer weighted outage time in California"}
 #create time series object 
 CA_CWA_ts <- 
   ts(outage_group_CA$customer_weighted_hours, 
@@ -522,7 +520,7 @@ plot(CA_CWA_decompose)
 
 ```
 
-```{r trend analysis, hide output, include=FALSE}
+```{r CA trend analysis hide output, include=FALSE}
 #run monotonic trend analysis 
 CA_CWA_trend <- trend::smk.test(CA_CWA_ts)
 CA_CWA_trend
@@ -544,7 +542,8 @@ CA_CWA_non_seas <-
 \newpage
 ### Pennsylvania 
 For customer-weighted hours, the seasonal test was not statistically significant (tau = 0.13, p = 0.09), indicating no consistent monthly pattern in outage impacts on customers. However, after de-seasonalizing, the Mann-Kendall trend test suggested a marginally increasing trend in customer-weighted hours over time (z = 1.89, n = 108, p = 0.06). Overall, these results suggest that while outage counts are increasing and show clear seasonality, the impact on customers is also trending upward, though less strongly.
-```{r, fig.cap = "Decomposed analyis of customer weighted outage time in Pennsylvania."}
+
+```{r PAcwh, fig.cap = "Decomposed analyis of customer weighted outage time in Pennsylvania."}
 # Aggregate monthly
 monthly_cwh_PA <- outage_group_PA %>%
   mutate(
@@ -584,7 +583,7 @@ CWH_MK_noseason_PA
 #p-value=0.06
 ```
 
-```{r, fig.cap = "Trend versus observation of customer-weighted hours in PA (2015-2023)."}
+```{r PAcwhTrend, fig.cap = "Trend versus observation of customer-weighted hours in PA (2015-2023)."}
 #Visualize the trends
 ggplot(CWH_components_PA) +
   geom_line(aes(x = Date, y = Observed)) +
@@ -596,7 +595,7 @@ ggplot(CWH_components_PA) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-```{r, fig.cap = "Single year breakdown of seasonal component of customer-weighted hours in PA."}
+```{r PAcwhSeas, fig.cap = "Single year breakdown of seasonal component of customer-weighted hours in PA."}
 # Seasonal Cycle by Month
 ggplot(CWH_components_PA) +
   geom_line(aes(
