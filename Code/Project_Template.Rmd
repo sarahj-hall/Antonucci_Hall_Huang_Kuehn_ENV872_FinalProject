@@ -195,7 +195,7 @@ TX_outage_count_month
 \newpage
 
 ## Pennsylvania
-
+From the initial data exploration of Pennsylvania, it is clear that power outages have gradually increased over the past decade. On a monthly basis, there is a noticeable rise in outages during the summer months, suggesting a seasonal pattern likely related to weather or energy demand.
 ```{r fig.cap= "Yearly plot of power outages in PA from 2015-2023"}
 #Pennsylvania Yearly Power Outage
 monthly_outages_PA <- outage_group_PA %>%
@@ -309,6 +309,7 @@ outage_trend_vis_CA
 
 ### 1.2 Florida 
 ### 1.3 Pennsylvania 
+ After removing the seasonal component, the Mann-Kendall trend test series showed a  upward trend over time (z = 3.02, n = 108, p = 0.002), indicating that the frequency of outages has increased from 2015 to 2023.
 ```{r, fig.cap="Decomposed components of the Pennsylvia power outage count time series."}
 # Aggregate monthly
 monthly_outages_PA <- outage_group_PA %>%
@@ -331,14 +332,24 @@ plot(Outage_Decomposed_PA)
 ```
 
 ```{r}
-##Is there Seasonality?
 #Mann-Kendall Seasonality Test
 Outages_PA_SMK <- Kendall::SeasonalMannKendall(Outages_ts_PA)
 Outages_PA_SMK
 summary(Outages_PA_SMK)
 #p-value is 0.009
 
+#Extracting components into Data Frame
 Outage_components_PA<-as.data.frame(Outage_Decomposed_PA$time.series[,1:3])
+
+Outage_components_PA <- mutate(Outage_components_PA,
+        Observed = monthly_outages_PA$outage_count,     
+        Date = monthly_outages_PA$year_month)
+
+#Mann-Kendall Seasonality Test
+Outages_PA_SMK <- Kendall::SeasonalMannKendall(Outages_ts_PA)
+Outages_PA_SMK
+summary(Ouatges_PA_SMK)
+#p-value is 0.009
 
 #Remove Seasonal
 PA_outage_non_seas <- Outages_ts_PA - Outage_components_PA$seasonal
@@ -349,13 +360,6 @@ PA_outage_MK_noseason
 ```
 
 ```{r, fig.cap="Trend versus observation of power outages in PA (2015-2023)."}
-#Extracting components into Data Frame
-Outage_components_PA<-as.data.frame(Outage_Decomposed_PA$time.series[,1:3])
-
-Outage_components_PA <- mutate(Outage_components_PA,
-        Observed = monthly_outages_PA$outage_count,     
-        Date = monthly_outages_PA$year_month)
-
 #Visualize the trends
 ggplot(Outage_components_PA)+
   geom_line(aes(y = Observed, x = Date),  size = 0.25) +
@@ -429,11 +433,13 @@ outage_seas_month_vis_CA
 
 ### 2.2 Florida 
 ### 2.3 Pennsylvania 
+The Mann-Kendall Seasonal test for Pennsylvania outage counts indicated a significant seasonal trend in the data (tau = 0.20, p = 0.009), suggesting that certain months consistently experience higher numbers of outages. From the figures below it is clear that power outages occur the most in the summer months of June, July, and August. 
+
 ```{r,  fig.cap="Isolated seasonal component of PA power outages."}
 #Visualize seasonal Component 
 ggplot(Outage_components_PA) +
   geom_line(aes(x = Date, y = seasonal), color = "purple") +
-  geom_hline(yintercept = 0, lty = 2) +
+  geom_hline(yintercept = 0) +
    labs(y = "# of outages",
       title = "Trend Component of Pennsylvania Power Outages Compared to the Raw Data")
 
@@ -449,7 +455,7 @@ ggplot(Outage_components_PA) +
     y = seasonal,
     group = year(Date)
   ), color = "purple") +
-  geom_hline(yintercept = 0, lty = 2) +
+  geom_hline(yintercept = 0) +
   labs(x = "Month", y = "# of outages",
   title = "Seasonal Cycle of Outages in Pennsylvania")
 ```
@@ -499,7 +505,17 @@ CA_CWA_non_seas <-
 
 ### 3.2 Florida 
 ### 3.3 Pennsylvania 
+For customer-weighted hours, the seasonal test was not statistically significant (tau = 0.13, p = 0.09), indicating no consistent monthly pattern in outage impacts on customers. However, after de-seasonalizing, the Mann-Kendall trend test suggested a marginally increasing trend in customer-weighted hours over time (z = 1.89, n = 108, p = 0.06). Overall, these results suggest that while outage counts are increasing and show clear seasonality, the impact on customers is also trending upward, though less strongly.
 ```{r, fig.cap= "Decomposed analyis of customer weighted outage time in Pennsylvania."}
+# Aggregate monthly
+monthly_cwh_PA <- outage_group_PA %>%
+  mutate(
+    year = year(date),
+    month = month(date),
+    year_month = as.Date(paste(year, month, "01", sep = "-"))) %>%
+  group_by(year_month) %>%
+  summarise(customer_weighted_hours = sum(customer_weighted_hours, na.rm = TRUE))
+
 # Create time series object
 CWH_ts_PA <- ts(
   monthly_cwh_PA$customer_weighted_hours,
@@ -508,6 +524,12 @@ CWH_ts_PA <- ts(
 # Visualize Decomposed series
 CWH_decompose_PA <- stl(CWH_ts_PA, s.window = "periodic")
 plot(CWH_decompose_PA)
+
+#Extracting components into Data Frame
+CWH_components_PA <- as.data.frame(CWH_decompose_PA$time.series[,1:3]) %>%
+  mutate(Observed = monthly_cwh_PA$customer_weighted_hours,
+    Date = monthly_cwh_PA$year_month,
+    Month = month(Date))
 ```
 
 ```{r}
@@ -522,7 +544,6 @@ CWH_non_seas_PA <- CWH_ts_PA - CWH_components_PA$seasonal
 CWH_MK_noseason_PA <- trend::mk.test(CWH_non_seas_PA)
 CWH_MK_noseason_PA
 #p-value=0.06
-
 ```
 
 ```{r, , fig.cap= "Trend versus observation of customer-weighted hours in PA (2015-2023)."}
@@ -556,6 +577,10 @@ ggplot(CWH_components_PA) +
 
 # Summary and Conclusions
 Summarize your major findings from your analyses in a few paragraphs. What conclusions do you draw from your findings? Relate your findings back to the original research questions and rationale.
+
+For customer-weighted hours in Pennsylvania, the seasonal test was not statistically significant (tau = 0.13, p = 0.09), indicating no consistent monthly pattern in outage impacts on customers. However, after de-seasonalizing, the Mann-Kendall trend test suggested a marginally increasing trend in customer-weighted hours over time (z = 1.89, n = 108, p = 0.06). Overall, these results suggest that while outage counts are increasing and show clear seasonality, the impact on customers is also trending upward, though less strongly.
+
+
 
 \newpage
 
