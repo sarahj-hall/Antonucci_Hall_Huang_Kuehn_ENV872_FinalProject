@@ -4,7 +4,7 @@ subtitle: 'https://github.com/sarahj-hall/Antonucci_Hall_Huang_Kuehn_ENV872_Fina
 authors: 'Addisen Antonucci, Sarah Hall, Carina Huang, and Isabelle Kuehn'
 date: 'December 12th, 2025'
 output: 
-  pdf_document: default
+  bookdown::pdf_document2: default
 editor_options:
   chunk_output_type: console
 ---
@@ -30,18 +30,28 @@ here()
 
 # Set ggplot theme
 mytheme <- theme_classic(base_size = 12) +
-  theme(axis.text = element_text(color = "black"), 
-        legend.position = "top")
+  theme(axis.text = element_text(color = "black"))
 theme_set(mytheme)
 
 #set global chunk options
-knitr::opts_chunk$set()
+knitr::opts_chunk$set(
+  echo = FALSE,      # hide all code
+  warning = FALSE,   # hide warnings
+  message = FALSE   # hide messages
+)
 
 # Load your datasets
 
 #load CA data
-
+#read in CA data from processed folder 
+outage_group_CA <- read.csv(here('Data/Processed/outage_group_CA.csv'), 
+                            stringsAsFactors = TRUE)
 #format date column
+outage_group_CA$date <- ymd(outage_group_CA$date)
+
+#load FL data
+#load PA data
+#load TX data
 
 ```
 
@@ -51,11 +61,18 @@ Write 1-2 paragraph(s) detailing the rationale for your study. This should inclu
 
 At the end of your rationale, introduce a numbered list of your questions (or an overarching question and sub-questions).
 
+Electric power outages are costly, for both grid operators and customers. (expand/give examples and cite). With increasing extreme weather events, the U.S. grid is more vulnerable to outage events. However, there have also been advancements in electric power systems planning, operations, and outage detection. Understanding what trend is occurring in the U.S. with regards to power outages could support.... In additional to the general trend, understanding if power outages follow a seasonal trend, that aligns with extreme weather periods (such as hurricane season), could help states focus their planning (resiliency?) for specific months. Furthermore, power outages may be increasing (or decreasing), but are their impacts the same? Are outage durations increasing? The outage duration helps quantify actual impact, as the longer duration, the more costly.
+
 - damage of outages (health, financial)
 - increasing climate related weather events, vulnerable power system infrastructure 
+- could be interesting trend/hard to estimate, could be increasing with more grid demand and aging power system + weather events or decreasing with increase grid planning and monitoring technology (or outage length should be decreasing)
 - selected four states, tried to spread out geographically but also selected states with the highest power outages/most impacted by recent extreme climate events. Texas, California, Florida, and Pennsylvania 
 
+Four U.S. states were selected for analysis: California, Florida, Pennsylvania, and Texas. These states were selected to cover different geographical areas of the U.S., and due to their large populations. (and vulnerability to climate change?). For all states the following questions were explored: 
 
+## Question 1: How has the frequency of power outages changed over time?
+## Question 2: Is there a seasonal trend? Are certain months more prone to outages? 
+## Question 3: How has the length of power outages changed over time?  
 
 \newpage
 
@@ -64,7 +81,14 @@ Provide information on how the dataset for this analysis were collected, the dat
 
 Describe how you wrangled your dataset in a format similar to a methods section of a journal article.
 
+The Event-correlated Outage Dataset in America was downloaded from the Open Energy Data Initiative (OEDI). The dataset includes an aggregated and event-correlated analysis of power outages in the United States. The specific dataset selected for this analysis is the Aggregated Outage Data which integrates data from the Environment for the Analysis of Geo-Located Energy Information (EAGLE-I), and Annual Estimates of the Resident Population for Counties 2024 (CO-EST2024-POP). The EAGLE-I dataset, provides county-level electricity outage estimates at 15-minute intervals from 2014 to 2023. It encompasses over 146 million customers, but this coverage has increased over time from 137 million in 2018. EAGLE-I only start providing . The Aggregated Outage Dataset provides monthly outage data at the state level, including total number of outages, the duration of outages, and the customer weighted average of outages.   
+
+Yearly data from 2015 to 2023 was combined into one data frame. 2014 was removed from the analysis because it did not have monthly data, only the yearly summary. From this file, four datasets were created by filtering for each state (CA, FL, PA, and TX). For each state, the monthly value equal to 0 was filtered out, which represented the yearly summary. Additionally, a date column was added that combined the monthly and yearly columns into a date object.
+
 Add a table that summarizes your data structure (variables, units, ranges and/or central tendencies, data source if multiple are used, etc.). This table can be made in markdown text or inserted as a kable function in an R chunk. If the latter, do not include the code used to generate your table.
+
+This data structure applies to all four state files:
+
 
 
 \newpage
@@ -75,6 +99,54 @@ Insert exploratory visualizations of your dataset. This may include, but is not 
 Each figure should be accompanied by a caption, and each figure should be referenced within the text.
 
 Scope: think about what information someone might want to know about the dataset before analyzing it statistically. How might you visualize this information?
+
+Initial data exploration of California power outage data suggest a slight increasing trend (Figure \@ref(fig:cayearly)). Furthermore, Figure \@ref(fig:camonthly) shows. 
+
+```{r cayearly, fig.cap="Power outages in California from 2015 to 2023."}
+# CA yearly plot 
+CA_yearly <- outage_group_CA %>% 
+  ggplot(
+    mapping = aes(
+      x= date,
+      y = outage_count
+      )) +
+  geom_point(size = 2, alpha = 0.7)+
+  geom_line()+
+  geom_smooth(method ="lm", se = FALSE) +
+  labs(
+    title = "Number of Power Outages in California from 2015 to 2023",
+    y = "Number of Outages",
+    x = "Year"
+  )
+
+CA_yearly
+```
+
+```{r camonthly, fig.cap="Power outages in California from 2015 to 2023 by month."}
+#CA monthly plot (for data visualization)
+CA_monthly_plot <- outage_group_CA %>% 
+  ggplot(
+    mapping = aes(
+      x=factor(
+      month,
+      levels=1:12,
+      labels=month.abb),
+      y = outage_count,
+      color = year)
+    ) +
+ geom_point(size = 2, alpha = 0.7)+
+ scale_color_viridis(
+   option = "mako", 
+   direction = -1)+
+  labs(
+    title = "Number of Power Outages in California by Month from 2015 to 2023",
+    y = "Number of Outages",
+    x = "Month",
+    color = "Year",
+  )
+
+CA_monthly_plot
+```
 
 \newpage
 
