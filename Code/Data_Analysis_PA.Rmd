@@ -37,7 +37,7 @@ outage_group_PA$date <- ymd(outage_group_PA$date)
 ```
 
 ##  How have outage frequencies changed over time?
-###  Initial Plots
+###  Time Series of monthly_outages
 ```{r}
 #Outages by Month
 monthly_outages_PA <- outage_group_PA %>%
@@ -55,12 +55,9 @@ ggplot(monthly_outages_PA, aes(x = year_month, y = outage_count)) +
   labs(x = "Year", y = "Outage Count") +
   geom_smooth(method = "lm", color = "#c13d75ff")
 
-```
-
-### Time Series of outage_count
-```{r}
 #Creating time Series Objects
-Outages_ts_PA <- ts(monthly_outages_PA$outage_count, start = c(2015,1), end =c(2023,12), frequency = 12)
+Outages_ts_PA <- ts(monthly_outages_PA$outage_count, 
+                    start = c(2015,1), end =c(2023,12), frequency = 12)
 
 #Visualize Decomposed Series
 Outage_Decomposed_PA <- stl(Outages_ts_PA, s.window = "periodic")
@@ -101,7 +98,8 @@ ggplot(Outage_components_PA) +
   ), color = "#c13d75ff") +
   geom_hline(yintercept = 0, lty = 2) +
   labs(x = "Month", y = "Seasonal Component",
-       title = "Seasonal Cycle of Outages in Pennsylvania")
+  title = "Seasonal Cycle of Outages in Pennsylvania")
+
 
 #Mann-Kendall Seasonality Test
 Ouatges_PA_SMK <- Kendall::SeasonalMannKendall(Outages_ts_PA)
@@ -124,26 +122,23 @@ monthly_cwh_PA <- outage_group_PA %>%
   mutate(
     year = year(date),
     month = month(date),
-    year_month = as.Date(paste(year, month, "01", sep = "-"))
-  ) %>%
+    year_month = as.Date(paste(year, month, "01", sep = "-"))) %>%
   group_by(year_month) %>%
-  summarise(customer_weighted_hours = sum(customer_weighted_hours, na.rm = TRUE),
-            .groups = "drop")
+  summarise(customer_weighted_hours = sum(customer_weighted_hours, na.rm = TRUE))
 
 #Initla Obseravtions of customer-weighted hours
 ggplot(monthly_cwh_PA, aes(x = year_month, y = customer_weighted_hours)) +
   geom_line() +
   labs(x = "Year", y = "Customer Weighted Hours",
-       title = "Monthly Customer-Weighted Hours (PA)") +
+  title = "Monthly Customer-Weighted Hours (PA)") +
   geom_smooth(method = "lm", color = "#c13d75ff")
 
 # Create time series object
 CWH_ts_PA <- ts(
   monthly_cwh_PA$customer_weighted_hours,
   start = c(year(min(monthly_cwh_PA$year_month)),
-            month(min(monthly_cwh_PA$year_month))),
-  frequency = 12
-)
+  month(min(monthly_cwh_PA$year_month))),
+  frequency = 12)
 
 # Visualize Decomposed series
 CWH_decompose_PA <- stl(CWH_ts_PA, s.window = "periodic")
@@ -152,26 +147,18 @@ plot(CWH_decompose_PA)
 ##Is there Seaonality?
 #Extracting components into Data Frame
 CWH_components_PA <- as.data.frame(CWH_decompose_PA$time.series[,1:3]) %>%
-  mutate(
-    Observed = monthly_cwh_PA$customer_weighted_hours,
+  mutate(Observed = monthly_cwh_PA$customer_weighted_hours,
     Date = monthly_cwh_PA$year_month,
-    Month = month(Date)
-  )
+    Month = month(Date))
 
 #Visualize the trends
 ggplot(CWH_components_PA) +
   geom_line(aes(x = Date, y = Observed), size = 0.3) +
   geom_line(aes(x = Date, y = trend), color = "#c13d75ff", linewidth = 0.8) +
   labs(x = "Date", y = "Customer Weighted Hours",
-       title = "Observed vs Trend in Customer-Weighted Hours (PA)") +
-  geom_hline(yintercept = 0, linetype = "dashed")
+  title = "Observed vs Trend in Customer-Weighted Hours (PA)") +
+  geom_hline(yintercept = 0)
 
-#seasonal by month
-ggplot(CWH_components_PA) +
-  geom_line(aes(x = Date, y = seasonal), color = "#c13d75ff") +
-  geom_hline(yintercept = 0, linetype = "dashed") +
-  labs(x = "Date", y = "Seasonal Component",
-       title = "Seasonality of Customer-Weighted Hours (PA)")
 
 # Seasonal Cycle by Month
 ggplot(CWH_components_PA) +
@@ -182,7 +169,7 @@ ggplot(CWH_components_PA) +
   ), color = "#c13d75ff") +
   geom_hline(yintercept = 0, linetype = 2) +
   labs(x = "Month", y = "Seasonal Component",
-       title = "Seasonal Cycle of Customer-Weighted Hours (PA)")
+  title = "Seasonal Cycle of Customer-Weighted Hours (PA)")
 
 #Mann-Kendall Seasonality Test
 CWH_MK_PA <- trend::smk.test(CWH_ts_PA)
@@ -193,6 +180,80 @@ summary(CWH_MK_PA)
 CWH_non_seas_PA <- CWH_ts_PA - CWH_components_PA$seasonal
 CWH_MK_noseason_PA <- trend::mk.test(CWH_non_seas_PA)
 CWH_MK_noseason_PA
+
+```
+
+##Time Series of max_outage_duration
+```{r}
+# Aggregate monthly
+monthly_duration_PA <- outage_group_PA %>%
+  mutate(
+    year = year(date),
+    month = month(date),
+    year_month = as.Date(paste(year, month, "01", sep = "-"))) %>%
+  group_by(year_month) %>%
+  summarise(max_outage_duration = max(max_outage_duration, na.rm = TRUE))
+
+#Initial Observations
+ggplot(monthly_duration_PA, aes(x = year_month, y = max_outage_duration)) +
+  geom_line() +
+  labs(x = "Year", y = "Max Outage Duration (hours)",
+  title = "Monthly Max Outage Duration (PA)") +
+  geom_smooth(method = "lm", color = "#c13d75ff")
+
+# Create time series object
+Duration_ts_PA <- ts(
+  monthly_duration_PA$max_outage_duration,
+  start = c(year(min(monthly_duration_PA$year_month)),
+  month(min(monthly_duration_PA$year_month))),
+  frequency = 12)
+
+# Visualize Decomposed series
+Duration_decompose_PA <- stl(Duration_ts_PA, s.window = "periodic")
+plot(Duration_decompose_PA)
+
+##Is there Seasonality?
+#Extracting components into Data Frame
+Duration_components_PA <- as.data.frame(Duration_decompose_PA$time.series[,1:3]) %>%
+  mutate( Observed = monthly_duration_PA$max_outage_duration,
+    Date = monthly_duration_PA$year_month,
+    Month = month(Date))
+
+#Visualize the trends
+ggplot(Duration_components_PA) +
+  geom_line(aes(x = Date, y = Observed), size = 0.3) +
+  geom_line(aes(x = Date, y = trend), color = "#c13d75ff", linewidth = 0.8) +
+  labs(x = "Date", y = "Max Outage Duration (hours)",
+  title = "Observed vs Trend in Max Outage Duration (PA)") +
+  geom_hline(yintercept = 0)
+
+#seasonal by month
+ggplot(Duration_components_PA) +
+  geom_line(aes(x = Date, y = seasonal), color = "#c13d75ff") +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(x = "Date", y = "Seasonal Component",
+  title = "Seasonality of Max Outage Duration (PA)")
+
+# Seasonal Cycle by Month
+ggplot(Duration_components_PA) +
+  geom_line(aes(
+    x = factor(Month, levels = 1:12, labels = month.abb),
+    y = seasonal,
+    group = year(Date)
+  ), color = "#c13d75ff") +
+  geom_hline(yintercept = 0, linetype = 2) +
+  labs(x = "Month", y = "Seasonal Component",
+  title = "Seasonal Cycle of Max Outage Duration (PA)")
+
+#Mann-Kendall Seasonality Test
+Duration_MK_PA <- trend::smk.test(Duration_ts_PA)
+Duration_MK_PA
+summary(Duration_MK_PA)
+
+#Remove Seasonal
+Duration_non_seas_PA <- Duration_ts_PA - Duration_components_PA$seasonal
+Duration_MK_noseason_PA <- trend::mk.test(Duration_non_seas_PA)
+Duration_MK_noseason_PA
 
 ```
 
