@@ -8,45 +8,69 @@ library(tidyverse)
 library(lubridate)
 library(here)
 library(viridis)
+library(RColorBrewer)
 library(ggplot2)
+library(Kendall)
+library(tseries)
+library(zoo)
+
 
 here()
 ```
 
 ```{r read csv}
-TX <- read.csv(here('./Data/Processed/outage_group_TX.csv'))
-TX <- TX %>% 
-  mutate(
-    date = my(paste0(month, "-", year)))
+
+outage_group_all_years <- read.csv(here('Data/Processed/outage_group_all_years.csv'), stringsAsFactors = TRUE)
+
+#Finding TX
+outage_group_TX <- outage_group_all_years %>% 
+  filter(state == 'TX') %>% 
+  mutate(date = my(paste0(month, "-", year)))
 
 ```
 
 ```{r ggplot visualizations}
-TX_outage_count <- ggplot(TX, 
-                         aes(x = date,
+TX_outage_count <- outage_group_TX %>% 
+  filter(month != 0) %>% 
+  ggplot(aes(x = factor(month,
+                        levels=1:12,
+                        labels=month.abb),
                              y = outage_count,
-                             color = as.character(year)))+
+                             color = year))+
   geom_point(size = 2, alpha = 0.6)+
-  scale_colour_discrete(palette = 'Set1')
+  scale_colour_viridis(option = "mako", direction = -1)+
+  labs(title = "Number of Outages in Texas from 2015-2023",
+       x = "Month",
+       y="Number of Outages")
 
-  TX_outage_count
+TX_outage_count 
 
-TX_outage_duration <- ggplot(TX, 
-                         aes(x = date,
+TX_outage_duration <- outage_group_TX %>% 
+  filter(month != 0) %>% 
+  ggplot(aes(x = factor(month,
+                        levels=1:12,
+                        labels=month.abb),
                              y = max_outage_duration,
-                             color = as.character(year)))+
+                             color = year))+
   geom_point(size = 2, alpha = 0.6)+
-  scale_colour_discrete(palette = 'Set1')
-  # scale_color_viridis(option = "mako", direction = -1)
-  
+  scale_colour_viridis(option = "mako", direction = -1)+
+  labs(title = "Outage Duration in Texas from 2015-2023",
+       x = "Month",
+       y="Outage Duration (min) ")
 TX_outage_duration
 
-TX_outage_weighted <- ggplot(TX, 
-                         aes(x = date,
+TX_outage_weighted <- outage_group_TX %>% 
+  filter(month != 0) %>% 
+  ggplot(aes(x = factor(month,
+                        levels=1:12,
+                        labels=month.abb),
                              y = customer_weighted_hours,
-                             color = as.character(year)))+
+                             color = year))+
   geom_point(size = 2, alpha = 0.6)+
-  scale_colour_discrete(palette = 'Set1')+
+  scale_colour_viridis(option = "mako", direction = -1)+
+  labs(title = "Weighted Outage Duration in Texas from 2015-2023 \n (# of customers * outage time) ",
+       x = "Month",
+       y="Outage Duration (min) ")+
   ylim(0,50000000)
   
 TX_outage_weighted
@@ -55,7 +79,13 @@ TX_outage_weighted
 
 
 ```{r time series analysis}
-first_month <- first()
+#time series object
+Outage_count_ts <- ts(outage_group_TX$outage_count, start = c(2015,1), frequency = 12)
+
+# Generate the decomposition
+Outage_count_Decomposed <- stl(Outage_count_ts, s.window = "periodic")
+# Visualize the decomposed series. 
+plot(Outage_count_Decomposed)
 
 ```
 
