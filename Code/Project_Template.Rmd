@@ -8,6 +8,7 @@ output:
   bookdown::pdf_document2:
     toc: true 
     toc_depth: 3
+    latex_engine: xelatex
 editor_options:
   chunk_output_type: console
 ---
@@ -174,7 +175,7 @@ Scope: think about what information someone might want to know about the dataset
 The exploratory analysis of the data involved initial visualizations of the power outage frequency for each state. For each state, a chart was created of power outages from 2015 to 2023 and another chart of power outages by month group by year. This provided a preview of the overall trend and seasonal trend occurring in the power outage data, but further analysis is needed to quantify these trends. 
 
 ### California
-Initial data exploration of California power outage data suggest a slight increasing trend (Figure \@ref(fig:cayearly)). Furthermore, Figure \@ref(fig:camonthly) shows. 
+Initial data exploration of California power outage data suggest a slight increasing trend (Figure \@ref(fig:cayearly)). Furthermore, Figure \@ref(fig:camonthly) shows a clear increase in the number of outages every single month from 2015 to 2023. 
 
 ```{r cayearly, fig.cap="Yearly plot of power outages in California from 2015 to 2023."}
 # CA yearly plot 
@@ -225,6 +226,7 @@ CA_monthly_plot
 
 \newpage
 ### Florida
+In Florida, the number of outages shows a slight upward trend over the past decade (Figure \@ref(fig:flyearly)). On a monthly scale, outages consistently rise during the summer months, indicating a seasonal pattern likely driven by weather conditions or increased energy demand (Figure \@ref(fig:flmonthly)). However, when comparing month-to-month patterns across years, no clear year-to-year monthly trend emerges.
 ```{r flyearly, fig.cap = "Yearly plot of power outages in Florida from 2015 to 2023."}
 #yearly_outages_FL <- outage_group_FL %>%
   #filter(month == 0)
@@ -259,7 +261,7 @@ monthly_outages_FL_plot
 
 \newpage
 ### Pennsylvania
-From the initial data exploration of Pennsylvania, it is clear that power outages have gradually increased over the past decade. On a monthly basis, there is a noticeable rise in outages during the summer months, suggesting a seasonal pattern likely related to weather or energy demand. Overall, the data points to both long-term growth in outage frequency and predictable seasonal fluctuations.
+From the initial data exploration of Pennsylvania, it is clear that power outages have gradually increased over the past decade (Figure \@ref(fig:payearly)). On a monthly basis, there is a noticeable rise in outages during the summer months, suggesting a seasonal pattern likely related to weather or energy demand (Figure \@ref(fig:pamonthly)). Overall, the data points to both long-term growth in outage frequency and predictable seasonal fluctuations.
 
 ```{r payearly, fig.cap="Yearly plot of power outages in Pennsylvania from 2015 to 2023."}
 #Pennsylvania Yearly Power Outage
@@ -308,7 +310,7 @@ PA_monthly_plot
 
 \newpage
 ### Texas
-From this yearly plot of power outages in Texas from 2015 to 2023, we can observe a general increasing pattern of power outages between this time period, aside from the temporary drop between 2016-2018. By looking at this graph, we are also observing a pattern of spikes around May or the early summer months and could indicate a seasonal pattern. 
+From this yearly plot of power outages in Texas from 2015 to 2023, we can observe a general increasing pattern of power outages between this time period, aside from the temporary drop between 2016-2018 (Figure \@ref(fig:txyearly)). By looking at this graph, we are also observing a pattern of spikes around May or the early summer months and could indicate a seasonal pattern (Figure \@ref(fig:txmonthly)). 
 ```{r txyearly, fig.cap="Yearly plot of power outages in Texas from 2015-2023."}
 TX_outage_count <- ggplot(outage_group_TX,
                           aes(x = date,
@@ -473,7 +475,7 @@ summary(FL_nonseasonal_outage_trend)
 
 \newpage
 ### Pennsylvania 
-After removing the seasonal component from the Pennsylvania outage time series, the Mann–Kendall trend test revealed a significant positive trend (z = 3.02, n = 108, p = 0.002), indicating that outage frequency has increased from 2015 to 2023. This result supports the hypothesis that outages have become more common during this time, independent of seasonal patterns. The decomposed time-series visualization shows this trend clearly, revealing that even after accounting for monthly fluctuations, the long-term component continues to rise.
+After removing the seasonal component from the Pennsylvania outage time series, the Mann–Kendall trend test revealed a significant positive trend (z = 3.02, n = 108, p = 0.002), indicating that outage frequency has increased slightly from 2015 to 2023. This result supports the hypothesis that outages have become more common during this time, independent of seasonal patterns. The decomposed time-series visualization shows this trend clearly, revealing that even after accounting for monthly fluctuations, the long-term component continues to rise (Figure \@ref(fig:PAtimeseries)). Figure \@ref(fig:PAtrend) reveals the true trend of the power outages with the seasonality element removed compared to the observed data. 
 
 ```{r PAtimeseries, fig.cap="Decomposed components of the Pennsylvania power outage count time series."}
 # Aggregate monthly
@@ -540,7 +542,7 @@ ggplot(Outage_components_PA)+
 
 \newpage
 ### Texas 
-Figure \@ref(fig:txtimeseries) shows the decomposed components of the Texas power outage count time series from 2015–2023. With a very small p-value (2.22e-16), the result indicates an upward trend, and it is statistically significant. After removing the seasonal component and rerunning the test, the Mann–Kendall results (z = 9.9423, n = 108, p-value < 2.2e-16) still show a highly significant positive trend. This confirms our early analysis that the increase in outage counts persists even after accounting for the influence of seasonal weather patterns.
+Figure \@ref(fig:txtimeseries) shows the decomposed components of the Texas power outage count time series from 2015–2023. With a very small p-value (2.22e-16), the result indicates an upward trend, and it is statistically significant. After removing the seasonal component and rerunning the test, the Mann–Kendall results (z = 9.9423, n = 108, p-value < 2.2e-16) still show a highly significant positive trend. This confirms our early analysis that the increase in outage counts persists even after accounting for the influence of seasonal weather patterns. Figure \@ref(fig:TXtrend) shows the overall trend without seasonality of power outages in Texas compared to the observed data. 
 
 ```{r txtimeseries, fig.cap="Decomposed components of the Texas power outage count time series."}
 #time series object
@@ -729,7 +731,7 @@ TukeyHSD(FL_anova_outage)
 
 \newpage
 ### Pennsylvania 
-The Mann–Kendall seasonal trend test for Pennsylvania outage counts indicated a significant seasonal signal in the data ($\tau = 0.20$, p = 0.009), demonstrating that outage frequencies vary across months. This finding supports the hypothesis that outages are not evenly distributed throughout the year but instead follow a seasonal pattern. The visualizations further highlight this pattern, showing clear peaks in June, July, and August, when outage counts are highest. Together, these results suggest that summer months consistently experience elevated outage activity, potentially driven by seasonal weather conditions or increased energy demand.
+The Mann–Kendall seasonal trend test for Pennsylvania outage counts indicated a significant seasonal signal in the data (tau = 0.20, p = 0.009), demonstrating that outage frequencies vary across months. This finding supports the hypothesis that outages are not evenly distributed throughout the year but instead follow a seasonal pattern. The visualizations further highlight this pattern, showing clear peaks in June, July, and August, when outage counts are highest (Figure \@ref(fig:PAseasonal)). Together, these results suggest that summer months consistently experience elevated outage activity, potentially driven by seasonal weather conditions or increased energy demand. The frequency of outages in Pennsylvania was significantly different among the months (ANOVA; df = 11, F =12.1, p < 7.54e-15). This supports our alternative hypothesis that outages are not evenly distributed throughout the year but instead follow a seasonal pattern. 
 
 ```{r, fig.cap="Isolated seasonal component of PA power outages."}
 #Visualize seasonal Component 
@@ -970,9 +972,9 @@ ggplot(monthly_wHrs_FL.components) +
 
 \newpage
 ### Pennsylvania 
-For customer-weighted hours, the seasonal test was not statistically significant (tau = 0.13, p = 0.09), indicating no consistent monthly pattern in outage impacts on customers. However, after de-seasonalizing, the Mann-Kendall trend test suggested a marginally increasing trend in customer-weighted hours over time (z = 1.89, n = 108, p = 0.06). Overall, these results suggest that while outage counts are increasing and show clear seasonality, the impact on customers is also trending upward, though less strongly.
+For customer-weighted hours, the seasonal test was not statistically significant (tau = 0.13, p = 0.09), indicating no consistent monthly pattern in outage impacts on customers. However, after de-seasonalizing, the Mann-Kendall trend test suggested a marginally increasing trend in customer-weighted hours over time (z = 1.89, n = 108, p = 0.06). Overall, these results suggest that while outage counts are increasing and show clear seasonality, the impact on customers is also trending upward, though less strongly (Figure \@ref(fig:PAcwh)). Figure \@ref(fig:PAcwhTrend) shows that the upward non-seasonal trend is very slight. 
 
-```{r PAcwh, fig.cap = "Decomposed analyis of customer weighted outage time in Pennsylvania."}
+```{r PAcwh, fig.cap = "Decomposed analysis of customer weighted outage time in Pennsylvania."}
 # Aggregate monthly
 monthly_cwh_PA <- outage_group_PA %>%
   mutate(
@@ -1075,7 +1077,7 @@ ggplot(TX_CWH_Components) +
 ```
 
 
-```{r}
+```{r include=FALSE}
 #Mann-Kendall Seasonality Test
 TX_CWH_SMK <- Kendall::SeasonalMannKendall(TX_CWH_ts)
 TX_CWH_SMK
@@ -1104,7 +1106,7 @@ ggplot(TX_CWH_Components) +
 
 \newpage
 ### Comparison between States
-This plot shows the non-seasonal pattern of customer-weighted outage hours for four states from 2015–2023. 
+This plot shows the non-seasonal pattern of customer-weighted outage hours for four states from 2015–2023 (Figure \@ref(fig:cwhall). 
 Overall, California and Texas both show a similar strong upward trend, indicating that total customer-weighted outage has increased intensely since 2015. The rise in outage hours for California could be a result of California’s increasing amount of wildfire. Texas outage increase could be caused by winter storm impact and high summer demands. While Florida has the highest overall customer weighted outage hours, it is only experiencing a mild increase. Pennsylvania remains the lowest out of all four states, and is also showing a pattern of slow increase. (feel free to add more!)
 
 **not sure how good of a graphic this is, outliers are removed from view so you can see the trends
@@ -1160,8 +1162,17 @@ nonseas_cwh_combined
 # Summary and Conclusions
 Summarize your major findings from your analyses in a few paragraphs. What conclusions do you draw from your findings? Relate your findings back to the original research questions and rationale.
 
+In California, power outages have become increasingly common and increasingly disruptive over the past decade. The time-series analysis reveal a noticeable seasonal cycle, with outages typically rising during the summer months and often reaching their highest levels in early fall. This aligns with California's peak wildfire season.  Alongside this seasonal cycle, both the frequency of outages and the total customer impact have trended upward over time, indicating that Californians are experiencing more outages and that these events are affecting larger numbers of customers than in previous years.
+
+In Florida, power outages have gradually increased over the past decade, with a clear seasonal pattern. Outages typically rise during the summer months, a time where Florida experiences extreme heat, storms, and high electricity demand. In contrast, the winter months see far fewer disruptions. Although the exact monthly pattern shifts slightly from year to year, the overall seasonal cycle remains consistent. Long-term patterns show that Florida is experiencing more outages over time, indicating that both environmental pressures such as an increase in storms and growing energy demand may be contributing to the steady upward trend.
+
 After accounting for seasonal patterns, the analysis shows that the frequency of power outages in Pennsylvania has increased from 2015 to 2023. Outage counts display a clear seasonal trend, with the highest numbers occurring in the summer months of June, July, and August. In contrast, customer-weighted hours do not show a strong seasonal pattern, but there is a slight upward trend over time, indicating that the impact of outages on customers is also gradually increasing. Overall, while outages are becoming more frequent and seasonally concentrated, the effect on customers is rising more moderately.
+
 After running ANOVA and MannKendall tests, the results show that there's an overall increasing trend of power outage frequency in Texas from 2015-2023. The customer weighted outage hours take into account the amount of customers impacted by these outages, which also shows an increasing trend over the study period. However, it is surprising that despite the visual season trend, Texas does not have a seasonal trend of power outages. 
+
+After comparing outage patterns across all four states, Florida and Pennsylvania show clear seasonal patterns in power outages, with events concentrated in the summer,especially July, and dropping sharply in winter. Texas peaks earlier in May, while California has no strong seasonal pattern, though outages rise somewhat in October. ANOVA results confirm this; Florida and Pennsylvania have extremely low p-values, indicating strong seasonality, while California and Texas have high p-values, indicating no statistically significant seasonal trend. These patterns may relate to regional climate factors. Florida and Pennsylvania face strong summer energy demand and storms, Texas experiences diverse weather but no consistent seasonal driver, and California’s fire season varies widely year to year.
+
+From 2015 to 2023, customer-weighted outage hours show a strong upward trend in both California and Texas, indicating growth in the scale of outages. California’s rise is likely tied to increasingly severe wildfires, while Texas’s growth may reflect the combined effects of winter storms and heavy summer electricity demand. Florida, although having the highest overall outage hours, shows only a mild upward trend. Pennsylvania has the lowest outage numbers among the four states and is experiencing only a slight gradual increase over time.
 
 
 
