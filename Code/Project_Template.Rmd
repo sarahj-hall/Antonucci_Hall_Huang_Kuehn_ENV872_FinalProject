@@ -1109,7 +1109,7 @@ Overall, California and Texas both show a similar strong upward trend, indicatin
 
 **not sure how good of a graphic this is, outliers are removed from view so you can see the trends
 
-```{r cwhall, fig.cap=""}
+```{r cwhall, fig.cap="Non-seasonal pattern of customer-weighted outage hours for CA, FL, PA, and TX from 2015–2023."}
 # Add a column for states 
 CA_nonseas_cwh_combined <- CA_cwh_outage_components %>%
   mutate(State = "CA",
@@ -1161,6 +1161,7 @@ nonseas_cwh_combined
 Summarize your major findings from your analyses in a few paragraphs. What conclusions do you draw from your findings? Relate your findings back to the original research questions and rationale.
 
 After accounting for seasonal patterns, the analysis shows that the frequency of power outages in Pennsylvania has increased from 2015 to 2023. Outage counts display a clear seasonal trend, with the highest numbers occurring in the summer months of June, July, and August. In contrast, customer-weighted hours do not show a strong seasonal pattern, but there is a slight upward trend over time, indicating that the impact of outages on customers is also gradually increasing. Overall, while outages are becoming more frequent and seasonally concentrated, the effect on customers is rising more moderately.
+After running ANOVA and MannKendall tests, the results show that there's an overall increasing trend of power outage frequency in Texas from 2015-2023. The customer weighted outage hours take into account the amount of customers impacted by these outages, which also shows an increasing trend over the study period. However, it is surprising that despite the visual season trend, Texas does not have a seasonal trend of power outages. 
 
 
 
