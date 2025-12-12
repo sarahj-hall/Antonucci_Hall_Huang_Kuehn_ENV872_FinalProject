@@ -83,35 +83,6 @@ summary(CA_anova_outage)
 #show months
 TukeyHSD(CA_anova_outage)
 
-#messing around with PA stats for seasonality (results so stats sig)
-outage_group_PA$month <- factor(month(outage_group_PA$date),
-                                levels = 1:12,
-                                labels = month.abb)
-
-PA_anova_outage <- aov(data = outage_group_PA, outage_count ~ month)
-summary(PA_anova_outage)
-
-#show months
-TukeyHSD(PA_anova_outage)
-
-#messing around with FL stats for seasonality (results so stats sig)
-outage_group_FL$month <- factor(month(outage_group_FL$date),
-                                levels = 1:12,
-                                labels = month.abb)
-
-FL_anova_outage <- aov(data = outage_group_FL, outage_count ~ month)
-summary(FL_anova_outage)
-
-#messing around with TX stats for seasonality (results so stats sig)
-outage_group_TX$month <- factor(month(outage_group_TX$date),
-                                levels = 1:12,
-                                labels = month.abb)
-
-TX_anova_outage <- aov(data = outage_group_TX, outage_count ~ month)
-summary(TX_anova_outage)
-
-#show months
-TukeyHSD(TX_anova_outage)
 ```
 
 
@@ -147,7 +118,7 @@ outage_seas_month_vis_CA <- ggplot(CA_outage_components) +
                   levels=1:12,
                   labels=month.abb), 
                 group = year(Date)), 
-                color = "#c13d75ff") +
+                color = "#red") +
   geom_hline(yintercept = 0, lty = 2) +
   labs(x = "Month", 
        y = "# of outages",
