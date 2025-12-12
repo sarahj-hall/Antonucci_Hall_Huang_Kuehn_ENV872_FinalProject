@@ -108,35 +108,18 @@ FL_nonseas_combined <- monthly_outages_FL.components %>%
 # Combine the datasets
 nonseas_combined_data <- bind_rows(CA_nonseas_combined, PA_nonseas_combined, TX_nonseas_combined, FL_nonseas_combined)
 
-ggplot(nonseas_combined_data) +
-  geom_point(aes(
-    x = Date,
-    y = nonseas,
-    color = State)) +
-  labs(
-    x = "Month",
-    y = "# of outages",
-    title = "Trend of Power Outages") +
-  scale_color_manual(values = c(
-  "CA" = "red",
-  "PA" = "purple",
-  "TX" = "blue",
-  "FL" = "darkgreen"
-))
-
 nonseas_combined <- nonseas_combined_data %>% 
   ggplot(
     aes(
       x = Date,
       y = nonseas,
       color = State)) +
-  geom_point(size = 2, alpha = 0.7)+
-  geom_line()+
-  geom_smooth(method ="lm", se = FALSE, color = "red") +
+  geom_point(size = 1.5, alpha = 0.5)+
+  geom_smooth(method ="lm", se = FALSE, size = 2) +
   labs(
     x = "Month",
-    y = "# of outages",
-    title = "Trend of Power Outages") +
+    y = "Number of outages",
+    title = "Non-Seasonal Trend of Power Outages") +
   scale_color_manual(values = c(
   "CA" = "red",
   "PA" = "purple",
@@ -145,41 +128,18 @@ nonseas_combined <- nonseas_combined_data %>%
 
 nonseas_combined
 
-combined_NonSeasonal.Plot <- ggplot(NULL) +
-  scale_y_log10(limits = c(0.25, 1200)) +
-  geom_point(data = NonSeasonalDischarge.Daily, aes(Date, Seasonality_Removed), 
-             color = "forestgreen", alpha = 0.05) +
-  geom_smooth(data = NonSeasonalDischarge.Daily, aes(Date, Seasonality_Removed),
-              method = "lm", color = "forestgreen") +
-  geom_point(data = florida_hurricane_Decomposed_Components, 
-             aes(x = Date, y = data), color = "deeppink1", alpha = 0.05) +
-  geom_smooth(data = florida_hurricane_Decomposed_Components, 
-             aes(x = Date, y = data), method = "lm", color = "deeppink1") +
-  geom_point(data = NY_Combine_Nonseasonal, aes(x = Date, y = Nonseasonal), 
-             color = "turquoise4", alpha = 0.05) + 
-  geom_smooth(data = NY_Combine_Nonseasonal, aes(x = Date, y = Nonseasonal), 
-              method = "lm", color = "turquoise4") +
-  labs(x = "Date", y = "Non-Seasonal Daily Discharge (cfs)", 
-       title = "Non-Seasonal Mean Daily Discharge During Hurricane Seasons") +
-  scale_x_date(date_labels = "%Y", date_breaks = "2 year") +
-  theme(axis.text.x = element_text(angle = 90))
-plot(combined_NonSeasonal.Plot)
-
-CA_yearly <- outage_group_CA %>% 
-  ggplot(
-    mapping = aes(
-      x= date,
-      y = outage_count
-      )) +
-  geom_point(size = 2, alpha = 0.7)+
-  geom_line()+
-  geom_smooth(method ="lm", se = FALSE, color = "red") +
-  labs(
-    title = "Number of Power Outages in California from 2015 to 2023",
-    y = "Number of Outages",
-    x = "Year"
-  )
-
+ggplot(nonseas_combined_data, aes(x = Date, y = nonseas, color = State)) +
+  # lighter raw points
+  geom_point(size = 1.5, alpha = 0.25) +
+  # bold linear trend per state (lm)
+  geom_smooth(aes(group = State), method = "lm", se = FALSE, size = 1.2) +
+  scale_color_manual(values = c("CA" = "red", "PA" = "purple", "TX" = "blue", "FL" = "darkgreen")) +
+  labs(x = "Month", y = "# of outages (non-seasonal)", title = "Trend of Power Outages (cleaned)") +
+  scale_x_date(date_labels = "%Y", date_breaks = "2 years", expand = c(0,0)) +
+  theme_minimal(base_size = 14) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5),
+        legend.position = "right",
+        plot.title = element_text(hjust = 0.5))
 
 ```
 

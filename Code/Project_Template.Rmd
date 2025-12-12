@@ -577,6 +577,52 @@ ggplot(TXOutage_count_Components) +
 \newpage
 ### Comparision between States
 
+```{r trendall, fig.caption="Non-seasonal trend of power outages in California, Florida, Pennyslvania, and Texas"}
+
+# Add a column for states 
+CA_nonseas_combined <- CA_outage_components %>%
+  mutate(State = "CA",
+         nonseas = trend + remainder)
+
+PA_nonseas_combined <- Outage_components_PA %>%
+  mutate(State = "PA", 
+         nonseas = trend + remainder)
+
+TX_nonseas_combined <- TXOutage_count_Components %>%
+  mutate(State = "TX", 
+         nonseas = trend + remainder)
+
+FL_nonseas_combined <- monthly_outages_FL.components %>%
+  mutate(State = "FL",
+         nonseas = trend + remainder)
+
+# Combine the datasets
+nonseas_combined_data <- bind_rows(CA_nonseas_combined, PA_nonseas_combined, TX_nonseas_combined, FL_nonseas_combined)
+
+nonseas_combined <- nonseas_combined_data %>% 
+  ggplot(
+    aes(
+      x = Date,
+      y = nonseas,
+      color = State)) +
+  geom_point(size = 1.5, alpha = 0.5)+
+  geom_smooth(method ="lm", se = FALSE, size = 1.5) +
+  labs(
+    x = "Month",
+    y = "Number of outages",
+    title = "Non-Seasonal Trend of Power Outages") +
+  scale_color_manual(values = c(
+  "CA" = "red",
+  "PA" = "purple",
+  "TX" = "blue",
+  "FL" = "darkgreen"))
+
+nonseas_combined
+
+```
+```
+
+
 \newpage
 ## Question 2: Is there a seasonal trend? Are certain months more prone to outages? 
 ### California 
