@@ -80,12 +80,12 @@ TX_outage_duration <- outage_group_TX %>%
                         levels =1:12,
                         labels=month.abb),
                              y = max_outage_duration,
-                             color = year))+
+                             color = factor(year)))+
   geom_point(size = 2, alpha = 0.6)+
-  scale_colour_viridis(option = "mako", direction = -1)+
+  scale_colour_viridis(option = "mako", direction = -1, discrete = TRUE)+
   labs(title = "Maximum Duration of Power Outages in Texas by Month from 2015 to 2023",
        x = "Month",
-       y="Outage Duration (hours) ")
+       y="Outage Duration (hours)")
 TX_outage_duration
 
 # customer weighted duration plot
@@ -94,12 +94,12 @@ TX_outage_weighted <- outage_group_TX %>%
                         levels=1:12,
                         labels=month.abb),
                              y = customer_weighted_hours,
-                             color = year))+
+                             color = factor(year)))+
   geom_point(size = 2, alpha = 0.6)+
-  scale_colour_viridis(option = "mako", direction = -1)+
+  scale_colour_viridis(option = "mako", direction = -1, discrete = TRUE)+
   labs(title = "Weighted Outage Duration in Texas from 2015-2023 \n (# of customers * outage time) ",
        x = "Month",
-       y="Outage Duration (min) ")+
+       y="Outage Duration (hour) ")+
   ylim(0,50000000)
   
 TX_outage_weighted
