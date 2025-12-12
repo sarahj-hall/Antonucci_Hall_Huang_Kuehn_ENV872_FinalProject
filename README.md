@@ -26,12 +26,12 @@ She, B., Adetola, V., & Yun, J. (2024). Event-correlated Outage Dataset in Ameri
 ## Folder structure, file formats, and naming conventions 
 Folders in this repository include: Code, Output, Data/Raw, and Data/Processed. 
 
-- '~/Code' folder the .Rmd files used to complete the data wrangling, exploration, and analysis for this report.
-- '~Data/Raw' folder contains the original data sets (all csv files)
+- `~/Code` folder the .Rmd files used to complete the data wrangling, exploration, and analysis for this report.
+- `~Data/Raw` folder contains the original data sets (all csv files)
   - Naming conventions of files is based on original to the dataset source
-- '~Data/Processed' contains the wrangled data. All data was downloaded and processed into csv format. 
+- `~Data/Processed` contains the wrangled data. All data was downloaded and processed into csv format. 
   - Naming convention based on state and content of analysis
-- '~/' contains the REAMME file and final report .rmd and .pdf files 
+- `~/` contains the REAMME file and final report .rmd and .pdf files 
 
 ## Metadata
 
@@ -127,11 +127,11 @@ Date | Date when outage occurred | Date | NA
 
 ## Scripts and code
 Wrangling code:
-- 'Data_Wrangling_Initial.Rmd': Markdown file used to conduct all initial data wrangling for all four states.
-- `Data_Wrangling_Initial.Rmd`
+1. `Data_Wrangling_Initial.Rmd`: Markdown file used to conduct all initial data wrangling for all four states.
+
 Visualization code:
-1. 'Title.rmd' - code used for wrangling ___ outage data
-2. 'Title.rmd' - code used for wrangling ___ outage data
+1. `Title.rmd` - code used for wrangling ___ outage data
+2. `Title.rmd` - code used for wrangling ___ outage data
 
 Analysis code:
 1. 
