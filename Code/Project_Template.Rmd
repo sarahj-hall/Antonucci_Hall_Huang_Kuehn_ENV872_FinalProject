@@ -6,12 +6,14 @@ date: 'December 12th, 2025'
 
 output: 
   bookdown::pdf_document2:
-    toc: true 
-    toc_depth: 3
+    toc: false 
     latex_engine: xelatex
 editor_options:
   chunk_output_type: console
 ---
+\newpage
+\setcounter{tocdepth}{3}
+\tableofcontents 
 \newpage
 \listoftables 
 \newpage
@@ -89,7 +91,7 @@ The research questions of this study are:
 - Question 2: Is there a seasonal trend? Are certain months more prone to outages? 
 - Question 3: How has the severity of power outages changed over time? 
 
-The hypothesis for this study is that with increasing number of extreme climate events, like hurricanes, heatwaves, wildfires, and winter storms, number of power outages across the United States might experience an increase overtime.There might also be seasonal trends for each of these states, and outage severity might also increase overtime.
+We hypothesize that (1) the frequency of power outages have increased over time in response to rising extreme climate events, (2) that each state has distinct seasonal power outage patterns related to its dominant weather hazards, and (3) the severity of power outages have increase over time, which will be reflected in an increase in the customer weighted ours of outages. 
 
 \newpage
 
@@ -168,12 +170,6 @@ kable(state_summary, booktabs = TRUE, align = "c",
 \newpage
 
 # Exploratory Analysis 
-Insert exploratory visualizations of your dataset. This may include, but is not limited to, graphs illustrating the distributions of variables of interest and/or maps of the spatial context of your dataset. Format your R chunks so that graphs are displayed but code is not displayed. Accompany these graphs with text sections that describe the visualizations and provide context for further analyses.
-
-Each figure should be accompanied by a caption, and each figure should be referenced within the text.
-
-Scope: think about what information someone might want to know about the dataset before analyzing it statistically. How might you visualize this information?
-
 The exploratory analysis of the data involved initial visualizations of the power outage frequency for each state. For each state, a chart was created of power outages from 2015 to 2023 and another chart of power outages by month group by year. This provided a preview of the overall trend and seasonal trend occurring in the power outage data, but further analysis is needed to quantify these trends. 
 
 ### California
@@ -604,8 +600,7 @@ ggplot(TXOutage_count_Components) +
 
 Figure \@ref(fig:nonseasall) visualizes each state’s non-seasonal power outage time series trend. Red represents California, green is Florida, purple is Pennsylvania, and blue is Texas. All states are seeing an increasing trend of power outages. California and Texas are experiencing the greatest increase, while Pennsylvania and Florida are experiencing more gradual increases in comparison. Towards the end of the time period, California and Texas also overall have more power outages than Florida and Pennsylvania, with Pennsylvania seeing overall the lowest amount of power outages. 
 
-```{r nonseasall, fig.caption = "Non-seasonal trend of power outages in California, Florida, Pennsylvania, and Texas."}
-
+```{r nonseasall, fig.cap="Non-seasonal trend of power outages in California, Florida, Pennsylvania, and Texas."}
 # Add a column for states 
 CA_nonseas_combined <- CA_outage_components %>%
   mutate(State = "CA",
@@ -646,7 +641,6 @@ nonseas_combined <- nonseas_combined_data %>%
   "FL" = "darkgreen"))
 
 nonseas_combined
-
 ```
 
 \newpage
