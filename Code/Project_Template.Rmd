@@ -8,7 +8,6 @@ output:
   bookdown::pdf_document2:
     toc: true 
     toc_depth: 3
-    
 editor_options:
   chunk_output_type: console
 ---
@@ -577,9 +576,9 @@ ggplot(TXOutage_count_Components) +
 \newpage
 ### Comparision between States
 
-Each state’s non-seasonal power outage time series trend are visualized in Figure \@ref(fig:trendall). Red represents California, green is Florida, purple is Pennsylvania, and blue is Texas. All states are seeing an increasing trend of power outages. California and Texas are experiencing the greatest increase, while Pennsylvania and Florida are experiencing more gradual increases in comparison. Towards the end of the time period, California and Texas also overall have more power outages than Florida and Pennsylvania, with Pennsylvania seeing overall the lowest amount of power outages. 
+Figure \@ref(fig:nonseasall) visualizes each state’s non-seasonal power outage time series trend. Red represents California, green is Florida, purple is Pennsylvania, and blue is Texas. All states are seeing an increasing trend of power outages. California and Texas are experiencing the greatest increase, while Pennsylvania and Florida are experiencing more gradual increases in comparison. Towards the end of the time period, California and Texas also overall have more power outages than Florida and Pennsylvania, with Pennsylvania seeing overall the lowest amount of power outages. 
 
-```{r trendall, fig.caption="Non-seasonal trend of power outages in California, Florida, Pennyslvania, and Texas."}
+```{r nonseasall, fig.caption = "Non-seasonal trend of power outages in California, Florida, Pennsylvania, and Texas."}
 
 # Add a column for states 
 CA_nonseas_combined <- CA_outage_components %>%
@@ -622,8 +621,6 @@ nonseas_combined <- nonseas_combined_data %>%
 nonseas_combined
 
 ```
-```
-
 
 \newpage
 ## Question 2: Is there a seasonal trend? Are certain months more prone to outages? 
@@ -799,6 +796,8 @@ TukeyHSD(TX_anova_outage)
 
 \newpage
 ### Comparision between States
+
+Figure \@ref(fig:seasall) displays the seasonal cycle for each state. This was created by aggregating the monthly power outage data of every year to show cumulative trend across 2015 to 2023. Florida and Pennyslvania have very similar seasonal cycles, with a concentration of outage occurrences in summer months (peaking in July), and a significant decline in winter months. Texas appears to peak earlier in May. California has a less discernible trend, but there is a peak in October. [ADD SECTION COMPARING ANOVA P-VALUES!] [LINK TO CLIMATE??, CA fire season is really all over the place? interesting that TX doesn't have an uptick from winter storms, but it also experiences hurricanes like FL. Summer peak could be largely from heatwaves and hurricanes, generally  energy demand peaks in the summer with AC usage]
 
 ```{r seasall, fig.cap="Seasonal cycle of power outages (2015-2023 combined)."}
 #Seasonal Cycle combined
