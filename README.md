@@ -31,7 +31,7 @@ Folders in this repository include: Code, Output, Data/Raw, and Data/Processed.
   - Naming conventions of files is based on original to the dataset source
 - `~Data/Processed` contains the wrangled data. All data was downloaded and processed into csv format. 
   - Naming convention based on state and content of analysis
-- `~/` contains the REAMME file and final report .rmd and .pdf files 
+- `~/` contains the README file and final report .rmd and .pdf files 
 
 ## Metadata
 
