@@ -126,12 +126,18 @@ Date | Date when outage occurred | Date | NA
 
 
 ## Scripts and code
-All found in the Code folder:
 Wrangling code:
-1. Title.rmd - code used for wrangling ___ outage data
-2. 
+1. 'Data_Wrangling_Initial.Rmd': Markdown file used to conduct all initial data wrangling for all four states.
 
-Exploration code:
+Visualization code:
+1. 'Title.rmd' - code used for wrangling ___ outage data
+2. 'Title.rmd' - code used for wrangling ___ outage data
+
 Analysis code:
-Project Code: Includes all code used to wrangle, visualized and analyze our data.
-<list any software scripts/code contained in the repository and a description of their purpose.>
+1. 
+2. 
+3.
+4.
+
+Project Code: 
+1. 'Antonucci_Hall_Huang_Kuehn_Project.Rmd': Markdown file used to create final report.
