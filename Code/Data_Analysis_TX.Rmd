@@ -163,12 +163,14 @@ TX_CWH_SMK <- Kendall::SeasonalMannKendall(TX_CWH_ts)
 TX_CWH_SMK
 summary(TX_CWH_SMK)
 
-#p-value = 5.3438e-11
+#tau = 0.505, 2-sided pvalue =5.3438e-11
 
 #Remove Seasonal
 TX_CWH_noseas <- TX_CWH_ts - TX_CWH_Components$seasonal
 TX_CWH_nonseason <- trend::mk.test(TX_CWH_noseas)
 TX_CWH_nonseason
+#data:  TX_CWH_noseas
+#z = 5.0309, n = 108, p-value = 4.882e-07
 ```
 
 ```{r TXCWHseason, fig.cap="Seasonal component of customer weighted outage hours in Texas}
