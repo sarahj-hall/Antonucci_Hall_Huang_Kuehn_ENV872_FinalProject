@@ -9,6 +9,9 @@ editor_options:
 ```{r setup, include=FALSE}
 library(here)
 library(tidyverse)
+library(viridis)
+library(RColorBrewer)
+library(colormap)
 
 #read in files for 2021
 outage_group_2021 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2021_group.csv'),
@@ -17,6 +20,39 @@ outage_merged_2021 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2021
                               stringsAsFactors = TRUE)
 outage_events_2021_24hr <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_with_events_2021_24_hours_lag.csv'), stringsAsFactors = TRUE)
 
+#read in all group outage data (2015-2023, 2014 has no month data)
+outage_group_2015 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2015_group.csv'), stringsAsFactors = TRUE)
+outage_group_2016 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2016_group.csv'), stringsAsFactors = TRUE)
+outage_group_2017 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2017_group.csv'), stringsAsFactors = TRUE)
+outage_group_2018 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2018_group.csv'), stringsAsFactors = TRUE)
+outage_group_2019 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2019_group.csv'), stringsAsFactors = TRUE)
+outage_group_2020 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2020_group.csv'), stringsAsFactors = TRUE)
+outage_group_2021 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2021_group.csv'), stringsAsFactors = TRUE)
+outage_group_2022 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2022_group.csv'), stringsAsFactors = TRUE)
+outage_group_2023 <- read.csv(here('Data/Raw/Outage_Dataset/eaglei_outages_2023_group.csv'), stringsAsFactors = TRUE)
+
+#merge into one dataset
+outage_group_all_years <- rbind(outage_group_2015, outage_group_2016,outage_group_2017, outage_group_2018, outage_group_2019, outage_group_2020, outage_group_2021, outage_group_2022, outage_group_2023)
+
+#change columns to state abbrevations
+outage_group_all_years$state <- state.abb[match(outage_group_all_years$state, state.name)]
+
+#export to combined years dataset
+write.csv(outage_group_all_years, row.names = FALSE, 
+          file = "./Data/Processed/outage_group_all_years.csv")
+
+#filter out for california 
+outage_group_CA <- outage_group_all_years %>% 
+  filter(state == 'CA') 
+#filter out for TX 
+outage_group_TX <- outage_group_all_years %>% 
+  filter(state == 'TX') 
+#filter out for FL 
+outage_group_FL <- outage_group_all_years %>% 
+  filter(state == 'FL') 
+#filter out for PA 
+outage_group_PA <- outage_group_all_years %>% 
+  filter(state == 'PA') 
 
 ```
 
@@ -27,14 +63,144 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 ```{r plot exploration}
+my_theme <- theme_classic + theme(axis.text.x = element_text(angle = 45))
+
 summary(outage_events_2021_24hr)
 summary(outage_group_2021)
 summary(outage_merged_2021)
 
-outage_group_2021 %>% 
+#boxplot for total yearly outages from 2015-2023
+outage_group_all_years %>% 
+  filter(month == 0) %>% 
   ggplot(aes(x = state,
       y = outage_count))+
   geom_boxplot()
+
+#line plots for each state yearly outages from 2015-2023
+outage_group_CA %>% 
+  filter(month == 0) %>% 
+  ggplot(aes(x = year,
+      y = outage_count))+
+  geom_point()+
+  geom_line()
+
+outage_group_PA %>% 
+  filter(month == 0) %>% 
+  ggplot(aes(x = year,
+      y = outage_count))+
+  geom_point()+
+  geom_line()
+
+outage_group_FL %>% 
+  filter(month == 0) %>% 
+  ggplot(aes(x = year,
+      y = outage_count))+
+  geom_point()+
+  geom_line()
+
+outage_group_TX %>% 
+  filter(month == 0) %>% 
+  ggplot(aes(x = year,
+      y = outage_count))+
+  geom_point()+
+  geom_line()
+
+#line plots for each state, monthly 
+CA_monthly_plot <- outage_group_CA %>% 
+  filter(month != 0) %>% 
+  ggplot(
+    mapping = aes(
+      x=factor(
+      month,
+      levels=1:12,
+      labels=month.abb),
+      y = outage_count,
+      color = year)
+    ) +
+ geom_point(size = 2, alpha = 0.7)+
+ scale_color_viridis(
+   option = "mako", 
+   direction = -1)+
+  labs(
+    title = "Number of Power Outages in California by Month from 2015 to 2023",
+    y = "Number of Outages",
+    x = "Month",
+    color = "Year",
+  )
+
+CA_monthly_plot
+
+#example of how to export 
+ggsave(here('Output/CA_monthly_plot.jpg'), CA_monthly_plot, height = 4, width = 6, units = "in", dpi = 300)
+
+#plots for Texas, monthly 
+outage_group_TX %>% 
+  filter(month != 0) %>% 
+  ggplot(
+    mapping = aes(
+      x=factor(
+      month,
+      levels=1:12,
+      labels=month.abb),
+      y = outage_count,
+      color = year)
+    ) +
+ geom_point(size = 2, alpha = 0.7)+
+ scale_color_viridis(
+   option = "mako", 
+   direction = -1)+
+  labs(
+    title = "Number of Power Outages in Texas by Month from 2015 to 2023",
+    y = "Number of Outages",
+    x = "Month",
+    color = "Year",
+  )
+
+#plots for Florida, monthly 
+outage_group_FL %>% 
+  filter(month != 0) %>% 
+  ggplot(
+    mapping = aes(
+      x=factor(
+      month,
+      levels=1:12,
+      labels=month.abb),
+      y = outage_count,
+      color = year)
+    ) +
+ geom_point(size = 2, alpha = 0.7)+
+ scale_color_viridis(
+   option = "mako", 
+   direction = -1)+
+  labs(
+    title = "Number of Power Outages in Florida by Month from 2015 to 2023",
+    y = "Number of Outages",
+    x = "Month",
+    color = "Year",
+  )
+
+#plots for PA, monthly 
+outage_group_PA %>% 
+  filter(month != 0) %>% 
+  ggplot(
+    mapping = aes(
+      x=factor(
+      month,
+      levels=1:12,
+      labels=month.abb),
+      y = outage_count,
+      color = year)
+    ) +
+ geom_point(size = 2, alpha = 0.7)+
+ scale_color_viridis(
+   option = "mako", 
+   direction = -1)+
+  labs(
+    title = "Number of Power Outages in Pennslyvania by Month from 2015 to 2023",
+    y = "Number of Outages",
+    x = "Month",
+    color = "Year",
+  )
 
 
 
