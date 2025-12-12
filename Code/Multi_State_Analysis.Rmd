@@ -46,7 +46,7 @@ ggplot(Outage_components_PA) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-```{r}
+```{r seas_all, fig.cap="Seasonal cycle of power outages in California, Florida, Pennsylvania, and Texas (2015-2023 combined).}
 #Seasonal Cycle combined
 # Add a column for states () Need to add FL and TX)
 CA_outage_combined <- CA_outage_components %>%
@@ -58,8 +58,12 @@ PA_Outage_combined <- Outage_components_PA %>%
 TX_Outage_combined <- TXOutage_count_Components %>%
   mutate(State = "TX")
 
+FL_Outage_combined <- monthly_outages_FL.components %>%
+  mutate(State = "FL",
+         Month = as.numeric(outage_group_FL$month),)
+
 # Combine the datasets
-combined_data <- bind_rows(CA_outage_combined, PA_Outage_combined, TX_Outage_combined)
+combined_data <- bind_rows(CA_outage_combined, PA_Outage_combined, TX_Outage_combined, FL_Outage_combined)
 
 # Plot together
 ggplot(combined_data) +
@@ -73,7 +77,12 @@ ggplot(combined_data) +
     x = "Month",
     y = "# of outages",
     title = "Seasonal Cycle of Power Outages") +
-  theme(plot.title = element_text(hjust = 0.5))
+  scale_color_manual(values = c(
+  "CA" = "red",
+  "PA" = "purple",
+  "TX" = "blue",
+  "FL" = "darkgreen"
+))
 
 ```
 
