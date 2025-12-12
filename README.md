@@ -127,17 +127,21 @@ Date | Date when outage occurred | Date | NA
 
 ## Scripts and code
 Wrangling code:
-1. `Data_Wrangling_Initial.Rmd`: Markdown file used to conduct all initial data wrangling for all four states.
+1. `Data_Wrangling_Initial.Rmd`: Markdown file used to conduct all initial data wrangling for the four states.
 
 Visualization code:
-1. `Title.rmd` - code used for wrangling ___ outage data
-2. `Title.rmd` - code used for wrangling ___ outage data
+1. `Initial_Data_Exploration.rmd` - code used for initial exploration of all data 
+2. `Data_Visualization_CA.rmd` - code used for data visualization for California
+3. `Title.rmd` - code used for data visualization for
+4. `Title.rmd` - code used for data visualization for
+5. `Title.rmd` - code used for data visualization for
 
 Analysis code:
-1. 
-2. 
-3.
-4.
+1. `Data_Analysis_CA.rmd` - code used for California data analysis
+2. `TS_Analysis_FL.rmd` - code used for Pennsylvania data analysis
+3. `Data_Analysis_PA.rmd` - code used for Pennsylvania data analysis
+4. `Title.rmd` - code used for Florida data analysis
+5. `Multi_State_Analysis.rmd` - code used for multi-state analysis 
 
 Project Code: 
 1. 'Antonucci_Hall_Huang_Kuehn_Project.Rmd': Markdown file used to create final report.
