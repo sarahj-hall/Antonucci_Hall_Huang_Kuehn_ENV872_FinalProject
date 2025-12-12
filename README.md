@@ -50,63 +50,13 @@ outage_count  | Total number of outages | Numeric | NA
 max_outage_duration  | Maximum duration of any single outage in the period | Numeric | hours
 customer_weighted_hours  | Total customer-weighted hours, calculated by multiplying the number of affected customers by the outage duration | Numeric | NA
 
-2. eagle_outages_year_merged.csv
-
-Column Name    | Description                                                   | Class         | Units
--------------: | :----------------------------------------------------------- | ------------- | -------------
-fips          |FIPS code identifying the county where outage occurred          | number  | NA
-state         |State where outage occurred                                   | factor  | NA
-county          | County where outage occur                                  | factor  | NA
-start_time  | Time when outage occurred | ?? | NA
-duration  | Duration of the outage | number | hours
-min_customers  | Minimum number of affected customers during the outage | number | NA
-max_customers  | Maximum number of affected customers during the outage | number | NA
-mean_customers | Mean number of affected customers during the outage | number | NA
-
-3. eaglei_outages_with_events_2014_8_hours_lag.csv
-
-Column Name    | Description                                                   | Class         | Units
--------------: | :----------------------------------------------------------- | ------------- | -------------
-event_id       | Unique identified for associated event          | factor | NA
-state_event         |State of outage event                                   | factor  | NA
-Datetime Event Began | Date and time of the start of the outage event | ???  | NA
-Datetime Restoration | Date and time of the end of the outage event | ???  | NA
-Event Type  | The type of disturbance (e.g. hurricane) causing the outage | factor | NA
-fips          |FIPS code identifying the county where outage occurred          | number  | NA
-state         |State where outage occurred                                   | factor  | NA
-county          | County where outage occur                                  | factor  | NA
-start_time  | Time when outage occurred | ?? | NA
-duration  | Duration of the outage | number | hours
-min_customers  | Minimum number of affected customers during the outage | number | NA
-max_customers  | Maximum number of affected customers during the outage | number | NA
-mean_customers | Mean number of affected customers during the outage | number | NA
-
-4. eaglei_outages_with_events_2014_24_hours_lag.csv
-
-Column Name    | Description                                                   | Class         | Units
--------------: | :----------------------------------------------------------- | ------------- | -------------
-event_id       | Unique identified for associated event          | factor | NA
-state_event         |State of outage event                                   | factor  | NA
-Datetime Event Began | Date and time of the start of the outage event | ???  | NA
-Datetime Restoration | Date and time of the end of the outage event | ???  | NA
-Event Type  | The type of disturbance (e.g. hurricane) causing the outage | factor | NA
-fips          |FIPS code identifying the county where outage occurred          | number  | NA
-state         |State where outage occurred                                   | factor  | NA
-county          | County where outage occur                                  | factor  | NA
-start_time  | Time when outage occurred | ?? | NA
-duration  | Duration of the outage | number | hours
-min_customers  | Minimum number of affected customers during the outage | number | NA
-max_customers  | Maximum number of affected customers during the outage | number | NA
-mean_customers | Mean number of affected customers during the outage | number | NA
-
-
 In the Processed data folder: 
 1. outage_group_all_years.csv
 
 Column Name    | Description                                                   | Class         | Units
 -------------: | :----------------------------------------------------------- | ------------- | -------------
 state         |State where outage occurred                                   | String  | NA
-year          | Year when outage occurred                                    | Interger  | NA
+year          | Year when outage occurred                                    | Integer  | NA
 month  | Month when outage occurred | Integer | NA
 outage_count  | Total number of outages | Numeric | NA
 max_outage_duration  | Maximum duration of any single outage in the period | Numeric | hours
@@ -117,7 +67,7 @@ customer_weighted_hours  | Total customer-weighted hours, calculated by multiply
 Column Name    | Description                                                   | Class         | Units
 -------------: | :----------------------------------------------------------- | ------------- | -------------
 state         |State where outage occurred                                   | String  | NA
-year          | Year when outage occurred                                    | Interger  | NA
+year          | Year when outage occurred                                    | Integer  | NA
 month  | Month when outage occurred | Integer | NA
 outage_count  | Total number of outages | Numeric | NA
 max_outage_duration  | Maximum duration of any single outage in the period | Numeric | hours
