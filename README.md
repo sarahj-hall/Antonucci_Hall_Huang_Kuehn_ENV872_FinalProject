@@ -132,7 +132,7 @@ Wrangling code:
 Visualization code:
 1. `Initial_Data_Exploration.rmd` - code used for initial exploration of all data 
 2. `Data_Visualization_CA.rmd` - code used for data visualization for California
-3. `.rmd` - code used for data visualization for Florida 
+3. `Data.Visualization_FL.rmd` - code used for data visualization for Florida 
 4. `Data_Visualization_PA.rmd` - code used for data visualization for Pennsylvania 
 5. `Data_Visualization_TX.rmd` - code used for data visualization for Texas
 
