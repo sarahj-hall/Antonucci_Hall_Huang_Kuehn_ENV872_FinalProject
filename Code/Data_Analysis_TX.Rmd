@@ -38,37 +38,6 @@ outage_group_TX$date <- ymd(outage_group_TX$date)
 
 ```
 
-```{r txyearly, fig.cap="Yearly plot of power outages in Texas from 2015-2023."}
-TX_outage_count <- ggplot(outage_group_TX,
-                          aes(x = date,
-                              y = outage_count))+
-  geom_point(size = 2, alpha = 0.7)+
-  geom_line()+
-  geom_smooth(method = "lm", se = FALSE, color = "blue")+
-  ylim(0,3000)+
-  labs(title = "Number of Power Outages in Texas from 2015-2023",
-       x = "Year",
-       y="Number of Outages")
-
-TX_outage_count
-```
-
-```{r txmonthly, fig.cap="Monthly plot of power outages in Texas from 2015 to 2023."}
-TX_outage_count_month <- outage_group_TX %>% 
-  ggplot(aes(x = factor(month,
-                        levels=1:12,
-                        labels=month.abb),
-                             y = outage_count,
-                             color = factor(year)))+
-  geom_point(size = 2, alpha = 0.7)+
-  scale_colour_viridis(option = "mako", direction = -1, discrete = TRUE)+
-  labs(title = "Number of Power Outages in Texas by Month from 2015-2023",
-       x = "Month",
-       y="Number of Outages", 
-       color = "Year")
-
-TX_outage_count_month
-```
 
 ```{r txtimeseries, fig.cap="Decomposed components of the Texas power outage count time series."}
 #time series object
