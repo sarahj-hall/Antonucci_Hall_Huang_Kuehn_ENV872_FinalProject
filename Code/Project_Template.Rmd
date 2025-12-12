@@ -1014,6 +1014,66 @@ ggplot(CWH_components_PA) +
 
 \newpage
 ### Texas 
+```{r txtimeseriesweighted, fig.cap="Decomposed components of customer weighted hours in Texas (2015-2023)."}
+#time series object
+TX_CWH_ts <- ts(outage_group_TX$customer_weighted_hours, 
+                      start = c(2015,1), 
+                      end = c(2023, 12),
+                      frequency = 12)
+
+# Generate the decomposition
+TX_CWH_ts_Decomposed <- stl(TX_CWH_ts, s.window = "periodic")
+# Visualize the decomposed series. 
+plot(TX_CWH_ts_Decomposed)
+```
+
+
+```{r TXCWHtrend, fig.cap="Trend versus observation of customer weighted hours in Texas (2015-2023)."}
+# Extract the components and turn them into data frames
+TX_CWH_Components <- as.data.frame(TX_CWH_ts_Decomposed$time.series[,1:3]) %>% 
+  mutate(
+        Observed = outage_group_TX$customer_weighted_hours, 
+        Month = outage_group_TX$month,
+        Date = outage_group_TX$date)
+
+# Visualize how the trend maps onto the data
+ggplot(TX_CWH_Components) +
+  geom_line(aes(y = Observed, x = Date),  size = 0.25) +
+  geom_line(aes(y = trend, x = Date), color = "blue") +
+  geom_hline(yintercept = 0, lty = 2)+
+  labs(title = "Trend versus observation of power outages in Texas (2015-2023)",
+       x = "Year",
+       y=" Number of Outages ")
+
+```
+
+
+```{r}
+#Mann-Kendall Seasonality Test
+TX_CWH_SMK <- Kendall::SeasonalMannKendall(TX_CWH_ts)
+TX_CWH_SMK
+summary(TX_CWH_SMK)
+
+#p-value = 5.3438e-11
+
+#Remove Seasonal
+TX_CWH_noseas <- TX_CWH_ts - TX_CWH_Components$seasonal
+TX_CWH_nonseason <- trend::mk.test(TX_CWH_noseas)
+TX_CWH_nonseason
+```
+
+```{r TXCWHseason, fig.cap="Seasonal component of customer weighted outage hours in Texas}
+# Visualize how the seasonal cycle maps onto the data
+ggplot(TX_CWH_Components) +
+  geom_line(aes(y = seasonal, 
+                x=factor(Month, levels=month.abb, labels=month.abb), 
+                group = year(Date)), 
+                color = "blue") +
+  geom_hline(yintercept = 0, lty = 2) +
+  labs(x = "Month", 
+       y = "# of outages",
+       title = "Seasonality of Customer Weighted Outages Hours in Texas, 2015-2023")
+```
 
 \newpage
 ### Comparison between States
