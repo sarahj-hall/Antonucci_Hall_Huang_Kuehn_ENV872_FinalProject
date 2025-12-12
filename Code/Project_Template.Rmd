@@ -87,7 +87,9 @@ The research questions of this study are:
 
 - Question 1: How has the frequency of power outages changed over time?
 - Question 2: Is there a seasonal trend? Are certain months more prone to outages? 
-- Question 3: How has the severity of power outages changed over time?  
+- Question 3: How has the severity of power outages changed over time? 
+
+The hypothesis for this study is that with increasing number of extreme climate events, like hurricanes, heatwaves, wildfires, and winter storms, number of power outages across the United States might experience an increase overtime.There might also be seasonal trends for each of these states, and outage severity might also increase overtime.
 
 \newpage
 
@@ -1174,6 +1176,7 @@ After comparing outage patterns across all four states, Florida and Pennsylvania
 
 From 2015 to 2023, customer-weighted outage hours show a strong upward trend in both California and Texas, indicating growth in the scale of outages. California’s rise is likely tied to increasingly severe wildfires, while Texas’s growth may reflect the combined effects of winter storms and heavy summer electricity demand. Florida, although having the highest overall outage hours, shows only a mild upward trend. Pennsylvania has the lowest outage numbers among the four states and is experiencing only a slight gradual increase over time.
 
+To strengthen the project in the future, we could include more nuanced perspectives by incorporating socioeconomic data to examine the broader impact that power outages could have on a community. It would also be interesting to inspect spatial data and identify areas in a state that are most vulnerable to power outages.
 
 
 \newpage
