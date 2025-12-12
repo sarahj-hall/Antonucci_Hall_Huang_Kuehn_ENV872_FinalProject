@@ -744,7 +744,7 @@ summary(TX_anova_outage)
 #show months
 TukeyHSD(TX_anova_outage)
 
-#despite visual apperances of a trend, with power outages peaking in May...
+#despite visual appearances of a trend, with power outages peaking in May...
 #The frequency of outages in Texas was not significantly different among the months (ANOVA; df = 11, F = 1.215, p < 0.288).  
 
 ```
@@ -753,8 +753,48 @@ TukeyHSD(TX_anova_outage)
 \newpage
 ### Comparision between States
 
+```{r seasall, fig.cap="Seasonal cycle of power outages (2015-2023 combined)."}
+#Seasonal Cycle combined
+# Add a column for states () Need to add FL and TX)
+CA_outage_combined <- CA_outage_components %>%
+  mutate(State = "CA")
+
+PA_Outage_combined <- Outage_components_PA %>%
+  mutate(State = "PA")
+
+TX_Outage_combined <- TXOutage_count_Components %>%
+  mutate(State = "TX")
+
+FL_Outage_combined <- monthly_outages_FL.components %>%
+  mutate(State = "FL",
+         Month = as.numeric(outage_group_FL$month),)
+
+# Combine the datasets
+combined_data <- bind_rows(CA_outage_combined, PA_Outage_combined, TX_Outage_combined, FL_Outage_combined)
+
+# Plot together
+ggplot(combined_data) +
+  geom_line(aes(
+    x = factor(Month, levels = 1:12, labels = month.abb),
+    y = seasonal,
+    group = interaction(year(Date), State),
+    color = State)) +
+  geom_hline(yintercept = 0) +
+  labs(
+    x = "Month",
+    y = "# of outages",
+    title = "Seasonal Cycle of Power Outages") +
+  scale_color_manual(values = c(
+  "CA" = "red",
+  "PA" = "purple",
+  "TX" = "blue",
+  "FL" = "darkgreen"
+))
+
+```
+
 \newpage
-## Question 3: How has the length of power outages changed over time?  
+## Question 3: How has the severity of power outages changed over time?  
 ### California 
 Figure \@ref(fig:CAcwh) displays the decomposed time series of the California customer weighted hours from 2015 to 2023. However, after removing the seasonality component the Mann-Kendall trend test suggested that there is a significant increase in the customer weighted hours of power outages in California, thus the outage severity (MannKendall; tau 3.513e-01 = p < 7.178e-08).
 
