@@ -3,8 +3,130 @@ title: "Data_Visualization_PA"
 author: "Addisen Antonucci"
 date: "2025-12-12"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(lubridate)
+library(here)
+library(viridis)
+```
+
+```{r}
+#read in processed PA data
+outage_group_PA <- read.csv(here('Data/Processed/outage_group_PA.csv'), 
+                    stringsAsFactors = TRUE)
+#Set Theme
+mytheme <- theme_classic(base_size = 14) +
+  theme(axis.text = element_text(color = "black"), 
+        legend.position = "top")
+theme_set(mytheme)
+
+#Format Date  
+outage_group_PA$date <- ymd(outage_group_PA$date)
+
+```
+
+#Initial Oberservations
+
+
+```{r}
+# Monthly plot
+PA_monthly_plot <- outage_group_PA %>% 
+  ggplot(aes(
+    x = factor(month, levels = 1:12, labels = month.abb),
+    y = outage_count,
+    color = factor(year)  # factor ensures discrete colors
+  )) +
+  geom_point(size = 2, alpha = 0.7) +
+  scale_color_viridis(
+    option = "mako", 
+    direction = -1,
+    discrete = TRUE  # important for discrete years
+  ) +
+  labs(
+    title = "Number of Power Outages in Pennsylvania by Month (2015-2023)",
+    y = "Number of Outages",
+    x = "Month",
+    color = "Year"
+  ) +
+  theme_classic(base_size = 14)
+
+PA_monthly_plot
+```
+
+```{r}
+#Pennsylvania Yearly Power Outage
+monthly_outages_PA <- outage_group_PA %>%
+  mutate(
+    year = year(date),
+    month = month(date),
+    year_month = as.Date(paste(year, month, "01", sep = "-"))
+  ) %>%
+  group_by(year_month) %>%
+  summarise(outage_count = sum(outage_count))
+
+monthly_outages_plot_PA <- ggplot(
+  monthly_outages_PA, aes(x = year_month, y = outage_count)) +
+  geom_point(size = 2, alpha = 0.7)+
+  geom_line() +
+  labs(
+    title = "Number of Power Outages in Pennsylvania
+    from 2015 to 2023",
+    x = "Year", 
+    y = "Number of Outages") +
+  geom_smooth(method = "lm", se = FALSE, color = "purple")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+monthly_outages_plot_PA
+```
+
+
+```{r}
+#Monthly Duration of outages
+PA_monthly_duration2<- outage_group_PA %>% 
+  ggplot(aes(
+    x = factor(month, levels = 1:12, labels = month.abb),
+    y = max_outage_duration,
+    color = factor(year))) +
+  geom_point(size = 2, alpha = 0.7) +
+  scale_color_viridis(
+    option = "mako", 
+    direction = -1,
+    discrete = TRUE) +
+  labs(
+    title = "Maximum Duration of Power Outages in PA (2015-2023)",
+    y = "Maximum Outage Duration (hours)",
+    x = "Month",
+    color = "Year" )
+
+PA_monthly_duration2
+```
+
+```{r}
+#Customer Weighted Hours by month
+PA_weighted_customers_hours<- outage_group_PA %>% 
+  ggplot(aes(
+    x = factor(month, levels = 1:12, labels = month.abb),
+    y = customer_weighted_hours,
+    color = factor(year))) +
+  geom_point(size = 2, alpha = 0.7) +
+  scale_color_viridis(
+    option = "mako", 
+    direction = -1,
+    discrete = TRUE) +
+  labs(
+    title = "Customer Weighted Hours of Power Outages in PA (2015-2023)",
+    y = "Customer Weighted Hours",
+    x = "Month",
+    color = "Year" )
+
+PA_weighted_customers_hours
+```
+

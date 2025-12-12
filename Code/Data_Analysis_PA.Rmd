@@ -38,7 +38,7 @@ outage_group_PA$date <- ymd(outage_group_PA$date)
 
 ```
 
-#Initial Oberservations
+
 ```{r}
 #Outages by Month
 monthly_outages_PA <- outage_group_PA %>%
@@ -56,45 +56,15 @@ outage_group_PA <- outage_group_PA %>%
     month = month(date)
   )
 
-# Monthly plot
-PA_monthly_plot <- outage_group_PA %>% 
-  ggplot(aes(
-    x = factor(month, levels = 1:12, labels = month.abb),
-    y = outage_count,
-    color = factor(year)  # factor ensures discrete colors
-  )) +
-  geom_point(size = 2, alpha = 0.7) +
-  scale_color_viridis(
-    option = "mako", 
-    direction = -1,
-    discrete = TRUE  # important for discrete years
-  ) +
-  labs(
-    title = "Number of Power Outages in Pennsylvania by Month (2015-2023)",
-    y = "Number of Outages",
-    x = "Month",
-    color = "Year"
-  ) +
-  theme_classic(base_size = 14)
-
-PA_monthly_plot
-
-# By Year
-yearly_outages_PA <- outage_group_PA %>%
-  mutate(year = year(date)) %>%
-  group_by(year) %>%
-  summarise(outage_count = sum(outage_count, na.rm = TRUE))
-
-# Plot yearly outages
-ggplot(yearly_outages_PA, aes(x = year, y = outage_count)) +
-  geom_col(fill = "#c13d75ff") +       
-  geom_line(aes(group = 1), color = "blue", size = 1) + 
-  geom_point(color = "blue", size = 2) +
-  labs(x = "Year", y = "Total Outage Count",
-       title = "Yearly Total Outages in Pennsylvania") +
-  scale_y_continuous(labels = scales::comma) +
-  theme_classic(base_size = 14)
-
+#Pennsylvania Yearly Power Outage
+monthly_outages_PA <- outage_group_PA %>%
+  mutate(
+    year = year(date),
+    month = month(date),
+    year_month = as.Date(paste(year, month, "01", sep = "-"))
+  ) %>%
+  group_by(year_month) %>%
+  summarise(outage_count = sum(outage_count))
 
 ```
 
@@ -111,7 +81,7 @@ Outage_Decomposed_PA <- stl(Outages_ts_PA, s.window = "periodic")
 
 plot(Outage_Decomposed_PA)
 
-##Is there Seaonality?
+##Is there Seasonality?
 #Extracting components into Data Frame
 Outage_components_PA<-as.data.frame(Outage_Decomposed_PA$time.series[,1:3])
 
