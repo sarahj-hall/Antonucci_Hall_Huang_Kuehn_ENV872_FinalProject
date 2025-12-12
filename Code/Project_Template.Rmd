@@ -312,10 +312,10 @@ print(TX_outage_count_month)
 \newpage
 ### Florida
 ```{r flyearly, fig.cap = "Yearly plot of power outages in Florida from 2015 to 2023."}
-yearly_outages_FL <- outage_group_FL %>%
-  filter(month == 0)
+#yearly_outages_FL <- outage_group_FL %>%
+  #filter(month == 0)
 
-yearly_outages_FL_plot <- ggplot(yearly_outages_FL, aes(x = year, y = outage_count)) +
+yearly_outages_FL_plot <- ggplot(outage_group_FL, aes(x = date, y = outage_count)) +
   geom_line() + 
   geom_point() +
   geom_smooth(method="lm", se = FALSE, color = "darkgreen") +
@@ -327,13 +327,10 @@ yearly_outages_FL_plot
 ```
 
 ```{r flmonthly, fig.cap="Monthly plot of power outages in Florida from 2015 to 2023."}
-monthly_outages_FL <- outage_group_FL %>%
-  filter(month != 0)
+#monthly_outages_FL <- outage_group_FL %>%
+  #filter(month != 0)
 
-monthly_outages_FL <- monthly_outages_FL %>% 
-  mutate(Date = my(paste(month,"-",year)))
-
-monthly_outages_FL_plot <- ggplot(monthly_outages_FL, 
+monthly_outages_FL_plot <- ggplot(outage_group_FL, 
                                   aes(x=factor(month, levels = 1:12, labels = month.abb), 
                                       y=outage_count, color = factor(year))) + 
   geom_point(size = 2, alpha = 0.7) +
@@ -528,10 +525,10 @@ ggplot(TXOutage_count_Components) +
 ### Florida 
 ```{r FLtimeseries, fig.cap="Time series for FL monthly power outages from 2015 to 2023."}
 # Time Series Analysis for FL Monthly Outage Count
-first_month_FL <- first(monthly_outages_FL$month)
-first_year_FL <- first(yearly_outages_FL$year)
+first_month_FL <- month(first(outage_group_FL$date))
+first_year_FL <- year(first(outage_group_FL$date))
 
-monthly_outages_FL.ts <- ts(monthly_outages_FL$outage_count, 
+monthly_outages_FL.ts <- ts(outage_group_FL$outage_count, 
                              frequency = 12, start = c(first_year_FL, first_month_FL))
 
 # TS trend analysis
