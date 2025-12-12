@@ -695,7 +695,7 @@ TukeyHSD(PA_anova_outage)
 
 \newpage
 ### Texas 
-```{r TXseasonal, fig.cap="Seasonality component of the California power outage count time series analysis where yearly data is grouped by month."}
+```{r TXseasonal, fig.cap="Seasonality component of the Texas power outage count time series analysis where yearly data is grouped by month."}
 # Visualize how the seasonal cycle maps onto the data
 ggplot(TXOutage_count_Components) +
   geom_line(aes(y = seasonal, 
