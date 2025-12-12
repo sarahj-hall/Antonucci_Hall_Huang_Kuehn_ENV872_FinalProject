@@ -165,7 +165,7 @@ summary(TX_CWH_SMK)
 
 #tau = 0.505, 2-sided pvalue =5.3438e-11
 
-#Remove Seasonal
+#Remove Seasonal and run the MK test again
 TX_CWH_noseas <- TX_CWH_ts - TX_CWH_Components$seasonal
 TX_CWH_nonseason <- trend::mk.test(TX_CWH_noseas)
 TX_CWH_nonseason
