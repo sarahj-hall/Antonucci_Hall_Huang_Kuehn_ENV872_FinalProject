@@ -122,7 +122,7 @@ kable(structure_tbl, booktabs = TRUE)%>%
     latex_options = "hold_position")   # forces placement of table here
 ```
 
-```{r datasummary, tab.cap= "Summary Statisitcs of CA, FL, PA, and TX Datasets"}
+```{r datasummary, tab.cap= "Summary Statistics of CA, FL, PA, and TX Datasets"}
 
 #combine datasets
 all_states <- bind_rows(
@@ -540,8 +540,7 @@ ggplot(Outage_components_PA)+
 
 \newpage
 ### Texas 
-Figure \@ref(fig:txtimeseries) shows the decomposed components of the Texas power outage count time series from 2015–2023. A Mann–Kendall tau of 0.727 indicates a strong positive monotonic trend even in the presence of seasonality. With a very small p-value (2.22e-16), this upward trend is statistically significant, supporting our previous analysis that outage counts in Texas have increased over the study period. After removing the seasonal component and rerunning the test, the Mann–Kendall results (z = 9.9423, n = 108, p-value < 2.2e-16) still show a highly significant positive trend. This confirms that the increase in outage counts persists even after accounting for the influence of seasonal weather patterns.
-
+Figure \@ref(fig:txtimeseries) shows the decomposed components of the Texas power outage count time series from 2015–2023. With a very small p-value (2.22e-16), the result indicates an upward trend, and it is statistically significant. After removing the seasonal component and rerunning the test, the Mann–Kendall results (z = 9.9423, n = 108, p-value < 2.2e-16) still show a highly significant positive trend. This confirms our early analysis that the increase in outage counts persists even after accounting for the influence of seasonal weather patterns.
 
 ```{r txtimeseries, fig.cap="Decomposed components of the Texas power outage count time series."}
 #time series object
@@ -909,10 +908,11 @@ CA_cwh_outage_components <- mutate(CA_CWA_compon,
 ```
 
 
-Figure \@ref(fig:FLcwh) visualizes the time series analysis for customer weighted hours in Florida from 2015 to 2023. The results of the Mann-Kendall test on seasonality across the data returned inconsistent tau results suggesting seasonality was not a significant trend. Running a non-seasonal Mann-Kendall test showed far greater significance in an increasing customer weighted duration (z = 1.2186, n = 108, p-value = 0.223). Unlike the other states, the p-value for non-seasonal trend is greater than 0.05, suggesting that the customer weighted hours follow more of a seasonal trend than may be present in other states.
+
 
 \newpage
 ### Florida 
+Figure \@ref(fig:FLcwh) visualizes the time series analysis for customer weighted hours in Florida from 2015 to 2023. The results of the Mann-Kendall test on seasonality across the data returned inconsistent tau results suggesting seasonality was not a significant trend. Running a non-seasonal Mann-Kendall test showed far greater significance in an increasing customer weighted duration (z = 1.2186, n = 108, p-value = 0.223). Unlike the other states, the p-value for non-seasonal trend is greater than 0.05, suggesting that the customer weighted hours follow more of a seasonal trend than may be present in other states.
 ```{r FLcwh, fig.cap = "Time series analysis for FL customer weighted hours from 2015 to 2023." }
 # customer weighted hours = customer hours x duration
 
@@ -1040,7 +1040,7 @@ ggplot(CWH_components_PA) +
 
 \newpage
 ### Texas 
-Figure \@ref(fig:txtimeseriesweighted) shows the decomposed components of the Texas customer weighted outage hours time series from 2015–2023. A Mann–Kendall tau of 0.505 indicates a strong positive monotonic trend even in the presence of seasonality. With a very small p-value (5.34×10⁻¹¹), this upward trend is statistically significant, supporting our previous analysis that outage counts in Texas have increased over the study period. After removing the seasonal component and rerunning the test, the Mann–Kendall results (z = 5.03, n = 108, p-value = 4.88×10⁻⁷) still show a highly significant positive trend. This confirms that the increase in customer weighted outage hours persists even after accounting for the influence of seasonal weather patterns.
+Figure \@ref(fig:txtimeseriesweighted) shows the decomposed components of the Texas customer weighted outage hours time series from 2015–2023. A Mann–Kendall tau of 0.505 indicates a strong positive monotonic trend even in the presence of seasonality. With a very small p-value (5.34×10⁻¹¹), this upward trend is statistically significant. After removing the seasonal component and rerunning the test, the Mann–Kendall results (z = 5.03, n = 108, p-value = 4.88×10⁻⁷) still show a highly significant positive trend in customer weighted outage hours. 
 ```{r txtimeseriesweighted, fig.cap="Decomposed components of customer weighted hours in Texas (2015-2023)."}
 #time series object
 TX_CWH_ts <- ts(outage_group_TX$customer_weighted_hours, 
