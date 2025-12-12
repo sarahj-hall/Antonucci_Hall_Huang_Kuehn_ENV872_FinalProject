@@ -420,7 +420,7 @@ outage_trend_vis_CA
 
 \newpage
 ### Florida 
-Figure \@ref(fig:FLtimeseries) shows the time series analysis for outage occurrences across Florida from 2015 to 2023. A Mann-Kendall test was run to determine if distinct seasonal trends from the time series are statistically significant. Based
+Figure \@ref(fig:FLtimeseries) shows the time series analysis for outage occurrences across Florida from 2015 to 2023. While a clear pattern of seasonality is evident within the time series, applying a non-seasonal Mann-Kendall test will determine if outage count across the years has a significant trend. The results of the test confirm that there is a statistically significant increase in outages in Florida (tau = 2.426865e-01, p = 0.0001997), independent from seasonality changes. Figure \@ref(fig:FLdecomp) shows the increasing trend.
 
 ```{r FLtimeseries, fig.cap="Time series for FL monthly power outages from 2015 to 2023."}
 # Time Series Analysis for FL Monthly Outage Count
@@ -445,7 +445,7 @@ monthly_outages_FL.components <- mutate(monthly_outages_FL.components,
 
 # Trend Plot
 fl_trend_plot <- ggplot(monthly_outages_FL.components) +
-  geom_line(aes(y = Observed, x = Date),  size = 0.5) +
+  geom_line(aes(y = Observed, x = Date),  linewidth = 0.5) +
   geom_line(aes(y = trend, x = Date), color = "darkgreen") +
   labs(
     y = "Outage Count", 
