@@ -1,0 +1,108 @@
+---
+title: "Data_Visualization_TX"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+# Load your packages
+library(tidyverse)
+library(here)
+library(lubridate)
+library(viridis)
+library(zoo)
+library(trend)
+library(Kendall)
+library(cowplot)
+library(knitr)
+library(kableExtra)
+
+here()
+
+# Set ggplot theme
+mytheme <- theme_classic(base_size = 10) +
+  theme(plot.title = element_text(size = 11, hjust = 0.5, face = "bold"),
+        axis.title.x = element_text(size = 10.5),
+        axis.title.y = element_text(size = 10.5))
+theme_set(mytheme)
+
+knitr::opts_chunk$set(
+  echo = FALSE,      # hide all code
+  warning = FALSE,   # hide warnings
+  message = FALSE,   # hide messages
+  fig.align = "center") #center figures 
+
+#load TX data
+outage_group_TX <- read.csv(here('Data/Processed/outage_group_TX.csv'))
+outage_group_TX$date <- ymd(outage_group_TX$date)
+
+```
+
+```{r data visualization}
+#TX yearly plot
+TX_outage_count <- ggplot(outage_group_TX,
+                          aes(x = date,
+                              y = outage_count))+
+  geom_point(size = 2, alpha = 0.7)+
+  geom_line()+
+  geom_smooth(method = "lm", se = FALSE, color = "blue")+
+  ylim(0,3000)+
+  labs(title = "Number of Power Outages in Texas from 2015-2023",
+       x = "Year",
+       y="Number of Outages")
+
+TX_outage_count
+
+#TX monthly plot
+TX_outage_count_month <- outage_group_TX %>% 
+  ggplot(aes(x = factor(month,
+                        levels=1:12,
+                        labels=month.abb),
+                             y = outage_count,
+                             color = factor(year)))+
+  geom_point(size = 2, alpha = 0.7)+
+  scale_colour_viridis(option = "mako", direction = -1, discrete = TRUE)+
+  labs(title = "Number of Power Outages in Texas by Month from 2015-2023",
+       x = "Month",
+       y="Number of Outages", 
+       color = "Year")
+
+TX_outage_count_month
+
+```
+
+
+```{r}
+
+#monthly max duration plot
+
+TX_outage_duration <- outage_group_TX %>% 
+  ggplot(aes(x = factor(month,
+                        levels =1:12,
+                        labels=month.abb),
+                             y = max_outage_duration,
+                             color = year))+
+  geom_point(size = 2, alpha = 0.6)+
+  scale_colour_viridis(option = "mako", direction = -1)+
+  labs(title = "Maximum Duration of Power Outages in Texas by Month from 2015 to 2023",
+       x = "Month",
+       y="Outage Duration (hours) ")
+TX_outage_duration
+
+# customer weighted duration plot
+TX_outage_weighted <- outage_group_TX %>% 
+  ggplot(aes(x = factor(month,
+                        levels=1:12,
+                        labels=month.abb),
+                             y = customer_weighted_hours,
+                             color = year))+
+  geom_point(size = 2, alpha = 0.6)+
+  scale_colour_viridis(option = "mako", direction = -1)+
+  labs(title = "Weighted Outage Duration in Texas from 2015-2023 \n (# of customers * outage time) ",
+       x = "Month",
+       y="Outage Duration (min) ")+
+  ylim(0,50000000)
+  
+TX_outage_weighted
+
+```
+
