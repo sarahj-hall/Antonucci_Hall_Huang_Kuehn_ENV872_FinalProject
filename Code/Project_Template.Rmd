@@ -318,7 +318,7 @@ yearly_outages_FL <- outage_group_FL %>%
 yearly_outages_FL_plot <- ggplot(yearly_outages_FL, aes(x = year, y = outage_count)) +
   geom_line() + 
   geom_point() +
-  geom_smooth(method="lm", se = FALSE, color = "darkorchid4") +
+  geom_smooth(method="lm", se = FALSE, color = "darkgreen") +
   labs(title = "2015-2023 Yearly Outages for Florida",
        y="Outage Count",
        x="Year")
@@ -422,11 +422,6 @@ outage_trend_vis_CA <- ggplot(CA_outage_components) +
 outage_trend_vis_CA
 ```
 
-\newpage
-### Florida 
-
-\newpage
-### Pennsylvania 
 
 After removing the seasonal component from the Pennsylvania outage time series, the Mann–Kendall trend test revealed a significant positive trend (z = 3.02, n = 108, p = 0.002), indicating that outage frequency has increased from 2015 to 2023. This result supports the hypothesis that outages have become more common during this time, independent of seasonal patterns. The decomposed time-series visualization shows this trend clearly, revealing that even after accounting for monthly fluctuations, the long-term component continues to rise.
 
@@ -527,6 +522,50 @@ ggplot(TXOutage_count_Components) +
   labs(title = "Trend Component of the Texas Power Outage ",
        x = "Year",
        y=" Number of Outages ")
+```
+
+\newpage
+### Florida 
+```{r FLtimeseries, fig.cap="Time series for FL monthly power outages from 2015 to 2023."}
+# Time Series Analysis for FL Monthly Outage Count
+first_month_FL <- first(monthly_outages_FL$month)
+first_year_FL <- first(yearly_outages_FL$year)
+
+monthly_outages_FL.ts <- ts(monthly_outages_FL$outage_count, 
+                             frequency = 12, start = c(first_year_FL, first_month_FL))
+
+# TS trend analysis
+FL_monthly_decomposed <- stl(monthly_outages_FL.ts, s.window = "periodic")
+plot(FL_monthly_decomposed, main = "Time Series Analysis for Monthly FL Outages")
+
+FL_monthly_outage_trend <- trend::smk.test(monthly_outages_FL.ts)
+FL_monthly_outage_trend
+
+summary(FL_monthly_outage_trend)
+```
+
+```{r FLdecomp, fig.cap = "FL Trend Analysis for Monthly Outages"}
+monthly_outages_FL.components <- as.data.frame(FL_monthly_decomposed$time.series[,1:3])
+
+monthly_outages_FL.components <- mutate(monthly_outages_FL.components,
+        Observed = monthly_outages_FL$outage_count,     
+        Date = monthly_outages_FL$Date)
+
+# Trend Plot
+ggplot(monthly_outages_FL.components) +
+  geom_line(aes(y = Observed, x = Date),  size = 0.5) +
+  geom_line(aes(y = trend, x = Date), color = "darkgreen") +
+  ylab("Outage Count")
+```
+
+```{r FLnonseasonal, fig.cap = "FL Nonseasonal Trend Analysis for Monthly Outages"}
+#Non-Seasonal Trend Analysis for FL
+monthly_outages_FL_nonseasonal <- monthly_outages_FL.ts - monthly_outages_FL.components[,1]
+
+FL_nonseasonal_outage_trend <- trend::smk.test(monthly_outages_FL_nonseasonal)
+FL_nonseasonal_outage_trend
+
+summary(FL_nonseasonal_outage_trend)
 ```
 
 \newpage
