@@ -132,15 +132,15 @@ Wrangling code:
 Visualization code:
 1. `Initial_Data_Exploration.rmd` - code used for initial exploration of all data 
 2. `Data_Visualization_CA.rmd` - code used for data visualization for California
-3. `Title.rmd` - code used for data visualization for
+3. `Data_Visualization_TX.rmd` - code used for data visualization for Texas
 4. `Title.rmd` - code used for data visualization for
 5. `Title.rmd` - code used for data visualization for
 
 Analysis code:
 1. `Data_Analysis_CA.rmd` - code used for California data analysis
-2. `TS_Analysis_FL.rmd` - code used for Pennsylvania data analysis
+2. `TS_Analysis_FL.rmd` - code used for Florida data analysis
 3. `Data_Analysis_PA.rmd` - code used for Pennsylvania data analysis
-4. `Title.rmd` - code used for Florida data analysis
+4. `Data_Analysis_TX.rmd` - code used for Texas data analysis
 5. `Multi_State_Analysis.rmd` - code used for multi-state analysis 
 
 Project Code: 
