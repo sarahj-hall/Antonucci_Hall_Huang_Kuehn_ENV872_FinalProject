@@ -873,6 +873,13 @@ CA_CWA_compon <-
 #remove seasonal 
 CA_CWA_non_seas <- 
   CA_CWA_ts - CA_CWA_compon[,1]
+
+#adding three new columns, observed outages, month date
+CA_cwh_outage_components <- mutate(CA_CWA_compon,
+        Observed = outage_group_CA$customer_weighted_hours, 
+        Month = outage_group_CA$month,
+        Date = outage_group_CA$date)
+
 ```
 
 
@@ -1011,8 +1018,54 @@ ggplot(CWH_components_PA) +
 \newpage
 ### Comparison between States
 
-\newpage
+**not sure how good of a graphic this is, outliers are removed from view so you can see the trends
 
+```{r cwhall, fig.cap=""}
+# Add a column for states 
+CA_nonseas_cwh_combined <- CA_cwh_outage_components %>%
+  mutate(State = "CA",
+         nonseas = trend + remainder, 
+         Month = as.numeric(outage_group_CA$month))
+
+PA_nonseas_cwh_combined <- CWH_components_PA %>%
+  mutate(State = "PA", 
+         nonseas = trend + remainder)
+
+#add once TX data is in
+#TX_nonseas_cwh_combined <- TXOutage_count_Components %>%
+ # mutate(State = "TX", 
+#       nonseas = trend + remainder)
+
+FL_nonseas_cwh_combined <- monthly_wHrs_FL.components %>%
+  mutate(State = "FL",
+         nonseas = trend + remainder)
+
+# Combine the datasets, need to add TX
+nonseas_cwh_combined_data <- bind_rows(CA_nonseas_cwh_combined, PA_nonseas_cwh_combined, FL_nonseas_cwh_combined)
+
+nonseas_cwh_combined <- nonseas_cwh_combined_data %>% 
+  ggplot(
+    aes(
+      x = Date,
+      y = nonseas,
+      color = State)) +
+  geom_point(size = 1.5, alpha = 0.5)+
+  geom_smooth(method ="lm", se = FALSE, size = 1.5) +
+  ylim(0, 1.5e+07)+
+  labs(
+    x = "Year",
+    y = "Customer Weighted Hours",
+    title = "Non-Seasonal Trend of Customer Weighted Hours of Power Outages") +
+  scale_color_manual(values = c(
+  "CA" = "red",
+  "PA" = "purple",
+  "FL" = "darkgreen"))#add once TX is in  "TX" = "blue",
+
+nonseas_cwh_combined
+```
+
+
+\newpage
 # Summary and Conclusions
 Summarize your major findings from your analyses in a few paragraphs. What conclusions do you draw from your findings? Relate your findings back to the original research questions and rationale.
 

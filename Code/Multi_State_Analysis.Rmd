@@ -91,7 +91,8 @@ ggplot(combined_data) +
 # Add a column for states 
 CA_nonseas_combined <- CA_outage_components %>%
   mutate(State = "CA",
-         nonseas = trend + remainder)
+         nonseas = trend + remainder, 
+         )
 
 PA_nonseas_combined <- Outage_components_PA %>%
   mutate(State = "PA", 
@@ -127,6 +128,54 @@ nonseas_combined <- nonseas_combined_data %>%
   "FL" = "darkgreen"))
 
 nonseas_combined
+
+```
+
+```{r CWH combined graphs??}
+
+# Add a column for states 
+CA_nonseas_cwh_combined <- CA_cwh_outage_components %>%
+  mutate(State = "CA",
+         nonseas = trend + remainder, 
+         Month = as.numeric(outage_group_CA$month))
+
+PA_nonseas_cwh_combined <- CWH_components_PA %>%
+  mutate(State = "PA", 
+         nonseas = trend + remainder)
+
+#add once TX data is in
+#TX_nonseas_cwh_combined <- TXOutage_count_Components %>%
+ # mutate(State = "TX", 
+#       nonseas = trend + remainder)
+
+FL_nonseas_cwh_combined <- monthly_wHrs_FL.components %>%
+  mutate(State = "FL",
+         nonseas = trend + remainder)
+
+# Combine the datasets, need to add TX
+nonseas_cwh_combined_data <- bind_rows(CA_nonseas_cwh_combined, PA_nonseas_cwh_combined, FL_nonseas_cwh_combined)
+
+nonseas_cwh_combined <- nonseas_cwh_combined_data %>% 
+  ggplot(
+    aes(
+      x = Date,
+      y = nonseas,
+      color = State)) +
+  geom_point(size = 1.5, alpha = 0.5)+
+  geom_smooth(method ="lm", se = FALSE, size = 1.5) +
+  ylim(0, 1.5e+07)+
+  labs(
+    x = "Year",
+    y = "Customer Weighted Hours",
+    title = "Non-Seasonal Trend of Customer Weighted Hours of Power Outages") +
+  scale_color_manual(values = c(
+  "CA" = "red",
+  "PA" = "purple",
+  "FL" = "darkgreen"))
+
+#add once TX is in  "TX" = "blue",
+nonseas_cwh_combined
+
 
 ```
 
