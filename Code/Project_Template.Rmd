@@ -77,12 +77,12 @@ outage_group_TX$date <- ymd(outage_group_TX$date)
 
 
 # Rationale and Research Questions
-Electric power outages are costly for both utilities and their customers. Outages disrupt economic activity, and impact critical facilities such as hosptials (citation). The U.S. electric grid is increasingly vulnerable to outages due to increasing extreme weather events, such as hurricanes, heatwaves, wildfires, and winter storms, which are increasing in frequency and intensity due to climate change (citation). Because many of these events occur during specific times of the year, understanding weather power outages follow a seasonal pattern is important for planning and resilience. If outages tend to occur in specific months, utilities and communities can better allocate resources, resilience investments, and emergency preparedness.
+Electric power outages are costly for both utilities and their customers. Outages disrupt economic activity, and impact critical facilities such as hospitals (Wing et al., 2025). The United States electric grid is increasingly vulnerable to outages due to increasing extreme weather events, such as hurricanes, heatwaves, wildfires, and winter storms, which are increasing in frequency and intensity due to climate change (Wendel, 2024). Because many of these events occur during specific times of the year, understanding weather power outages follow a seasonal pattern is important for planning and resilience. If outages tend to occur in specific months, utilities and communities can better allocate resources, resilience investments, and emergency preparedness.
 
-As the weather events are increasing, electric utilities have also made advancements in system planning, grid hardening, and outage detection. Together this raises key questions about weather outages are becoming more or less frequent, whether they show predictable seasonal cycles, and whether their impacts are increasing over time. 
+At the same time, electric utilities have made advancements in system planning, grid hardening, and outage detection (IBM, 2025). Together this raises key questions about whether outages are becoming more or less frequent, whether they show predictable seasonal cycles, and whether their impacts are increasing over time. 
 
 To address these questions, this study focuses on Texas, California, Florida, and Pennsylvania. These states represent diverse geographic regions, climates, and electric power systems. For each state, the study examines trends in frequency of power outages, seasonality, and severity of outages. Customer weighted hours of outages will be used to quantify the impact of outages, as it combines the number of customers affected with the outage duration. 
-
+ 
 The research questions of this study are: 
 
 - Question 1: How has the frequency of power outages changed over time?
@@ -931,4 +931,7 @@ After accounting for seasonal patterns, the analysis shows that the frequency of
 \newpage
 
 # References
-<add references here if relevant, otherwise delete this section> 
+- IBM. Power grid modernization—Strategies and tactics for resilience and energy transition. (2025, March 21). IBM. https://www.ibm.com/thought-leadership/institute-business-value/en-us/report/power-grid-modernization
+- Wendel, J. (2024, July 29). Extreme Heat, Hurricanes, Wildfires: How Summer’s Extremes Disrupt the Power Grid. Pacific Northwest National Laboratory. https://www.pnnl.gov/news-media/extreme-heat-hurricanes-wildfires-how-summers-extremes-disrupt-power-grid
+- Wing, I. S., Larsen, P. H., Carvallo, J. P., Sanstad, A., Wei, D., Rose, A., Baik, S., Smith, J., Ramee, C., & Peterson, R. (2025). A Method to estimate the economy-wide consequences of widespread, long duration electric power interruptions. Nature Communications, 16(1), 3335. https://doi.org/10.1038/s41467-025-58537-4
+
