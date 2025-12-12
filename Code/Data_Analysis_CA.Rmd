@@ -1,5 +1,6 @@
 ---
 title: "Data_Analysis_CA"
+author: "Sarah Hall"
 output: html_document
 editor_options: 
   chunk_output_type: console

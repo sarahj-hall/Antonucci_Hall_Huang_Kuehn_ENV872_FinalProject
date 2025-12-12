@@ -1,5 +1,6 @@
 ---
 title: "Initial_Data_Visualization"
+author: "Sarah Hall"
 output: pdf_document
 editor_options: 
   chunk_output_type: console
