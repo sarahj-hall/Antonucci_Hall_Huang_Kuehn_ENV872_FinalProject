@@ -104,18 +104,35 @@ monthly_outages_FL <- outage_group_FL %>%
 ```
 
 ```{r}
+yearly_outages_FL_plot <- ggplot(yearly_outages_FL, aes(x = year, y = outage_count)) +
+  geom_line() + 
+  geom_point() +
+  geom_smooth(method="lm", se = FALSE, color = "darkorchid4") +
+  labs(title = "2015-2023 Yearly Outages for Florida",
+       y="Outage Count",
+       x="Year")
+
+yearly_outages_FL_plot
+```
+
+```{r}
 # Monthly Outages Across FL from 2015-2023 with Linear Regression
 monthly_outages_FL <- monthly_outages_FL %>% 
   mutate(Date = my(paste(month,"-",year)))
 
-ggplot(monthly_outages_FL, aes(x=Date, y=outage_count)) + 
-  geom_line() + 
-  geom_point() +
-  geom_smooth(method="lm", se = FALSE) +
+monthly_outages_FL_plot <- ggplot(monthly_outages_FL, 
+                                  aes(x=factor(month, levels = 1:12, labels = month.abb), 
+                                      y=outage_count, color = factor(year))) + 
+  geom_point(size = 2, alpha = 0.7) +
+  scale_colour_viridis(option = "mako", direction = -1, discrete = TRUE) +
   labs(title = "2015-2023 Monthly Outages for Florida",
        y="Outage Count",
-       x="Date")
+       x="Date",
+       color = "Year")
+
+monthly_outages_FL_plot
 ```
+
 
 ## Time Series Analysis
 
