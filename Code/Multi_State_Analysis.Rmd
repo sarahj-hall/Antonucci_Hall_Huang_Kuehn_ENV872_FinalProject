@@ -58,8 +58,16 @@ PA_Outage_combined <- Outage_components_PA %>%
 TX_Outage_combined <- TXOutage_count_Components %>%
   mutate(State = "TX")
 
+monthly_outages_FL.components <- mutate(monthly_outages_FL.components,
+        Month = as.numeric(outage_group_FL$month),
+        Observed = outage_group_FL$outage_count,     
+        Date = outage_group_FL$date)
+
+FL_Outage_combined <- monthly_outages_FL.components %>%
+  mutate(State = "FL")
+
 # Combine the datasets
-combined_data <- bind_rows(CA_outage_combined, PA_Outage_combined, TX_Outage_combined)
+combined_data <- bind_rows(CA_outage_combined, PA_Outage_combined, TX_Outage_combined, FL_Outage_combined)
 
 # Plot together
 ggplot(combined_data) +
