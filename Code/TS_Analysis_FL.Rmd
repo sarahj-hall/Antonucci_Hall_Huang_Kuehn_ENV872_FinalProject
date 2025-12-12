@@ -176,6 +176,16 @@ ggplot(monthly_outages_FL.components) +
   ylab("Outage Count")
 ```
 
+```{r}
+#Non-Seasonal Trend Analysis for FL
+monthly_outages_FL_nonseasonal <- monthly_outages_FL.ts - monthly_outages_FL.components[,1]
+
+FL_nonseasonal_outage_trend <- trend::smk.test(monthly_outages_FL_nonseasonal)
+FL_nonseasonal_outage_trend
+
+summary(FL_nonseasonal_outage_trend)
+```
+
 
 What does this show?
 Seasonal Mann Kendall tests are run to show statistical evidence for seasonality across datasets. The results of the Mann Kendall test show a p-value well below 0.05, providing significant statistical support in proving seasonal trends across Florida from 2015-2023.
