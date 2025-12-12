@@ -577,7 +577,9 @@ ggplot(TXOutage_count_Components) +
 \newpage
 ### Comparision between States
 
-```{r trendall, fig.caption="Non-seasonal trend of power outages in California, Florida, Pennyslvania, and Texas"}
+Each state’s non-seasonal power outage time series trend are visualized in Figure \@ref(fig:trendall). Red represents California, green is Florida, purple is Pennsylvania, and blue is Texas. All states are seeing an increasing trend of power outages. California and Texas are experiencing the greatest increase, while Pennsylvania and Florida are experiencing more gradual increases in comparison. Towards the end of the time period, California and Texas also overall have more power outages than Florida and Pennsylvania, with Pennsylvania seeing overall the lowest amount of power outages. 
+
+```{r trendall, fig.caption="Non-seasonal trend of power outages in California, Florida, Pennyslvania, and Texas."}
 
 # Add a column for states 
 CA_nonseas_combined <- CA_outage_components %>%
@@ -608,7 +610,7 @@ nonseas_combined <- nonseas_combined_data %>%
   geom_point(size = 1.5, alpha = 0.5)+
   geom_smooth(method ="lm", se = FALSE, size = 1.5) +
   labs(
-    x = "Month",
+    x = "Year",
     y = "Number of outages",
     title = "Non-Seasonal Trend of Power Outages") +
   scale_color_manual(values = c(
