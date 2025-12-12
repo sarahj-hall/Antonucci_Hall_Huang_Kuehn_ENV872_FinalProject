@@ -272,6 +272,7 @@ monthly_outages_PA <- outage_group_PA %>%
   summarise(outage_count = sum(outage_count))
 
 ggplot(monthly_outages_PA, aes(x = year_month, y = outage_count)) +
+  geom_point(size = 2, alpha = 0.7)+
   geom_line() +
   labs(
     title = "Number of Power Outages in Pennsylvania
@@ -349,6 +350,10 @@ Each figure should be accompanied by a caption, and each figure should be refere
 ## Question 1: How has the frequency of power outages changed over time?
 ### California 
 
+Figure \@ref(fig:CAtimeseries) displays the decomposed time series of the California power outage frequency from 2015 to 2023. There appears to be clear seasonal trend, which is analyzed further in part (5). 
+
+A MannKendall non seasonal trend analysis was applied to the California power outage frequency dataset with the seasonal component remove, a significant overall increase in power outages over time is observed (MannKendall; tau = 5.437e-01 p < 2.2e-16). Figure \@ref(fig:CAtrend) visualizes the trend compared to the observed frequency of power outages in California. The red line represents the overall increasing trend. 
+
 ```{r CAtimeseries, fig.cap="Decomposed components of the California power outage count time series."}
 #define first day and first year values 
 f_month <- month(first(outage_group_CA$date))
@@ -369,10 +374,10 @@ plot(CA_outage_decompose)
 
 ```{r CA trend analysis chunk, include=FALSE}
 #run monotonic trend analysis, i think this should be removed and just focus on non seas analysis
-CA_outage_trend <- trend::smk.test(CA_outage_ts)
-CA_outage_trend
 
-summary(CA_outage_trend)
+#CA_outage_trend <- trend::smk.test(CA_outage_ts)
+#CA_outage_trend
+#summary(CA_outage_trend)
 
 #remove seasonality trend?? and re=run MK test 
 #extract the components of each series into a df
@@ -573,7 +578,7 @@ ggplot(TXOutage_count_Components) +
 ## Question 2: Is there a seasonal trend? Are certain months more prone to outages? 
 ### California 
 
-The visualization highlights a potential pattern of power outage frequencies peaking rising in the summer months, peaking in October (Figure \@ref(fig:CAseasonal)). However, the frequency of outages in California was not significantly different among the months (ANOVA; df = 11, F = 0.704, p < 0.732). 
+Figure \@ref(fig:CAtimeseries) displays a clear seasonal trend in the decomposed time series of the California power outage frequency. The seasonal trend was isolated and grouped by year to show the Seasonal Cycle of Power Outages in California in Figure \@ref(fig:CAseasonal). The seasonal cycle highlights a potential pattern of power outage frequencies peaking rising in the summer months, peaking in October. However, the frequency of outages in California was not significantly different among the months (ANOVA; df = 11, F = 0.704, p < 0.732). 
 
 ```{r CAseasonal, fig.cap="Seasonality component of the California power outage count time series analysis where yearly data is grouped by month.", fig.align='center'}
 #visualize grouped by month
@@ -731,6 +736,8 @@ TukeyHSD(TX_anova_outage)
 \newpage
 ## Question 3: How has the length of power outages changed over time?  
 ### California 
+Figure \@ref(fig:CAcwh) displays the decomposed time series of the California customer weighted hours from 2015 to 2023. However, after removing the seasonality component the Mann-Kendall trend test suggested that there is a significant increase in the customer weighted hours of power outages in California, thus the outage severity (MannKendall; tau 3.513e-01 = p < 7.178e-08).
+
 ```{r CAcwh, fig.cap="Decomposed analyis of customer weighted outage time in California"}
 #create time series object 
 CA_CWA_ts <- 
