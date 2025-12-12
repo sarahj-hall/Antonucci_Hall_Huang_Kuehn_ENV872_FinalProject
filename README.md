@@ -128,7 +128,7 @@ Date | Date when outage occurred | Date | NA
 ## Scripts and code
 Wrangling code:
 - 'Data_Wrangling_Initial.Rmd': Markdown file used to conduct all initial data wrangling for all four states.
-
+- `Data_Wrangling_Initial.Rmd`
 Visualization code:
 1. 'Title.rmd' - code used for wrangling ___ outage data
 2. 'Title.rmd' - code used for wrangling ___ outage data
