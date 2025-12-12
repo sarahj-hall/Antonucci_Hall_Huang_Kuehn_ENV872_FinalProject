@@ -1089,7 +1089,7 @@ TX_CWH_nonseason <- trend::mk.test(TX_CWH_noseas)
 TX_CWH_nonseason
 ```
 
-```{r TXCWHseason, fig.cap="Seasonal component of customer weighted outage hours in Texas}
+```{r TXCWHseason, fig.cap="Seasonal component of customer weighted outage hours in Texas"}
 # Visualize how the seasonal cycle maps onto the data
 ggplot(TX_CWH_Components) +
   geom_line(aes(y = seasonal, 
