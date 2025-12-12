@@ -172,6 +172,8 @@ Each figure should be accompanied by a caption, and each figure should be refere
 
 Scope: think about what information someone might want to know about the dataset before analyzing it statistically. How might you visualize this information?
 
+The exploratory analysis of the data involved initial visualizations of the power outage frequency for each state. For each state, a chart was created of power outages from 2015 to 2023 and another chart of power outages by month group by year. This provided a preview of the overall trend and seasonal trend occurring in the power outage data, but further analysis is needed to quantify these trends. 
+
 ### California
 Initial data exploration of California power outage data suggest a slight increasing trend (Figure \@ref(fig:cayearly)). Furthermore, Figure \@ref(fig:camonthly) shows. 
 
@@ -345,7 +347,11 @@ Insert visualizations and text describing your main analyses. Format your R chun
 
 Each figure should be accompanied by a caption, and each figure should be referenced within the text
 
-**trying to figure out the best organization for this.. where is the best place for the seasonality component? 
+The power outage datasets for each state were analyzed by creating time series objects of the power outage data. The time series objects were decomposed to separate the trend, seasonality, and remainder of each dataset. New data frames were created with these three time series components. A non-seasonal power outage frequency component was created by subtracting the seasonal component from the trend and remainder components. This nonseasonal components was graphed along with the observed power outage frequency to display the visual fit of the trend. Mann-Kendall tests were performed on the nonseasonal component to statistically analyze the trends, providing the trend direction and statistical significance. 
+
+The seasonal component was isolated and graphed by grouping the yearly values (2015-2023) by month. This shows how the seasonal component changes over the year, allowing for the months with a high frequency of power outages to be identified. To statistically analyze the seasonality of power outages, an ANOVA test was performed to see if power outage counts varied significantly across months.
+
+To investigate the severity of power outages, time series objects were created of the customer weighted hours data. The customer weighted hours’ time series objects were also decomposed to separate the trend, seasonality, and remainder of each dataset. A non-seasonal power outage frequency component was created by subtracting the seasonal component from the trend and remainder components. This nonseasonal components was graphed along with the observed customer weighted hours to display the visual fit of the trend. Mann-Kenndall tests were performed on the nonseasonal component to statistically analyze the trends, providing the trend direction and statistical significance. [UPDATE BASED ON WHAT WE INCLUDE]
 
 ## Question 1: How has the frequency of power outages changed over time?
 ### California 
