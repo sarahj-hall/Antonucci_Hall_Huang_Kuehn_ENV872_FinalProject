@@ -358,7 +358,7 @@ To investigate the severity of power outages, time series objects were created o
 
 Figure \@ref(fig:CAtimeseries) displays the decomposed time series of the California power outage frequency from 2015 to 2023. There appears to be clear seasonal trend, which is analyzed further in part (5). 
 
-A MannKendall non seasonal trend analysis was applied to the California power outage frequency dataset with the seasonal component remove, a significant overall increase in power outages over time is observed (MannKendall; tau = 5.437e-01 p < 2.2e-16). Figure \@ref(fig:CAtrend) visualizes the trend compared to the observed frequency of power outages in California. The red line represents the overall increasing trend. 
+A MannKendall non seasonal trend analysis was applied to the California power outage frequency dataset with the seasonal component removed, a significant overall increase in power outages over time is observed (MannKendall; tau = 5.437e-01, p < 2.2e-16). Figure \@ref(fig:CAtrend) visualizes the trend compared to the observed frequency of power outages in California. The red line represents the overall increasing trend. 
 
 ```{r CAtimeseries, fig.cap="Decomposed components of the California power outage count time series."}
 #define first day and first year values 
@@ -624,7 +624,7 @@ TukeyHSD(CA_anova_outage)
 
 \newpage
 ### Florida 
-Results from the time series for outages in FL displayed a pattern of seasonality. To further analysis the strength of that trend, months of every year were aggregated to show a cumulative trend across 2015 to 2023 in Figure \@ref(fig:FLseasonal). A clear normal distribution shows a concentration of outage occurrences in summer months, and a significant decline in winter months. This is statistically proven with an ANOVA test that confirms outage counts between months vary significantly, following a seasonal trend (Df = 11, F-value = 43.28, p < 2e-16).
+Results from the time series for outages in FL displayed a pattern of seasonality. To further analyze the strength of that trend, months of every year were aggregated to show a cumulative trend across 2015 to 2023 in Figure \@ref(fig:FLseasonal). A clear normal distribution shows a concentration of outage occurrences in summer months, and a significant decline in winter months. This is statistically proven with an ANOVA test that confirms outage counts between months vary significantly, following a seasonal trend (Df = 11, F-value = 43.28, p < 2e-16).
 
 ```{r FLseasonal, fig.cap = "Seasonality component of FL outage TS analysis, years grouped by month"}
 ggplot(monthly_outages_FL.components) +
@@ -665,13 +665,12 @@ The Mann–Kendall seasonal trend test for Pennsylvania outage counts indicated 
 
 ```{r, fig.cap="Isolated seasonal component of PA power outages."}
 #Visualize seasonal Component 
-ggplot(Outage_components_PA) +
-  geom_line(aes(x = Date, y = seasonal), color = "purple") +
-  geom_hline(yintercept = 0) +
-   labs(y = "# of outages",
-      title = "Trend Component of Pennsylvania Power Outages
-      Compared to the Raw Data")+
-  theme(plot.title = element_text(hjust = 0.5))
+#ggplot(Outage_components_PA) +
+ # geom_line(aes(x = Date, y = seasonal), color = "purple") +
+ # geom_hline(yintercept = 0) +
+ #  labs(y = "# of outages",
+ #     title = "Trend Component of Pennsylvania Power Outages
+ #     Compared to the Raw Data")+
 
 Outage_components_PA$Month <- month(Outage_components_PA$Date)
 
@@ -796,7 +795,7 @@ ggplot(combined_data) +
 \newpage
 ## Question 3: How has the severity of power outages changed over time?  
 ### California 
-Figure \@ref(fig:CAcwh) displays the decomposed time series of the California customer weighted hours from 2015 to 2023. However, after removing the seasonality component the Mann-Kendall trend test suggested that there is a significant increase in the customer weighted hours of power outages in California, thus the outage severity (MannKendall; tau 3.513e-01 = p < 7.178e-08).
+Figure \@ref(fig:CAcwh) displays the decomposed time series of the California customer weighted hours from 2015 to 2023. However, after removing the seasonality component the Mann-Kendall trend test suggests that there is a significant increase in the overall customer weighted hours of power outages in California, and thus the outage severity (MannKendall; tau 3.513e-01 = p < 7.178e-08).
 
 ```{r CAcwh, fig.cap="Decomposed analyis of customer weighted outage time in California"}
 #create time series object 
