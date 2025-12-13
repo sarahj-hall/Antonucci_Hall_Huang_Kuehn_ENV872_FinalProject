@@ -34,9 +34,6 @@ Folders in this repository include: Code, Output, Data/Raw, and Data/Processed.
 - `~/` contains the README file and final report .rmd and .pdf files 
 
 ## Metadata
-
-note to self: might not need to include all this if we don't use it?, also check class types
-
 In the Raw data folder, there are four different types of files for the years 2014 to 2023 (replace year in title with proper year):
 
 1. eagle_outages_<year>_group.csv
