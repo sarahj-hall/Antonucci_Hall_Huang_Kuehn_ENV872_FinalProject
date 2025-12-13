@@ -76,7 +76,6 @@ outage_group_TX$date <- ymd(outage_group_TX$date)
 
 ```
 
-
 # Rationale and Research Questions
 Electric power outages are costly for both utilities and their customers. Outages disrupt economic activity, and impact critical facilities such as hospitals (Wing et al., 2025). The United States electric grid is increasingly vulnerable to outages due to increasing extreme weather events, such as hurricanes, heatwaves, wildfires, and winter storms, which are increasing in frequency and intensity due to climate change (Wendel, 2024). Because many of these events occur during specific times of the year, understanding weather power outages follow a seasonal pattern is important for planning and resilience. If outages tend to occur in specific months, utilities and communities can better allocate resources, resilience investments, and emergency preparedness.
 
@@ -90,7 +89,7 @@ The research questions of this study are:
 - Question 2: Is there a seasonal trend? Are certain months more prone to outages? 
 - Question 3: How has the severity of power outages changed over time? 
 
-We hypothesize that (1) the number of power outages have increased over time in response to rising extreme climate events, (2) that each state has distinct seasonal power outage patterns related to its dominant weather hazards, and (3) the severity of power outages have increase over time, which will be reflected in an increase in the customer weighted ours of outages. 
+We hypothesize that (1) the number of power outages have increased over time in response to rising extreme climate events, (2) that each state has distinct seasonal power outage patterns related to its dominant weather hazards, and (3) the severity of power outages have increase over time, which will be reflected in an increase in the customer weighted hours of outages. 
 
 \newpage
 
@@ -159,7 +158,7 @@ kable(state_summary, booktabs = TRUE, align = "c",
 
 \newpage
 # Exploratory Analysis 
-The exploratory analysis of the data involved initial visualizations of the power outage counts for each state. For each state, a chart was created of power outages from 2015 to 2023 and another chart of power outages by month grouped by year. There was no missing data for any of the states during the time frame, and all outliers were retained because many reflect climate-driven extreme events relevant to our research. These exploratory trends informed the analytical methods used in this study. The presence of visual long-term increases in power outages motivated the use of the Mann–Kendall trend test, while the recurring monthly patterns suggested the need for seasonal decomposition and an ANOVA to test for significant seasonal variations.
+The exploratory analysis of the data involved initial visualizations of the power outage counts for each state. For each state, a chart was created to display power outage counts from 2015 to 2023 and another chart to display power outages by month, grouped by year. There was no missing data for any of the states during the time frame, and all outliers were retained because many reflect climate-driven extreme events relevant to our research. These exploratory trends informed the analytical methods used in this study. The presence of visual long-term increases in power outages motivated the use of the Mann–Kendall trend test, while the recurring monthly patterns suggested the need for seasonal decomposition and an ANOVA to test for significant seasonal variations.
 
 ### California
 Initial data exploration of California power outage data suggest a slight increasing trend (Figure \@ref(fig:cayearly)). Furthermore, Figure \@ref(fig:camonthly) shows a clear increase in the number of outages every single month from 2015 to 2023. The monthly plot does not indicate that any particular month consistently experiences a higher number of power outages. 
@@ -340,6 +339,7 @@ The seasonal component was isolated and graphed by grouping the yearly values (2
 
 To investigate the severity of power outages, time series objects were created of the customer weighted hours data. The customer weighted hours’ time series objects were also decomposed to separate the trend, seasonality, and remainder of each dataset. A non-seasonal power outage count component was created by subtracting the seasonal component from the trend and remainder components. This nonseasonal components was graphed along with the observed customer weighted hours to display the visual fit of the trend. Mann-Kenndall tests were performed on the nonseasonal component to statistically analyze the trends, providing the trend direction and statistical significance.
 
+\newpage
 ## Question 1: How has the number of power outages changed over time?
 ### California 
 
@@ -1185,7 +1185,7 @@ After accounting for seasonal patterns, the analysis shows that the number of po
 
 After running ANOVA and Mann-Kendall tests, the results show that there's an overall increasing trend of power outages and customer impact in Texas from 2015-2023. Despite the visual seasonal trend, statistical testing reveled that there is not a significant difference between power outages across months in Texas. The customer weighted outage hours take into account the amount of customers impacted by these outages, which also shows a significant increasing trend over the study period. 
 
-Overall we conclude that number of power outages in California, Florida, Pennsylvania, and Texas have increased from 2015 to 2023. We conclude that some states do have strong seasonal trends in outages. Florida and Pennsylvania show clear significant seasonal patterns in power outages, with events concentrated in the summer,especially July, and dropping sharply in winter. While California and Texas have no statistically significant seasonal trend. Lastly, we conclude that the severity of power outages is increasing in some states, but further analysis with different variables could provide better evidence towards this hypothesis. From 2015 to 2023, customer-weighted outage hours show a strong upward trend in both California and Texas. California’s rise is likely tied to increasingly severe wildfires, while Texas’s growth may reflect the combined effects of winter storms and heavy summer electricity demand. Florida and Pennsylvania both exhibit insignificant upward trends.
+Overall we conclude that number of power outages in California, Florida, Pennsylvania, and Texas have increased from 2015 to 2023. We conclude that some states do have strong seasonal trends in outages. Florida and Pennsylvania show clear significant seasonal patterns in power outages, with events concentrated in the summer, especially July, and dropping sharply in winter. While California and Texas have no statistically significant seasonal trend. Lastly, we conclude that the severity of power outages is increasing in some states, but further analysis with different variables could provide better evidence towards this hypothesis. From 2015 to 2023, customer-weighted outage hours show a strong upward trend in both California and Texas. California’s rise is likely tied to increasingly severe wildfires, while Texas’s growth may reflect the combined effects of winter storms and heavy summer electricity demand. Florida and Pennsylvania both exhibit insignificant upward trends.
 
 To strengthen the project in the future, further analysis could directly quantify the relationship between climate-related events and the trend in power outages. This could include directly modeling the customer weighted hours with known climate events. The exploration of severity of power outages could also be improved by exploring other variables, such as the duration of outages with a minimum threshold of customers impacted. This would help reduce noise from minor outages and focus the severity metric on if there is a general trend in power outage duration.  
 
